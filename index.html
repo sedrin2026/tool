@@ -93,12 +93,13 @@
         }
 
         .terminal-header p {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--neon-cyan);
             margin-top: 5px;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             opacity: 0.9;
             text-align: center;
+            white-space: nowrap;
         }
 
         /* PIN Pad Styles */
@@ -166,12 +167,6 @@
         .bio-box {
             text-align: center;
             padding: 10px 0;
-        }
-
-        .bio-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            text-shadow: 0 0 25px var(--neon-cyan);
         }
 
         /* App Main Screen */
@@ -324,6 +319,16 @@
             min-height: 15px;
             text-shadow: 0 0 6px var(--neon-pink);
         }
+
+        .welcome-placeholder {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--text-muted);
+            font-size: 12px;
+            border: 1px dashed rgba(34, 211, 238, 0.3);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
 <body>
@@ -392,12 +397,12 @@
                 </div>
                 <div class="terminal-header">
                     <h1>DEEP VAULT</h1>
-                    <p>MAXIMUM SECURE STORAGE // 10 SLOTS</p>
+                    <p>MAXIMUM SECURE STORAGE // 10</p>
                 </div>
             </div>
 
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('bank', this)">🏦 銀行口座</button>
+                <button class="tab-btn" onclick="switchTab('bank', this)">🏦 銀行口座</button>
                 <button class="tab-btn" onclick="switchTab('card', this)">💳 クレカ</button>
                 <button class="tab-btn" onclick="switchTab('web', this)">🌐 アプリ</button>
             </div>
@@ -405,6 +410,7 @@
             <div class="item-selector">
                 <label id="slot-label" style="font-size: 11px;">登録スロット選択</label>
                 <select id="slot-select" onchange="changeSlot()">
+                    <option value="" selected disabled>-- 未選択 --</option>
                     <option value="1">SLOT 01</option>
                     <option value="2">SLOT 02</option>
                     <option value="3">SLOT 03</option>
@@ -418,7 +424,9 @@
                 </select>
             </div>
 
-            <div id="form-area"></div>
+            <div id="form-area">
+                <div class="welcome-placeholder">上のタブとスロットを選択してください</div>
+            </div>
 
             <div class="form-group" style="margin-top: 12px;">
                 <label>マスターパスワード（暗号化キー）</label>
@@ -541,11 +549,10 @@
 
             document.getElementById('step-bio').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
-            switchTab('bank', document.querySelector('.tab-btn'));
         }
 
-        let currentTab = 'bank';
-        let currentSlot = '1';
+        let currentTab = null;
+        let currentSlot = '';
 
         const templates = {
             bank: `
@@ -574,13 +581,23 @@
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('form-area').innerHTML = templates[tab];
-            loadSavedDataToForm();
+            
+            if (currentSlot) {
+                document.getElementById('form-area').innerHTML = templates[tab];
+                loadSavedDataToForm();
+            } else {
+                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">スロットを選択してください</div>`;
+            }
         }
 
         function changeSlot() {
             currentSlot = document.getElementById('slot-select').value;
-            loadSavedDataToForm();
+            if (currentTab) {
+                document.getElementById('form-area').innerHTML = templates[currentTab];
+                loadSavedDataToForm();
+            } else {
+                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のタブを選択してください</div>`;
+            }
         }
 
         function getStorageKey() {
@@ -588,6 +605,7 @@
         }
 
         function loadSavedDataToForm() {
+            if (!currentTab || !currentSlot) return;
             const saved = localStorage.getItem(getStorageKey());
             const inputs = document.querySelectorAll('#form-area input');
             inputs.forEach(input => input.value = '');
@@ -618,6 +636,11 @@
         }
 
         function encryptData() {
+            if (!currentTab || !currentSlot) {
+                alert("⚠️ タブとスロットの両方を選択してください！");
+                return;
+            }
+
             let data = { category: currentTab, slot: currentSlot };
             if (currentTab === 'bank') {
                 data.bankName = document.getElementById('b-name').value;
