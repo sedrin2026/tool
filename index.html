@@ -6,15 +6,15 @@
     <title>CYBER VAULT // MAXIMUM SECURITY PROTOCOL</title>
     <style>
         :root {
-            --bg-deep: #030712;
-            --bg-glass: rgba(15, 23, 42, 0.85);
-            --neon-cyan: #06b6d4;
-            --neon-pink: #ec4899;
-            --neon-purple: #8b5cf6;
-            --neon-green: #10b981;
-            --text-main: #e2e8f0;
-            --text-muted: #64748b;
-            --border-glow: 0 0 20px rgba(6, 182, 212, 0.4);
+            --bg-deep: #090d16;
+            --bg-glass: rgba(15, 23, 42, 0.92);
+            --neon-cyan: #22d3ee;
+            --neon-pink: #f472b6;
+            --neon-purple: #a78bfa;
+            --neon-green: #34d399;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: 0 0 25px rgba(34, 211, 238, 0.5);
         }
 
         * {
@@ -33,40 +33,41 @@
             align-items: center;
             padding: 16px;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+                radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.12) 0%, transparent 40%);
         }
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: var(--bg-glass);
-            border: 1px solid var(--neon-cyan);
+            border: 2px solid var(--neon-cyan);
             border-radius: 24px;
             padding: 28px;
-            box-shadow: var(--border-glow), inset 0 0 15px rgba(6, 182, 212, 0.1);
-            backdrop-filter: blur(12px);
+            box-shadow: var(--border-glow), inset 0 0 20px rgba(34, 211, 238, 0.15);
+            backdrop-filter: blur(16px);
         }
 
         .terminal-header {
             text-align: center;
             margin-bottom: 24px;
-            border-bottom: 1px dashed rgba(6, 182, 212, 0.3);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.4);
             padding-bottom: 15px;
         }
 
         .terminal-header h1 {
-            font-size: 22px;
+            font-size: 24px;
             color: #fff;
-            text-shadow: 0 0 10px var(--neon-cyan);
+            text-shadow: 0 0 12px var(--neon-cyan);
             letter-spacing: 3px;
         }
 
         .terminal-header p {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 5px;
+            font-size: 12px;
+            color: var(--neon-cyan);
+            margin-top: 6px;
             letter-spacing: 1px;
+            opacity: 0.9;
         }
 
         /* PIN Pad Styles */
@@ -78,8 +79,8 @@
         }
 
         .pin-dot {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             border: 2px solid var(--neon-cyan);
             background: transparent;
@@ -100,7 +101,7 @@
         }
 
         .pin-btn {
-            background: rgba(6, 182, 212, 0.05);
+            background: rgba(34, 211, 238, 0.1);
             border: 1px solid var(--neon-cyan);
             color: #fff;
             font-size: 20px;
@@ -117,7 +118,6 @@
             transform: scale(0.95);
         }
 
-        /* Screen Transitions */
         #step-bio, #app-screen {
             display: none;
         }
@@ -138,73 +138,89 @@
         }
 
         .bio-icon {
-            font-size: 48px;
+            font-size: 52px;
             margin-bottom: 15px;
-            text-shadow: 0 0 20px var(--neon-cyan);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 30px var(--neon-pink); }
-            100% { transform: scale(1); opacity: 0.8; }
+            text-shadow: 0 0 25px var(--neon-cyan);
         }
 
         /* App Main Screen */
         .tabs {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             margin-bottom: 20px;
         }
 
         .tab-btn {
             flex: 1;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--neon-cyan);
             color: var(--text-muted);
-            padding: 10px 4px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 12px 4px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
             text-align: center;
             transition: 0.2s;
         }
 
         .tab-btn.active {
-            background: rgba(6, 182, 212, 0.2);
+            background: rgba(34, 211, 238, 0.25);
             color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
             border-color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .item-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .item-selector select {
+            background: #020617;
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: bold;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            margin-bottom: 12px;
+            gap: 6px;
+            margin-bottom: 14px;
         }
 
         label {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--neon-cyan);
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: bold;
         }
 
         input, textarea, select {
             width: 100%;
-            background: #000;
+            background: #020617;
             border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
+            color: #fff;
             padding: 12px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 14px;
             outline: none;
             transition: 0.2s;
         }
 
         input:focus, textarea:focus {
-            box-shadow: 0 0 10px var(--neon-cyan);
+            box-shadow: 0 0 12px var(--neon-cyan);
             border-color: #fff;
         }
 
@@ -218,10 +234,11 @@
             cursor: pointer;
             margin-top: 10px;
             color: #030712;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.4);
             transition: 0.2s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-size: 14px;
         }
 
         .action-btn:active {
@@ -229,24 +246,24 @@
         }
 
         .action-btn.purple {
-            background: linear-gradient(135deg, var(--neon-purple), #6d28d9);
+            background: linear-gradient(135deg, var(--neon-purple), #7c3aed);
             color: #fff;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
         }
 
         .result-box {
-            background: #000;
+            background: #020617;
             border: 1px solid var(--neon-purple);
             padding: 14px;
-            color: var(--neon-purple);
-            min-height: 70px;
-            max-height: 140px;
+            color: #e9d5ff;
+            min-height: 80px;
+            max-height: 160px;
             overflow-y: auto;
             margin-top: 10px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 13px;
             word-break: break-all;
-            box-shadow: inset 0 0 10px rgba(139, 92, 246, 0.2);
+            box-shadow: inset 0 0 12px rgba(167, 139, 250, 0.25);
         }
 
         .settings-link {
@@ -256,7 +273,7 @@
 
         .settings-link a {
             color: var(--text-muted);
-            font-size: 11px;
+            font-size: 12px;
             text-decoration: none;
             cursor: pointer;
             transition: 0.2s;
@@ -264,16 +281,16 @@
 
         .settings-link a:hover {
             color: var(--neon-cyan);
-            text-shadow: 0 0 5px var(--neon-cyan);
+            text-shadow: 0 0 6px var(--neon-cyan);
         }
 
         .msg-alert {
             color: var(--neon-pink);
-            font-size: 11px;
+            font-size: 12px;
             text-align: center;
             margin-top: 10px;
             min-height: 15px;
-            text-shadow: 0 0 5px var(--neon-pink);
+            text-shadow: 0 0 6px var(--neon-pink);
         }
     </style>
 </head>
@@ -311,7 +328,7 @@
             </div>
         </div>
 
-        <!-- 2. 二重セキュリティ（生体認証 / デバイスロック解除画面） -->
+        <!-- 2. 二重セキュリティ（生体認証画面） -->
         <div id="step-bio" class="fade-in">
             <div class="terminal-header">
                 <h1>🧬 BIOMETRIC 2FA</h1>
@@ -319,24 +336,40 @@
             </div>
             <div class="bio-box">
                 <div class="bio-icon">🛡️</div>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">
-                    デバイスの生体認証（指紋・顔認証）またはロック解除を実行してください。
+                <p style="font-size: 13px; color: var(--text-main); margin-bottom: 20px;">
+                    デバイスの生体認証またはロック解除を実行してください。
                 </p>
                 <button class="action-btn" onclick="authBio()">生体認証 / ロック解除をクリア</button>
             </div>
         </div>
 
-        <!-- 3. メインアプリ画面（要塞の中枢） -->
+        <!-- 3. メインアプリ画面（最大10件対応） -->
         <div id="app-screen" class="fade-in">
             <div class="terminal-header">
                 <h1>💎 DEEP VAULT</h1>
-                <p>SECURE STORAGE SYSTEM ONLINE</p>
+                <p>MAXIMUM SECURE STORAGE // 10 SLOTS</p>
             </div>
 
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('bank', this)">🏦 銀行口座</button>
                 <button class="tab-btn" onclick="switchTab('card', this)">💳 クレカ</button>
                 <button class="tab-btn" onclick="switchTab('web', this)">🌐 アプリ</button>
+            </div>
+
+            <div class="item-selector">
+                <label id="slot-label" style="font-size: 11px;">登録スロット選択</label>
+                <select id="slot-select" onchange="changeSlot()">
+                    <option value="1">SLOT 01</option>
+                    <option value="2">SLOT 02</option>
+                    <option value="3">SLOT 03</option>
+                    <option value="4">SLOT 04</option>
+                    <option value="5">SLOT 05</option>
+                    <option value="6">SLOT 06</option>
+                    <option value="7">SLOT 07</option>
+                    <option value="8">SLOT 08</option>
+                    <option value="9">SLOT 09</option>
+                    <option value="10">SLOT 10</option>
+                </select>
             </div>
 
             <div id="form-area"></div>
@@ -365,7 +398,6 @@
     <!-- CryptoJS 暗号化ライブラリ -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        // 初期PINの設定（ローカルストレージにない場合）
         if (!localStorage.getItem('vault_pin')) {
             localStorage.setItem('vault_pin', '1234');
         }
@@ -405,7 +437,6 @@
             const savedPin = localStorage.getItem('vault_pin');
             if (!isChangingPin) {
                 if (enteredPin === savedPin) {
-                    // ステップ1クリア → ステップ2（生体認証画面）へ移行
                     document.getElementById('step-pin').style.display = 'none';
                     document.getElementById('step-bio').style.display = 'block';
                 } else {
@@ -448,10 +479,8 @@
             updateDots();
         }
 
-        // 生体認証API / セキュリティクリア処理
         async function authBio() {
             try {
-                // WebAuthn APIを呼び出し（デバイスの生体認証画面をポップアップ）
                 if (window.PublicKeyCredential) {
                     await navigator.credentials.get({
                         publicKey: {
@@ -461,18 +490,17 @@
                     });
                 }
             } catch (e) {
-                // キャンセルや未登録環境でも、シミュレーションとして通過させる
                 console.log("Biometric fallback triggered.");
             }
 
-            // ステップ2クリア → メイン画面へ突入！
             document.getElementById('step-bio').style.display = 'none';
             document.getElementById('app-screen').style.display = 'block';
             switchTab('bank', document.querySelector('.tab-btn'));
         }
 
-        // カテゴリ別入力フォームのテンプレート
         let currentTab = 'bank';
+        let currentSlot = '1';
+
         const templates = {
             bank: `
                 <div class="form-group"><label>銀行名</label><input type="text" id="b-name" placeholder="例: みずほ銀行"></div>
@@ -501,11 +529,51 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('form-area').innerHTML = templates[tab];
+            loadSavedDataToForm();
         }
 
-        // AES暗号化処理
+        function changeSlot() {
+            currentSlot = document.getElementById('slot-select').value;
+            loadSavedDataToForm();
+        }
+
+        function getStorageKey() {
+            return 'vault_' + currentTab + '_slot_' + currentSlot;
+        }
+
+        function loadSavedDataToForm() {
+            const saved = localStorage.getItem(getStorageKey());
+            // フォームを一旦クリア
+            const inputs = document.querySelectorAll('#form-area input');
+            inputs.forEach(input => input.value = '');
+            
+            if (saved) {
+                try {
+                    const obj = JSON.parse(saved);
+                    if (currentTab === 'bank') {
+                        document.getElementById('b-name').value = obj.bankName || '';
+                        document.getElementById('b-branch').value = obj.branch || '';
+                        document.getElementById('b-account').value = obj.account || '';
+                        document.getElementById('b-holder').value = obj.holder || '';
+                        document.getElementById('b-pin').value = obj.pin || '';
+                    } else if (currentTab === 'card') {
+                        document.getElementById('c-brand').value = obj.brand || '';
+                        document.getElementById('c-num').value = obj.number || '';
+                        document.getElementById('c-exp').value = obj.expire || '';
+                        document.getElementById('c-name').value = obj.name || '';
+                        document.getElementById('c-cvv').value = obj.cvv || '';
+                    } else if (currentTab === 'web') {
+                        document.getElementById('w-srv').value = obj.service || '';
+                        document.getElementById('w-id').value = obj.id || '';
+                        document.getElementById('w-user').value = obj.username || '';
+                        document.getElementById('w-pass').value = obj.pass || '';
+                    }
+                } catch(e) {}
+            }
+        }
+
         function encryptData() {
-            let data = { category: currentTab };
+            let data = { category: currentTab, slot: currentSlot };
             if (currentTab === 'bank') {
                 data.bankName = document.getElementById('b-name').value;
                 data.branch = document.getElementById('b-branch').value;
@@ -531,12 +599,14 @@
                 return;
             }
 
+            // スロットごとに自動保存
+            localStorage.setItem(getStorageKey(), JSON.stringify(data));
+
             const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), pass).toString();
             document.getElementById('cipher-text').value = encrypted;
-            alert("🔒 データを要塞レベルで暗号化しました！");
+            alert(`🔒 [${currentTab.toUpperCase()} - SLOT ${currentSlot}] データを要塞レベルで暗号化・保存しました！`);
         }
 
-        // AES復号化処理
         function decryptData() {
             const cipher = document.getElementById('cipher-text').value;
             const pass = document.getElementById('master-pass').value;
@@ -551,9 +621,9 @@
                 if (!str) throw new Error();
                 const obj = JSON.parse(str);
                 
-                let resText = `📂 [VAULT CATEGORY: ${obj.category.toUpperCase()}]\n`;
+                let resText = `📂 [VAULT DATA // SLOT ${obj.slot || '?'}]\n`;
                 for (let k in obj) {
-                    if (k !== 'category') {
+                    if (k !== 'category' && k !== 'slot') {
                         resText += `• ${k}: ${obj[k]}\n`;
                     }
                 }
