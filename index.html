@@ -226,6 +226,7 @@
             border-radius: 6px;
             font-weight: bold;
             outline: none;
+            max-width: 220px;
         }
 
         .form-group {
@@ -415,24 +416,14 @@
             </div>
 
             <div class="item-selector">
-                <label id="slot-label" style="font-size: 11px; line-height: 1.3;">登録項目を<br>選択</label>
+                <label id="slot-label" style="font-size: 11px; line-height: 1.3;">登録項目<br>選択▶</label>
                 <select id="slot-select" onchange="changeSlot()">
-                    <option value="" selected disabled>-- 未選択 --</option>
-                    <option value="1">SLOT 01</option>
-                    <option value="2">SLOT 02</option>
-                    <option value="3">SLOT 03</option>
-                    <option value="4">SLOT 04</option>
-                    <option value="5">SLOT 05</option>
-                    <option value="6">SLOT 06</option>
-                    <option value="7">SLOT 07</option>
-                    <option value="8">SLOT 08</option>
-                    <option value="9">SLOT 09</option>
-                    <option value="10">SLOT 10</option>
+                    <option value="" selected disabled>-- 先にタブを選択してね --</option>
                 </select>
             </div>
 
             <div id="form-area">
-                <div class="welcome-placeholder">上のタブとスロットを選択してください</div>
+                <div class="welcome-placeholder">上のタブと項目を選択してください</div>
             </div>
 
             <div class="form-group" style="margin-top: 12px;">
@@ -584,26 +575,71 @@
             `
         };
 
+        function updateSlotOptions() {
+            const slotSelect = document.getElementById('slot-select');
+            slotSelect.innerHTML = '<option value="" selected disabled>-- 未選択 --</option>';
+            
+            if (!currentTab) return;
+
+            let prefix = "登録項目";
+            if (currentTab === 'bank') prefix = "登録口座";
+            else if (currentTab === 'card') prefix = "登録カード";
+            else if (currentTab === 'web') prefix = "登録アプリ";
+
+            for (let i = 1; i <= 10; i++) {
+                let slotNum = String(i).padStart(2, '0');
+                let slotKey = String(i);
+                let saved = localStorage.getItem('vault_' + currentTab + '_slot_' + slotKey);
+                
+                let displayName = `${prefix} ${slotNum}`;
+                if (saved) {
+                    try {
+                        let obj = JSON.parse(saved);
+                        let nameVal = '';
+                        if (currentTab === 'bank') nameVal = obj.bankName;
+                        else if (currentTab === 'card') nameVal = obj.brand;
+                        else if (currentTab === 'web') nameVal = obj.service;
+
+                        if (nameVal) {
+                            displayName = `${prefix} ${slotNum} [ ${nameVal} ]`;
+                        }
+                    } catch(e) {}
+                }
+
+                let opt = document.createElement('option');
+                opt.value = slotKey;
+                opt.textContent = displayName;
+                slotSelect.appendChild(opt);
+            }
+        }
+
         function switchTab(tab, btn) {
+            if (currentTab === tab) {
+                currentTab = null;
+                currentSlot = '';
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                const slotSelect = document.getElementById('slot-select');
+                slotSelect.innerHTML = '<option value="" selected disabled>-- 先にタブを選択してね --</option>';
+                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のタブと項目を選択してください</div>`;
+                return;
+            }
+
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
-            if (currentSlot) {
-                document.getElementById('form-area').innerHTML = templates[tab];
-                loadSavedDataToForm();
-            } else {
-                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">スロットを選択してください</div>`;
-            }
+            currentSlot = '';
+            updateSlotOptions();
+            document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のタブと項目を選択してください</div>`;
         }
 
         function changeSlot() {
             currentSlot = document.getElementById('slot-select').value;
-            if (currentTab) {
+            if (currentTab && currentSlot) {
                 document.getElementById('form-area').innerHTML = templates[currentTab];
                 loadSavedDataToForm();
             } else {
-                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のタブを選択してください</div>`;
+                document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のタブと項目を選択してください</div>`;
             }
         }
 
@@ -644,7 +680,7 @@
 
         function encryptData() {
             if (!currentTab || !currentSlot) {
-                alert("⚠️ タブとスロットの両方を選択してください！");
+                alert("⚠️ タブと項目（スロット）の両方を選択してください！");
                 return;
             }
 
@@ -675,6 +711,8 @@
             }
 
             localStorage.setItem(getStorageKey(), JSON.stringify(data));
+            updateSlotOptions();
+            document.getElementById('slot-select').value = currentSlot;
 
             const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), pass).toString();
             document.getElementById('cipher-text').value = encrypted;
