@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberVault // Secure Suite</title>
+    <title>CYBER VAULT // SECURE SUITE</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --neon-blue: #38bdf8;
-            --neon-purple: #c084fc;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #6366f1;
+            --bg-deep: #030712;
+            --neon-cyan: #06b6d4;
+            --neon-pink: #ec4899;
+            --neon-purple: #8b5cf6;
+            --glass-bg: rgba(6, 182, 212, 0.03);
+            --glass-border: rgba(6, 182, 212, 0.2);
+            --text-main: #e2e8f0;
+            --text-muted: #64748b;
         }
 
         * {
@@ -24,7 +24,11 @@
         }
 
         body {
-            background: var(--bg-gradient);
+            background-color: var(--bg-deep);
+            background-image: 
+                linear-gradient(to right, rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -36,13 +40,13 @@
         .container {
             width: 100%;
             max-width: 480px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.15), inset 0 0 15px rgba(6, 182, 212, 0.05);
         }
 
         .header {
@@ -51,48 +55,50 @@
         }
 
         .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            letter-spacing: 2px;
         }
 
         .header p {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 4px;
+            font-size: 11px;
+            color: var(--neon-cyan);
+            margin-top: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* ロック画面 */
-        #lock-screen {
+        /* 共通ロック画面系 */
+        .lock-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
             text-align: center;
-            padding: 20px 0;
+            padding: 10px 0;
         }
 
         .pin-dots {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin: 16px 0;
+            margin: 12px 0;
         }
 
         .pin-dot {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            border: 2px solid var(--neon-blue);
+            border: 2px solid var(--neon-cyan);
             background: transparent;
+            box-shadow: 0 0 5px var(--neon-cyan);
             transition: 0.2s;
         }
 
         .pin-dot.active {
-            background: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
+            background: var(--neon-cyan);
+            box-shadow: 0 0 12px var(--neon-cyan), 0 0 20px var(--neon-cyan);
         }
 
         .pin-pad {
@@ -104,43 +110,80 @@
         }
 
         .pin-btn {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(6, 182, 212, 0.05);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
             font-size: 20px;
-            padding: 16px;
-            border-radius: 14px;
+            padding: 14px;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 0 5px rgba(6, 182, 212, 0.1);
         }
 
         .pin-btn:active {
-            background: var(--neon-blue);
-            color: #0f172a;
+            background: var(--neon-cyan);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        /* 生体認証ステップ画面 */
+        #step-bio {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .bio-icon {
+            font-size: 50px;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { text-shadow: 0 0 10px var(--neon-pink); transform: scale(1); }
+            50% { text-shadow: 0 0 25px var(--neon-pink), 0 0 40px var(--neon-pink); transform: scale(1.08); }
+            100% { text-shadow: 0 0 10px var(--neon-pink); transform: scale(1); }
+        }
+
+        .bio-btn {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            width: 100%;
         }
 
         /* メインアプリ画面 */
         #app-screen {
             display: none;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
         }
 
         .tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             overflow-x: auto;
             padding-bottom: 4px;
         }
 
         .tab-btn {
             flex: 1;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--glass-border);
             color: var(--text-muted);
-            padding: 10px 12px;
-            border-radius: 12px;
-            font-size: 13px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
             transition: 0.2s;
@@ -148,53 +191,53 @@
         }
 
         .tab-btn.active {
-            background: var(--accent);
-            color: var(--text-main);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
         }
 
         label {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
+            font-size: 11px;
+            color: var(--neon-cyan);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(3, 7, 18, 0.6);
             border: 1px solid var(--glass-border);
             border-radius: 10px;
-            padding: 12px;
+            padding: 11px;
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
             transition: 0.2s;
         }
 
-        input:focus, select:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+        input:focus, textarea:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
         }
 
         .action-btn {
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
-            color: white;
+            background: linear-gradient(135deg, var(--neon-cyan), #0284c7);
+            color: #030712;
             border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 14px;
+            font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
             transition: 0.2s;
-            margin-top: 4px;
         }
 
         .action-btn:active {
@@ -202,39 +245,56 @@
         }
 
         .result-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(3, 7, 18, 0.8);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 12px;
             word-break: break-all;
             font-family: monospace;
-            font-size: 13px;
-            color: var(--neon-blue);
-            max-height: 120px;
+            font-size: 12px;
+            color: var(--neon-cyan);
+            max-height: 110px;
             overflow-y: auto;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
         }
 
         .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
             display: flex;
             align-items: center;
             gap: 6px;
             border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 6px;
-            margin-bottom: 12px;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+
+        .settings-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .settings-link a {
+            color: var(--text-muted);
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .settings-link a:hover {
+            color: var(--neon-cyan);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- ロック画面 -->
-        <div id="lock-screen">
+        <!-- ステップ1：4桁PINコード入力画面 -->
+        <div id="step-pin" class="lock-container">
             <div class="header">
-                <h1>⚡ CYBER VAULT</h1>
-                <p>Enter 4-digit PIN to Unlock</p>
+                <h1>⚡ SECURE VAULT</h1>
+                <p id="pin-instruction">Enter 4-Digit PIN Code</p>
             </div>
             <div class="pin-dots">
                 <div class="pin-dot" id="dot-0"></div>
@@ -256,62 +316,79 @@
                 <button class="pin-btn" onclick="pressPin('0')">0</button>
                 <button class="pin-btn" onclick="deletePin()">⌫</button>
             </div>
-            <p id="pin-error" style="color: #f43f5e; font-size: 12px; min-height: 16px;"></p>
+            <p id="pin-error" style="color: #ec4899; font-size: 11px; min-height: 14px;"></p>
+            <div class="settings-link">
+                <a onclick="togglePinChangeMode()">⚙️ PINコードを変更する</a>
+            </div>
         </div>
 
-        <!-- メイン画面 -->
+        <!-- ステップ2：二重セキュリティ（生体認証・デバイスロック確認） -->
+        <div id="step-bio">
+            <div class="header" style="margin-bottom: 0;">
+                <h1>🛡️ 2FA SECURITY</h1>
+                <p>Biometric / Device Verification</p>
+            </div>
+            <div class="bio-icon">🧬</div>
+            <p style="font-size: 12px; color: var(--text-muted);">最後の砦：スマホの生体認証または画面ロックをクリアしてください。</p>
+            <button class="bio-btn" onclick="passBioVerification()">🔓 生体認証 / ロック解除をクリア</button>
+        </div>
+
+        <!-- メインアプリ画面 -->
         <div id="app-screen">
-            <div class="header" style="margin-bottom: 10px;">
-                <h1>🛡️ Secure Vault</h1>
-                <p>Category-based Encrypted Storage</p>
+            <div class="header" style="margin-bottom: 6px;">
+                <h1>💎 DEEP VAULT</h1>
+                <p>Encrypted Data Management</p>
             </div>
 
-            <!-- カテゴリ選択タブ -->
+            <!-- カテゴリタブ -->
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchCategory('bank', this)">🏦 銀行</button>
+                <button class="tab-btn active" onclick="switchCategory('bank', this)">🏦 銀行口座</button>
                 <button class="tab-btn" onclick="switchCategory('card', this)">💳 クレカ</button>
-                <button class="tab-btn" onclick="switchCategory('web', this)">🌐 Web/アプリ</button>
+                <button class="tab-btn" onclick="switchCategory('web', this)">🌐 アプリ</button>
             </div>
 
-            <!-- 入力フォームエリア -->
-            <div id="form-container" style="display: flex; flex-direction: column; gap: 12px;">
-                <!-- 動的に切り替わる -->
-            </div>
+            <!-- 動的フォーム -->
+            <div id="form-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
 
             <div class="form-group">
-                <label>マスターパスワード（暗号化・復号化キー）</label>
-                <input type="password" id="master-pass" placeholder="秘密のパスワードを入力">
+                <label>マスターパスワード（暗号化キー）</label>
+                <input type="password" id="master-pass" placeholder="秘密のマスターキー">
             </div>
 
-            <button class="action-btn" onclick="encryptData()">🔒 データを暗号化して保存</button>
+            <button class="action-btn" onclick="encryptData()">🔒 暗号化してセーブ</button>
 
-            <div class="form-group" style="margin-top: 10px;">
-                <label>暗号化データ（暗号文をここに貼り付け）</label>
+            <div class="form-group" style="margin-top: 4px;">
+                <label>暗号化データ（暗号文）</label>
                 <textarea id="cipher-input" rows="2" placeholder="U2FsdGVkX1..."></textarea>
             </div>
 
-            <button class="action-btn" style="background: linear-gradient(135deg, #0ea5e9, #0369a1);" onclick="decryptData()">🔓 復号化して中身を見る</button>
+            <button class="action-btn" style="background: linear-gradient(135deg, var(--neon-purple), #6d28d9); color: #fff;" onclick="decryptData()">🔓 復号化して中身をロード</button>
 
             <div class="form-group">
-                <label>復号化された中身</label>
-                <div id="result-view" class="result-box">ここに復号結果が表示されます</div>
+                <label>復号結果</label>
+                <div id="result-view" class="result-box">ここにデータが表示されます</div>
             </div>
         </div>
     </div>
 
-    <!-- CryptoJS (暗号化ライブラリ) -->
-    <script src="https://cdnjs.cloudflare.com/ajax5/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- CryptoJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
-        // 初回PINコード（初期値は "1234" に設定。必要なら変更してね）
-        const CORRECT_PIN = "1234";
+        // PINコードの管理（初期値は "1234"、スマホのlocalStorageに保存）
+        if (!localStorage.getItem('user_vault_pin')) {
+            localStorage.setItem('user_vault_pin', '1234');
+        }
+
         let enteredPin = "";
+        let isChangingPin = false;
+        let oldPinBuffer = "";
 
         function pressPin(num) {
             if (enteredPin.length < 4) {
                 enteredPin += num;
                 updatePinDots();
                 if (enteredPin.length === 4) {
-                    setTimeout(checkPin, 200);
+                    setTimeout(processPinAction, 200);
                 }
             }
         }
@@ -337,44 +414,89 @@
             }
         }
 
-        function checkPin() {
-            if (enteredPin === CORRECT_PIN) {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('app-screen').style.display = 'flex';
-                loadCategoryFields('bank');
+        function processPinAction() {
+            const savedPin = localStorage.getItem('user_vault_pin');
+
+            if (!isChangingPin) {
+                // 通常のログイン判定
+                if (enteredPin === savedPin) {
+                    // 1段階目クリア → 2段階目の生体認証画面へ！
+                    document.getElementById('step-pin').style.display = 'none';
+                    document.getElementById('step-bio').style.display = 'flex';
+                } else {
+                    document.getElementById('pin-error').innerText = "❌ PINコードが違います";
+                    enteredPin = "";
+                    updatePinDots();
+                }
             } else {
-                document.getElementById('pin-error').innerText = "PINコードが違います（初期値: 1234）";
-                enteredPin = "";
-                updatePinDots();
+                // PIN変更モード
+                if (!oldPinBuffer) {
+                    if (enteredPin === savedPin) {
+                        oldPinBuffer = enteredPin;
+                        enteredPin = "";
+                        updatePinDots();
+                        document.getElementById('pin-instruction').innerText = "Enter NEW 4-Digit PIN";
+                        document.getElementById('pin-error').innerText = "✨ 現在のPINを確認しました。新しいPINを入力";
+                    } else {
+                        document.getElementById('pin-error').innerText = "❌ 現在のPINが違います";
+                        enteredPin = "";
+                        updatePinDots();
+                    }
+                } else {
+                    // 新しいPINを保存
+                    localStorage.setItem('user_vault_pin', enteredPin);
+                    alert("🎉 PINコードが新しく変更されました！");
+                    isChangingPin = false;
+                    oldPinBuffer = "";
+                    enteredPin = "";
+                    document.getElementById('pin-instruction').innerText = "Enter 4-Digit PIN Code";
+                    document.getElementById('pin-error').innerText = "";
+                    updatePinDots();
+                }
             }
         }
 
-        // カテゴリごとのフォーム定義
-        let currentCategory = 'bank';
+        function togglePinChangeMode() {
+            isChangingPin = true;
+            enteredPin = "";
+            oldPinBuffer = "";
+            updatePinDots();
+            document.getElementById('pin-instruction').innerText = "Enter CURRENT PIN";
+            document.getElementById('pin-error').innerText = "🔐 現在の4桁を入力してください";
+        }
 
+        // 2段階目：生体認証シミュレーション通過
+        function passBioVerification() {
+            document.getElementById('step-bio').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            loadCategoryFields('bank');
+        }
+
+        // カテゴリフォーム管理
+        let currentCategory = 'bank';
         const categoryTemplates = {
             bank: `
-                <div class="section-title">🏦 銀行口座情報</div>
-                <div class="form-group"><label>銀行名</label><input type="text" id="f-bank-name" placeholder="例: みずほ銀行"></div>
-                <div class="form-group"><label>支店名</label><input type="text" id="f-branch" placeholder="例: 渋谷支店"></div>
-                <div class="form-group"><label>口座種別・番号</label><input type="text" id="f-account" placeholder="例: 普通 1234567"></div>
-                <div class="form-group"><label>口座名義（カタカナ）</label><input type="text" id="f-holder" placeholder="例: ヤマダ タロウ"></div>
-                <div class="form-group"><label>暗証番号（PIN）</label><input type="password" id="f-pin" placeholder="例: 1234"></div>
+                <div class="section-title">🏦 銀行口座セキュリティ</div>
+                <div class="form-group"><label>銀行名</label><input type="text" id="f-bank-name" placeholder="例: 〇〇銀行"></div>
+                <div class="form-group"><label>支店名</label><input type="text" id="f-branch" placeholder="例: 本店・渋谷支店"></div>
+                <div class="form-group"><label>口座番号</label><input type="text" id="f-account" placeholder="例: 普通 1234567"></div>
+                <div class="form-group"><label>口座名義</label><input type="text" id="f-holder" placeholder="例: ヤマダ タロウ"></div>
+                <div class="form-group"><label>暗証番号 (PIN)</label><input type="password" id="f-pin" placeholder="例: 1234"></div>
             `,
             card: `
                 <div class="section-title">💳 クレジットカード情報</div>
-                <div class="form-group"><label>カード会社 / ブランド</label><input type="text" id="c-brand" placeholder="例: 三井住友 VISA"></div>
+                <div class="form-group"><label>ブランド / 会社</label><input type="text" id="c-brand" placeholder="例: VISA / Mastercard"></div>
                 <div class="form-group"><label>カード番号</label><input type="text" id="c-number" placeholder="例: 4000 0000 0000 0000"></div>
                 <div class="form-group"><label>有効期限</label><input type="text" id="c-expire" placeholder="例: 12/28"></div>
-                <div class="form-group"><label>名義人 (HOLDER NAME)</label><input type="text" id="c-name" placeholder="例: TARO YAMADA"></div>
-                <div class="form-group"><label>セキュリティコード (CVV)</label><input type="password" id="c-cvv" placeholder="例: 123"></div>
+                <div class="form-group"><label>名義人</label><input type="text" id="c-name" placeholder="例: TARO YAMADA"></div>
+                <div class="form-group"><label>CVV (セキュリティコード)</label><input type="password" id="c-cvv" placeholder="例: 123"></div>
             `,
             web: `
-                <div class="section-title">🌐 Webアプリ / ログイン情報</div>
-                <div class="form-group"><label>サービス名 / アプリ名</label><input type="text" id="w-service" placeholder="例: X (Twitter) / ネット銀行"></div>
-                <div class="form-group"><label>ログインID / メールアドレス</label><input type="text" id="w-id" placeholder="例: user@example.com"></div>
-                <div class="form-group"><label>登録者名 / ユーザー名</label><input type="text" id="w-username" placeholder="例: 太郎"></div>
-                <div class="form-group"><label>パスワード</label><input type="password" id="w-pass" placeholder="例: secretPassword!99"></div>
+                <div class="section-title">🌐 Webアプリ / ログイン</div>
+                <div class="form-group"><label>サービス名</label><input type="text" id="w-service" placeholder="例: ネット銀行 / X / 証券"></div>
+                <div class="form-group"><label>ログインID / メアド</label><input type="text" id="w-id" placeholder="例: user@example.com"></div>
+                <div class="form-group"><label>登録者名</label><input type="text" id="w-username" placeholder="例: 山田太郎"></div>
+                <div class="form-group"><label>パスワード</label><input type="password" id="w-pass" placeholder="例: password!99"></div>
             `
         };
 
@@ -389,7 +511,7 @@
             document.getElementById('form-container').innerHTML = categoryTemplates[cat];
         }
 
-        // 暗号化処理
+        // 暗号化
         function encryptData() {
             let dataObj = { category: currentCategory };
             if (currentCategory === 'bank') {
@@ -417,42 +539,34 @@
                 return;
             }
 
-            const jsonStr = JSON.stringify(dataObj, null, 2);
-            const encrypted = CryptoJS.AES.encrypt(jsonStr, pass).toString();
-            
+            const encrypted = CryptoJS.AES.encrypt(JSON.stringify(dataObj), pass).toString();
             document.getElementById('cipher-input').value = encrypted;
-            alert("暗号化が完了しました！この暗号文をコピーして保存してください。");
+            alert("🔒 暗号化に成功しました！");
         }
 
-        // 復号化処理
+        // 復号化
         function decryptData() {
             const cipherText = document.getElementById('cipher-input').value;
             const pass = document.getElementById('master-pass').value;
 
             if (!cipherText || !pass) {
-                alert("暗号化データとマスターパスワードの両方を入力してください！");
+                alert("暗号データとマスターパスワードを入力してください！");
                 return;
             }
 
             try {
                 const bytes = CryptoJS.AES.decrypt(cipherText, pass);
                 const decryptedStr = bytes.toString(CryptoJS.enc.Utf8);
-                
-                if (!decryptedStr) {
-                    throw new Error("復号失敗");
-                }
+                if (!decryptedStr) throw new Error();
 
                 const dataObj = JSON.parse(decryptedStr);
-                let htmlFormatted = `📂 カテゴリ: ${dataObj.category.toUpperCase()}\n`;
-                for (let key in dataObj) {
-                    if (key !== 'category') {
-                        htmlFormatted += `• ${key}: ${dataObj[key]}\n`;
-                    }
+                let text = `📂 [${dataObj.category.toUpperCase()}]\n`;
+                for (let k in dataObj) {
+                    if (k !== 'category') text += `• ${k}: ${dataObj[k]}\n`;
                 }
-
-                document.getElementById('result-view').innerText = htmlFormatted;
+                document.getElementById('result-view').innerText = text;
             } catch (e) {
-                alert("パスワードが違うか、暗号データが壊れています！");
+                alert("❌ パスワード違い、またはデータが不正です！");
             }
         }
     </script>
