@@ -13,6 +13,7 @@
             --neon-purple: #a78bfa;
             --neon-green: #34d399;
             --metal-silver: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 50%, #cbd5e1 100%);
+            --metal-button: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 50%, #94a3b8 100%);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-glow: 0 0 30px rgba(34, 211, 238, 0.55);
@@ -287,10 +288,11 @@
             transform: scale(0.98);
         }
 
-        .action-btn.purple {
-            background: linear-gradient(135deg, var(--neon-purple), #7c3aed);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);
+        .action-btn.metal {
+            background: var(--metal-button);
+            color: #0f172a;
+            box-shadow: 0 0 15px rgba(226, 232, 240, 0.5), inset 0 0 8px rgba(255, 255, 255, 0.8);
+            border: 1px solid #cbd5e1;
         }
 
         .result-box {
@@ -388,8 +390,8 @@
         <!-- 2. 二重セキュリティ（生体認証画面） -->
         <div id="step-bio" class="fade-in">
             <div class="cyber-logo-wrapper">
-                <div class="hexagon-badge" style="border-color: var(--neon-purple); box-shadow: 0 0 20px rgba(167, 139, 250, 0.4);">
-                    <div class="hexagon-inner" style="text-shadow: 0 0 12px var(--neon-purple);">🧬</div>
+                <div class="hexagon-badge" style="border-color: var(--neon-purple); box-shadow: 0 0 25px rgba(167, 139, 250, 0.7);">
+                    <div class="hexagon-inner" style="text-shadow: 0 0 20px var(--neon-purple), 0 0 35px var(--neon-purple); font-size: 26px;">🧬</div>
                 </div>
                 <div class="terminal-header">
                     <h1>BIOMETRIC 2FA</h1>
@@ -442,7 +444,7 @@
                 <textarea id="cipher-text" rows="2" placeholder="U2FsdGVkX1..."></textarea>
             </div>
 
-            <button class="action-btn purple" onclick="decryptData()">🔓 復号化して中身を見る</button>
+            <button class="action-btn metal" onclick="decryptData()">🔐 復号化して中身を見る</button>
 
             <div class="form-group" style="margin-top: 12px;">
                 <label>復号結果ビューア</label>
