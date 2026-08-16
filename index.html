@@ -546,13 +546,14 @@
                             userVerification: "required"
                         }
                     });
+                    document.getElementById('step-bio').style.display = 'none';
+                    document.getElementById('app-screen').style.display = 'block';
+                } else {
+                    console.log("PublicKeyCredential not supported.");
                 }
             } catch (e) {
-                console.log("Biometric fallback triggered.");
+                console.log("Biometric authentication failed or cancelled.");
             }
-
-            document.getElementById('step-bio').style.display = 'none';
-            document.getElementById('app-screen').style.display = 'block';
         }
 
         let currentTab = null;
