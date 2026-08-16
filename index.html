@@ -42,7 +42,6 @@
             position: relative;
         }
 
-        /* 非常に薄いスキャンライン演出 */
         body::after {
             content: " ";
             display: block;
@@ -55,7 +54,6 @@
             opacity: 0.3;
         }
 
-        /* 起動イニシャル画面演出 (0.6s) */
         #boot-screen {
             position: fixed;
             top: 0;
@@ -96,7 +94,6 @@
             z-index: 2;
         }
 
-        /* HUDコーナーフレーム */
         .container::before {
             content: '┌';
             position: absolute;
@@ -114,7 +111,6 @@
             opacity: 0.6;
         }
 
-        /* ヘッダー情報およびデータストリーム */
         .cyber-logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -181,7 +177,6 @@
             text-transform: uppercase;
         }
 
-        /* Smart Glass PINパッド */
         .pin-dots {
             display: flex;
             justify-content: center;
@@ -243,7 +238,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 3Dホログラム・VAIO CORE システム */
         .bio-box {
             text-align: center;
             padding: 4px 0;
@@ -259,7 +253,6 @@
             align-items: center;
         }
 
-        /* 多層認証リング群 */
         .ring-layer {
             position: absolute;
             border-radius: 50%;
@@ -318,7 +311,6 @@
             text-shadow: 0 0 8px var(--neon-purple);
         }
 
-        /* セキュリティクリアランス表示 */
         .security-clearance {
             display: flex;
             flex-direction: column;
@@ -348,7 +340,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* セキュリティモジュール・タブ */
         .security-modules {
             display: flex;
             gap: 6px;
@@ -526,7 +517,6 @@
     </style>
 </head>
 <body>
-    <!-- 起動時システム初期化演出 (0.5s) -->
     <div id="boot-screen">
         <div class="boot-console">
             INITIALIZING CYBER VAULT...<br>
@@ -536,7 +526,6 @@
     </div>
 
     <div class="container">
-        <!-- 1. PINコード認証画面 -->
         <div id="step-pin" class="fade-in">
             <div class="cyber-logo-wrapper">
                 <div class="hud-status-bar">
@@ -577,7 +566,6 @@
             </div>
         </div>
 
-        <!-- 2. 二重セキュリティ（生体認証画面：VAIO CORE & 多層認証リング） -->
         <div id="step-bio" class="fade-in">
             <div class="cyber-logo-wrapper">
                 <div class="hud-status-bar">
@@ -613,7 +601,6 @@
             </div>
         </div>
 
-        <!-- 3. メインアプリ画面（最大10スロット対応セキュリティモジュール） -->
         <div id="app-screen" class="fade-in">
             <div class="cyber-logo-wrapper">
                 <div class="hud-status-bar">
@@ -675,8 +662,6 @@
         </div>
     </div>
 
-    <!-- CryptoJS 暗号化ライブラリ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         if (!localStorage.getItem('vault_pin')) {
             localStorage.setItem('vault_pin', '1234');
@@ -819,14 +804,7 @@
                 if (saved) {
                     try {
                         let obj = JSON.parse(saved);
-                        let nameVal = '';
-                        if (currentTab === 'bank') nameVal = obj.bankName;
-                        else if (currentTab === 'card') nameVal = obj.brand;
-                        else if (currentTab === 'web') nameVal = obj.service;
-
-                        if (nameVal) {
-                            displayName = `[ ${slotNum} ] SECURE // ${nameVal}`;
-                        } else {
+                        if (obj.ciphertext) {
                             displayName = `[ ${slotNum} ] SECURE`;
                         }
                     } catch(e) {}
@@ -863,7 +841,9 @@
             currentSlot = document.getElementById('slot-select').value;
             if (currentTab && currentSlot) {
                 document.getElementById('form-area').innerHTML = templates[currentTab];
-                loadSavedDataToForm();
+                const inputs = document.querySelectorAll('#form-area input');
+                inputs.forEach(input => input.value = '');
+                document.getElementById('cipher-text').value = '';
             } else {
                 document.getElementById('form-area').innerHTML = `<div class="welcome-placeholder">上のセキュリティモジュールとスロットを選択してください</div>`;
             }
@@ -873,38 +853,48 @@
             return 'vault_' + currentTab + '_slot_' + currentSlot;
         }
 
-        function loadSavedDataToForm() {
-            if (!currentTab || !currentSlot) return;
-            const saved = localStorage.getItem(getStorageKey());
-            const inputs = document.querySelectorAll('#form-area input');
-            inputs.forEach(input => input.value = '');
-            
-            if (saved) {
-                try {
-                    const obj = JSON.parse(saved);
-                    if (currentTab === 'bank') {
-                        document.getElementById('b-name').value = obj.bankName || '';
-                        document.getElementById('b-branch').value = obj.branch || '';
-                        document.getElementById('b-account').value = obj.account || '';
-                        document.getElementById('b-holder').value = obj.holder || '';
-                        document.getElementById('b-pin').value = obj.pin || '';
-                    } else if (currentTab === 'card') {
-                        document.getElementById('c-brand').value = obj.brand || '';
-                        document.getElementById('c-num').value = obj.number || '';
-                        document.getElementById('c-exp').value = obj.expire || '';
-                        document.getElementById('c-name').value = obj.name || '';
-                        document.getElementById('c-cvv').value = obj.cvv || '';
-                    } else if (currentTab === 'web') {
-                        document.getElementById('w-srv').value = obj.service || '';
-                        document.getElementById('w-id').value = obj.id || '';
-                        document.getElementById('w-user').value = obj.username || '';
-                        document.getElementById('w-pass').value = obj.pass || '';
-                    }
-                } catch(e) {}
+        function buf2base64(buf) {
+            let binary = '';
+            let bytes = new Uint8Array(buf);
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
             }
+            return btoa(binary);
         }
 
-        function encryptData() {
+        function base642buf(base64) {
+            let binary = atob(base64);
+            let bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        async function deriveKey(password, salt) {
+            const enc = new TextEncoder();
+            const keyMaterial = await window.crypto.subtle.importKey(
+                "raw",
+                enc.encode(password),
+                { name: "PBKDF2" },
+                false,
+                ["deriveKey"]
+            );
+            return await window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2",
+                    salt: salt,
+                    iterations: 310000,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                { name: "AES-GCM", length: 256 },
+                false,
+                ["encrypt", "decrypt"]
+            );
+        }
+
+        async function encryptData() {
             if (!currentTab || !currentSlot) {
                 alert("⚠️ モジュールとスロットの両方を選択してください！");
                 return;
@@ -936,29 +926,93 @@
                 return;
             }
 
-            localStorage.setItem(getStorageKey(), JSON.stringify(data));
-            updateSlotOptions();
-            document.getElementById('slot-select').value = currentSlot;
+            try {
+                const salt = window.crypto.getRandomValues(new Uint8Array(16));
+                const iv = window.crypto.getRandomValues(new Uint8Array(12));
+                const key = await deriveKey(pass, salt);
 
-            const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), pass).toString();
-            document.getElementById('cipher-text').value = encrypted;
-            alert(`🔒 [${currentTab.toUpperCase()} - SLOT ${currentSlot}] データを要塞レベルで暗号化・保存しました！`);
+                const enc = new TextEncoder();
+                const encodedData = enc.encode(JSON.stringify(data));
+
+                const ciphertext = await window.crypto.subtle.encrypt(
+                    { name: "AES-GCM", iv: iv },
+                    key,
+                    encodedData
+                );
+
+                const storageObj = {
+                    version: 1,
+                    algorithm: "AES-GCM",
+                    kdf: "PBKDF2-SHA256",
+                    iterations: 310000,
+                    salt: buf2base64(salt),
+                    iv: buf2base64(iv),
+                    ciphertext: buf2base64(ciphertext)
+                };
+
+                localStorage.setItem(getStorageKey(), JSON.stringify(storageObj));
+                updateSlotOptions();
+                document.getElementById('slot-select').value = currentSlot;
+
+                document.getElementById('cipher-text').value = storageObj.ciphertext;
+                alert(`🔒 [${currentTab.toUpperCase()} - SLOT ${currentSlot}] データを要塞レベルで暗号化・保存しました！`);
+            } catch (e) {
+                alert("❌ 暗号化に失敗しました。");
+            }
         }
 
-        function decryptData() {
-            const cipher = document.getElementById('cipher-text').value;
+        async function decryptData() {
             const pass = document.getElementById('master-pass').value;
-            if (!cipher || !pass) {
-                alert("⚠️ 暗号データとマスターパスワードの両方が必要です！");
+            if (!pass) {
+                alert("⚠️ マスターパスワードを入力してください！");
+                return;
+            }
+
+            const saved = localStorage.getItem(getStorageKey());
+            if (!saved) {
+                alert("❌ 暗号化データが存在しません！");
                 return;
             }
 
             try {
-                const bytes = CryptoJS.AES.decrypt(cipher, pass);
-                const str = bytes.toString(CryptoJS.enc.Utf8);
-                if (!str) throw new Error();
+                const storageObj = JSON.parse(saved);
+                const salt = base642buf(storageObj.salt);
+                const iv = base642buf(storageObj.iv);
+                const ciphertext = base642buf(storageObj.ciphertext);
+
+                const key = await deriveKey(pass, salt);
+
+                const decrypted = await window.crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv },
+                    key,
+                    ciphertext
+                );
+
+                const dec = new TextDecoder();
+                const str = dec.decode(decrypted);
                 const obj = JSON.parse(str);
-                
+
+                if (currentTab === 'bank') {
+                    document.getElementById('b-name').value = obj.bankName || '';
+                    document.getElementById('b-branch').value = obj.branch || '';
+                    document.getElementById('b-account').value = obj.account || '';
+                    document.getElementById('b-holder').value = obj.holder || '';
+                    document.getElementById('b-pin').value = obj.pin || '';
+                } else if (currentTab === 'card') {
+                    document.getElementById('c-brand').value = obj.brand || '';
+                    document.getElementById('c-num').value = obj.number || '';
+                    document.getElementById('c-exp').value = obj.expire || '';
+                    document.getElementById('c-name').value = obj.name || '';
+                    document.getElementById('c-cvv').value = obj.cvv || '';
+                } else if (currentTab === 'web') {
+                    document.getElementById('w-srv').value = obj.service || '';
+                    document.getElementById('w-id').value = obj.id || '';
+                    document.getElementById('w-user').value = obj.username || '';
+                    document.getElementById('w-pass').value = obj.pass || '';
+                }
+
+                document.getElementById('cipher-text').value = storageObj.ciphertext;
+
                 let resText = `📂 [VAULT DATA // SLOT ${obj.slot || '?'}]\n`;
                 for (let k in obj) {
                     if (k !== 'category' && k !== 'slot') {
@@ -968,6 +1022,7 @@
                 document.getElementById('result-view').innerText = resText;
             } catch (e) {
                 alert("❌ DECRYPTION FAILED // パスワードが違うかデータが破損しています！");
+                document.getElementById('result-view').innerText = "復号に失敗しました。機密データは非表示です。";
             }
         }
     </script>
