@@ -94,11 +94,11 @@ h1{font-size:17px;letter-spacing:2px;text-align:center;text-shadow:0 0 10px rgba
   transition:.2s;box-shadow:inset 0 0 5px rgba(34,211,238,.12)
 }
 .pin-dot.active{background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 20px rgba(34,211,238,.5)}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:250px;margin:auto}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:250px;margin:auto}
 .pin-btn{
   background:linear-gradient(145deg,rgba(17,29,52,.9),rgba(5,11,23,.9));
-  border:1px solid rgba(34,211,238,.28);color:#fff;font-size:15px;padding:8px;border-radius:7px;
-  cursor:pointer;transition:.12s;min-height:42px;touch-action:manipulation
+  border:1px solid rgba(34,211,238,.28);color:#fff;font-size:17px;padding:12px;border-radius:7px;
+  cursor:pointer;transition:.12s;min-height:54px;touch-action:manipulation
 }
 .pin-btn:hover{border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.25)}
 .pin-btn:active{background:var(--cyan);color:#000;transform:scale(.96);box-shadow:0 0 20px var(--cyan)}
@@ -155,54 +155,32 @@ h1{font-size:17px;letter-spacing:2px;text-align:center;text-shadow:0 0 10px rgba
   padding:6px;border-radius:4px;font-size:11px;font-weight:bold
 }
 .form-group{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
-label{font-size:8px;color:var(--cyan);letter-spacing:1.5px;font-weight:bold}
+label{font-size:8px;color:var(--cyan);letter-spacing:1px;font-weight:bold}
 input,textarea{
   width:100%;background:#020617;border:1px solid rgba(34,211,238,.25);color:#fff;
   padding:8px 10px;border-radius:6px;font-size:11px;outline:none
 }
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(34,211,238,.35)}
-
-/* === 修正された暗号化・復号化ボタン（横長の八角形：上下が平らで左右に角のある形状） === */
 .action-btn{
-  width:100%;padding:8px 16px;margin-top:6px;font-weight:bold;cursor:pointer;
-  font-size:11px;letter-spacing:1.5px;
-  background:linear-gradient(135deg,rgba(34,211,238,.25),rgba(2,132,199,.4));
-  color:var(--cyan);text-shadow:0 0 8px rgba(34,211,238,.6);
-  border:1px solid rgba(34,211,238,.6);
-  clip-path: polygon(14px 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 14px 100%, 0% 50%);
-  box-shadow:0 0 18px rgba(34,211,238,.2), inset 0 0 12px rgba(34,211,238,.15);
-  transition:all .25s ease;touch-action:manipulation;position:relative;overflow:hidden;
+  width:100%;padding:11px;border:0;border-radius:7px;margin-top:4px;font-weight:bold;cursor:pointer;
+  font-size:10px;letter-spacing:1px;background:linear-gradient(135deg,var(--cyan),#0284c7);
+  box-shadow:0 0 14px rgba(34,211,238,.25);transition:.18s;touch-action:manipulation
 }
-.action-btn:before{
-  content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(34,211,238,.2),transparent);
-  transition:.5s;
-}
-.action-btn:hover{
-  background:linear-gradient(135deg,rgba(34,211,238,.4),rgba(2,132,199,.6));
-  border-color:var(--cyan);color:#fff;
-  box-shadow:0 0 25px rgba(34,211,238,.4), inset 0 0 18px rgba(34,211,238,.3);
-  text-shadow:0 0 12px #fff;
-}
-.action-btn:hover:before{left:100%}
-.action-btn:active{transform:scale(.98);box-shadow:0 0 10px var(--cyan)}
+.action-btn:active{transform:scale(.98)}
 .action-btn:disabled{opacity:.45;cursor:not-allowed}
-
-/* メタル（復号化ボタン用）：カラーはそのまま、横長八角形＆スリム化 */
-.metal{
-  background:linear-gradient(135deg,rgba(167,139,250,.2),rgba(30,41,59,.8));
-  color:var(--purple);border:1px solid rgba(167,139,250,.5);
-  text-shadow:0 0 8px rgba(167,139,250,.5);
-  box-shadow:0 0 18px rgba(167,139,250,.15), inset 0 0 12px rgba(167,139,250,.1);
+.metal{background:linear-gradient(135deg,#334155,#1e293b);color:#fff;border:1px solid rgba(148,163,184,.25)}
+.octagon-btn{
+  clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,18px 100%,0 50%);
+  border-radius:0;border:none;position:relative;background:#020617
 }
-.metal:hover{
-  background:linear-gradient(135deg,rgba(167,139,250,.35),rgba(51,65,85,.9));
-  border-color:var(--purple);color:#fff;
-  box-shadow:0 0 25px rgba(167,139,250,.35), inset 0 0 18px rgba(167,139,250,.25);
-  text-shadow:0 0 12px #fff;
+.octagon-btn.oct-cyan{
+  box-shadow:0 0 16px rgba(34,211,238,.45),inset 0 0 12px rgba(34,211,238,.15);
+  border:1px solid var(--cyan);background:linear-gradient(135deg,rgba(8,47,73,.9),rgba(2,6,23,.95))
 }
-/* ======================================= */
-
+.octagon-btn.oct-purple{
+  box-shadow:0 0 16px rgba(167,139,250,.45),inset 0 0 12px rgba(167,139,250,.15);
+  border:1px solid #a78bfa;background:linear-gradient(135deg,rgba(59,7,100,.9),rgba(2,6,23,.95))
+}
 .result-box{
   background:#020617;border:1px solid rgba(167,139,250,.25);padding:9px;color:#e9d5ff;min-height:52px;
   max-height:110px;overflow-y:auto;border-radius:7px;font-size:10px;white-space:pre-wrap;word-break:break-all
@@ -366,14 +344,14 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 
     <input type="password" id="master-pass" placeholder="秘密のマスターキーを入力" autocomplete="off">
   </div>
 
-  <button class="action-btn" onclick="encryptData()">🔑 データを暗号化して保存</button>
+  <button class="action-btn octagon-btn oct-cyan" onclick="encryptData()">🔑 データを暗号化して保存</button>
 
   <div class="form-group">
     <label>CIPHER TEXT // SECURE STREAM</label>
     <textarea id="cipher-text" rows="2" placeholder="U2FsdGVkX1..." autocomplete="off"></textarea>
   </div>
 
-  <button class="action-btn metal" onclick="decryptData()">🔐 復号化して中身を確認</button>
+  <button class="action-btn metal octagon-btn oct-purple" onclick="decryptData()">🔓 復号化して中身を見る</button>
 
   <div class="form-group">
     <label>DECRYPTION VIEWER</label>
@@ -649,6 +627,11 @@ async function authBio(){
 
     const challenge=crypto.getRandomValues(new Uint8Array(32));
 
+    /*
+      Client-only vault:
+      a production WebAuthn implementation should obtain and verify
+      a server-generated challenge.
+    */
     const credential=await navigator.credentials.get({
       publicKey:{
         challenge,
@@ -658,11 +641,18 @@ async function authBio(){
       }
     });
 
+    /*
+      CRITICAL:
+      Cancel/Back/error never reaches this point.
+      A real credential object is required.
+    */
     if(!credential)throw new Error("NO_CREDENTIAL");
 
+    /* ONLY successful authentication can unlock LEVEL 03 */
     unlockVaultUI();
 
   }catch(e){
+    /* Cancel = remain on LEVEL 02 */
     vaultUnlocked=false;
 
     if(err){
