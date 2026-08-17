@@ -1017,7 +1017,7 @@ select:focus{
 
       <div class="terminal-header">
         <h1>DEEP VAULT</h1>
-        <p>NEURAL SECURITY CORE // 10 SLOTS</p>
+        <p>NEURAL SECURITY CORE // APP 20 SLOTS / OTHER 10 SLOTS</p>
       </div>
     </div>
 
@@ -1720,7 +1720,10 @@ function updateSlots(){
 
   if(!currentTab) return;
 
-  for(let i=1;i<=10;i++){
+  // アプリ（web）だけ20スロット、それ以外は従来どおり10スロット
+  const slotCount = currentTab === 'web' ? 20 : 10;
+
+  for(let i=1;i<=slotCount;i++){
 
     const k = '' + i;
 
@@ -1734,9 +1737,15 @@ function updateSlots(){
 
     o.value = k;
 
+    const slotLabel =
+      currentTab === 'bank' ? '銀行名' :
+      currentTab === 'card' ? 'クレカ名' :
+      currentTab === 'web'  ? 'アプリ名' :
+      'メモ';
+
     o.textContent =
-      `[ ${k.padStart(2,'0')} ] ` +
-      `${saved ? 'SECURE' : 'ACTIVE (EMPTY)'}`;
+      `[ ${k.padStart(2,'0')} ] ${slotLabel}` +
+      `${saved ? ' // SECURE' : ' // ACTIVE (EMPTY)'}`;
 
     s.appendChild(o);
   }
