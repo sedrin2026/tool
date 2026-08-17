@@ -435,7 +435,8 @@ h1{
 }
 
 .security-modules{
-  display:flex;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
   gap:7px;
   margin-bottom:12px;
 }
@@ -874,6 +875,11 @@ select:focus{
       <div class="module-card" onclick="switchTab('web',this)">
         🌐 アプリ
         <div class="mod-status">DIGITAL CORE</div>
+      </div>
+
+      <div class="module-card" onclick="switchTab('memo',this)">
+        📝 メモ帳
+        <div class="mod-status">NOTE CORE</div>
       </div>
     </div>
 
@@ -1488,6 +1494,19 @@ const templates = {
       <input id="w-pass" type="password">
     </div>
   `
+,
+
+  memo:`
+    <div class="form-group">
+      <label>メモタイトル</label>
+      <input id="m-title" placeholder="タイトルを入力">
+    </div>
+
+    <div class="form-group">
+      <label>メモ内容</label>
+      <textarea id="m-body" rows="8" placeholder="自由にメモを入力してください"></textarea>
+    </div>
+  `
 };
 
 /* ---------- スロット ---------- */
@@ -1587,7 +1606,7 @@ function changeSlot(){
       templates[currentTab];
 
     $('form-area')
-      .querySelectorAll('input')
+      .querySelectorAll('input, textarea')
       .forEach(x => x.value = '');
 
     $('cipher-text').value = '';
@@ -2035,6 +2054,10 @@ async function decryptData(){
 
       updateCardBrandDetection();
 
+    }else if(currentTab === 'memo'){
+      $('m-title').value = d.title || '';
+      $('m-body').value = d.body || '';
+
     }else{
 
       [
@@ -2060,7 +2083,9 @@ async function decryptData(){
       o.ciphertext;
 
     $('result-view').textContent =
-      JSON.stringify(d,null,2);
+      currentTab === 'memo'
+        ? '📝 メモを復号しました\n\n' + (d.title ? d.title + '\n' : '') + (d.body || '')
+        : JSON.stringify(d,null,2);
 
   }catch(e){
 
