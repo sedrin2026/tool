@@ -16,7 +16,7 @@
   --purple2:#7c3aed;
   --pink:#f472b6;
   --green:#34d399;
-  --muted:#94a3b8; /* ← 少し明るく見やすく変更しました */
+  --muted:#94a3b8;
   --white:#f8fafc;
 }
 
@@ -525,11 +525,11 @@ select:focus{
 
 .action-btn{
   width:100%;
-  min-height:34px;
-  height:34px;
-  padding:6px 12px;
+  min-height:30px; /* ← 高さを少し低く調整しました */
+  height:30px;    /* ← 高さを少し低く調整しました */
+  padding:4px 12px;
   border:0;
-  border-radius:11px;
+  border-radius:9px;
   margin-top:4px;
   font-weight:bold;
   cursor:pointer;
@@ -547,10 +547,10 @@ select:focus{
   position:relative;
   overflow:hidden;
   clip-path:none;
-  border-radius:11px;
-  min-height:34px;
-  height:34px;
-  padding:6px 18px;
+  border-radius:9px;
+  min-height:30px; /* ← 高さを少し低く調整しました */
+  height:30px;    /* ← 高さを少し低く調整しました */
+  padding:4px 18px;
   isolation:isolate;
 }
 
@@ -560,7 +560,7 @@ select:focus{
   inset:1px;
   z-index:-1;
   clip-path:none;
-  border-radius:10px;
+  border-radius:8px;
   background:linear-gradient(
     90deg,
     transparent,
@@ -691,7 +691,6 @@ select:focus{
 @media(max-width:380px){
   .container{padding:16px}
   .biometric-core-container{transform:scale(.9)}
-  .cyber-action{min-height:46px}
 }
 </style>
 </head>
@@ -1495,7 +1494,7 @@ function updateSlots(){
   }
 }
 
-/* ---------- モジュール切替（もう一度押すと未選択にリセット） ---------- */
+/* ---------- モジュール切替（もう一度押すと確実に未選択にリセット） ---------- */
 function switchTab(t,e){
 
   if(!authenticatedSession){
@@ -1503,17 +1502,14 @@ function switchTab(t,e){
     return;
   }
 
-  // すでに選択されているタブを再度クリックした場合は未選択状態にリセット
+  // 既に選択されているタブが再度押された場合は、選択を完全に解除して未選択状態に戻す
   if(currentTab === t){
-
     currentTab = null;
     currentSlot = '';
 
     document
       .querySelectorAll('.module-card')
-      .forEach(x =>
-        x.classList.remove('active')
-      );
+      .forEach(x => x.classList.remove('active'));
 
     updateSlots();
 
