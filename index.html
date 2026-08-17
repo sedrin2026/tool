@@ -162,20 +162,21 @@ input,textarea{
 }
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(34,211,238,.35)}
 
-/* --- 近未来風デザイン調整：暗号化・復号化ボタン（サイズ・余白最適化） --- */
+/* --- 近未来風ボタン：高さを低くし、上下を台形（斜めカット）に変更 --- */
 #app-screen .action-btn {
   position: relative;
   border: 1px solid rgba(34, 211, 238, 0.5);
   background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(2, 132, 199, 0.4));
   color: var(--cyan);
   text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
-  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  /* 上辺と下辺の両端を斜めに切り欠いた台形風ポリゴン (左上・右上・右下・左下) */
+  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
   box-shadow: 0 0 15px rgba(34, 211, 238, 0.2), inset 0 0 10px rgba(34, 211, 238, 0.1);
   letter-spacing: 1.5px;
   font-size: 11px;
-  /* ボタン内側に十分な余白を確保 */
-  padding: 16px 24px;
-  margin: 12px 0;
+  /* 上下の高さを抑えつつ、左右の余白を確保 */
+  padding: 10px 20px;
+  margin: 10px 0;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: block;
   width: 100%;
@@ -652,11 +653,6 @@ async function authBio(){
 
     const challenge=crypto.getRandomValues(new Uint8Array(32));
 
-    /*
-      Client-only vault:
-      a production WebAuthn implementation should obtain and verify
-      a server-generated challenge.
-    */
     const credential=await navigator.credentials.get({
       publicKey:{
         challenge,
@@ -666,18 +662,11 @@ async function authBio(){
       }
     });
 
-    /*
-      CRITICAL:
-      Cancel/Back/error never reaches this point.
-      A real credential object is required.
-    */
     if(!credential)throw new Error("NO_CREDENTIAL");
 
-    /* ONLY successful authentication can unlock LEVEL 03 */
     unlockVaultUI();
 
   }catch(e){
-    /* Cancel = remain on LEVEL 02 */
     vaultUnlocked=false;
 
     if(err){
