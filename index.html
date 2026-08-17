@@ -16,7 +16,7 @@
   --purple2:#7c3aed;
   --pink:#f472b6;
   --green:#34d399;
-  --muted:#64748b;
+  --muted:#94a3b8; /* ← 少し明るく見やすく変更しました */
   --white:#f8fafc;
 }
 
@@ -525,8 +525,8 @@ select:focus{
 
 .action-btn{
   width:100%;
-  min-height:35px;
-  height:35px;
+  min-height:34px;
+  height:34px;
   padding:6px 12px;
   border:0;
   border-radius:11px;
@@ -548,8 +548,8 @@ select:focus{
   overflow:hidden;
   clip-path:none;
   border-radius:11px;
-  min-height:35px;
-  height:35px;
+  min-height:34px;
+  height:34px;
   padding:6px 18px;
   isolation:isolate;
 }
@@ -875,7 +875,7 @@ select:focus{
     <button
       class="action-btn cyber-action cyber-save"
       onclick="encryptData()">
-      🔑　データを暗号化して保存
+      🔑 データを暗号化して保存
     </button>
 
     <div class="form-group" style="margin-top:8px">
@@ -890,7 +890,7 @@ select:focus{
     <button
       class="action-btn cyber-action cyber-decrypt"
       onclick="decryptData()">
-      🔐　復号化して中身を確認
+      🔐 復号化して中身を確認
     </button>
 
     <div class="form-group" style="margin-top:8px">
@@ -942,12 +942,6 @@ let autoLockTimer = null;
 let currentTab = null;
 let currentSlot = '';
 
-/*
- * 生体認証中は visibilitychange による自動ロックを
- * 発生させない。
- * これがないと Android の認証ダイアログ表示時に
- * 画面がロックされる場合がある。
- */
 let authInProgress = false;
 let authenticatedSession = false;
 
@@ -970,10 +964,6 @@ function showOnly(screenId){
   });
 }
 
-/*
- * メイン画面は必ず authenticatedSession=true の時だけ表示。
- * HTMLをスクロールしただけでは絶対に到達できない。
- */
 function showAppScreen(){
   if(!authenticatedSession){
     showOnly('step-pin');
@@ -1041,10 +1031,6 @@ function resetAuto(){
   },{passive:true});
 });
 
-/*
- * 認証ダイアログのキャンセル・戻る操作で
- * メイン画面へ進まないようにする。
- */
 document.addEventListener('visibilitychange',() => {
   if(
     document.visibilityState === 'hidden' &&
@@ -1056,10 +1042,6 @@ document.addEventListener('visibilitychange',() => {
 });
 
 window.addEventListener('pageshow',() => {
-  /*
-   * 戻る操作等で復元された場合、
-   * 認証済みフラグがなければPINへ戻す。
-   */
   if(!authenticatedSession){
     showPinScreen();
   }
@@ -1207,10 +1189,6 @@ async function pinDone(){
       enteredPin = '';
       dots();
 
-      /*
-       * PINだけではメイン画面へ行かない。
-       * 必ず生体認証画面へ。
-       */
       showBioScreen();
 
     }else{
@@ -1330,10 +1308,6 @@ async function authBio(){
 
   if(authInProgress) return;
 
-  /*
-   * PublicKeyCredential が使えない端末では
-   * メイン画面へ進ませない。
-   */
   if(!window.PublicKeyCredential){
     $('pin-msg').textContent =
       '❌ この端末では生体認証を利用できません。';
@@ -1351,15 +1325,6 @@ async function authBio(){
 
   try{
 
-    /*
-     * WebAuthn。
-     *
-     * ユーザーが「戻る」「キャンセル」を押した場合は
-     * navigator.credentials.get() が reject する。
-     *
-     * reject時は絶対に authenticatedSession を
-     * trueにしない。
-     */
     const challenge =
       crypto.getRandomValues(
         new Uint8Array(32)
@@ -1374,9 +1339,6 @@ async function authBio(){
       }
     });
 
-    /*
-     * ここまで到達した時だけ認証成功。
-     */
     authenticatedSession = true;
 
     $('step-bio').style.display = 'none';
@@ -1395,17 +1357,9 @@ async function authBio(){
 
   }catch(error){
 
-    /*
-     * キャンセル・戻る・認証失敗はすべてここ。
-     * メイン画面へは絶対に進まない。
-     */
     authenticatedSession = false;
-
     showBioScreen();
 
-    /*
-     * キャンセルなら穏やかな表示。
-     */
     const name =
       error && error.name
         ? error.name
@@ -1541,7 +1495,7 @@ function updateSlots(){
   }
 }
 
-/* ---------- モジュール切替 ---------- */
+/* ---------- モジュール切替（もう一度押すと未選択にリセット） ---------- */
 function switchTab(t,e){
 
   if(!authenticatedSession){
@@ -1549,6 +1503,7 @@ function switchTab(t,e){
     return;
   }
 
+  // すでに選択されているタブを再度クリックした場合は未選択状態にリセット
   if(currentTab === t){
 
     currentTab = null;
@@ -1977,7 +1932,6 @@ async function decryptData(){
 
 /* =========================================================
    CYBER 3D VISUAL LAYER
-   ※ 見た目だけを変更。認証状態・セキュリティ状態には触れない。
    ========================================================= */
 
 (() => {
@@ -2071,11 +2025,6 @@ if(Date.now() < lockUntil){
   lockCountdown();
 }
 
-/*
- * 起動時は必ずPIN画面。
- * localStorageに認証済み状態を保存しないので、
- * ページ更新でもメイン画面へ直行できない。
- */
 authenticatedSession = false;
 authInProgress = false;
 showPinScreen();
