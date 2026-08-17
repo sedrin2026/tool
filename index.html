@@ -632,6 +632,30 @@ select:focus{
   filter:brightness(1.18);
 }
 
+.card-brand-status{
+  margin-top:4px;
+  padding:5px 8px;
+  border:1px solid rgba(34,211,238,.18);
+  border-radius:6px;
+  background:rgba(2,6,23,.7);
+  color:var(--muted);
+  font-size:7px;
+  letter-spacing:.7px;
+  text-align:left;
+  transition:.2s;
+}
+.card-brand-status.detected{
+  color:var(--cyan);
+  border-color:rgba(34,211,238,.45);
+  box-shadow:0 0 10px rgba(34,211,238,.12),inset 0 0 8px rgba(34,211,238,.05);
+  text-shadow:0 0 7px rgba(34,211,238,.6);
+}
+.card-brand-status.warning{
+  color:var(--pink);
+  border-color:rgba(244,114,182,.35);
+  text-shadow:0 0 7px rgba(244,114,182,.45);
+}
+
 .result-box{
   background:#020617;
   border:1px solid rgba(168,85,247,.25);
@@ -1417,13 +1441,14 @@ const templates = {
 
   card:`
     <div class="form-group">
-      <label>カード会社 / ブランド</label>
-      <input id="c-brand">
+      <label>カード会社 / ブランド // AUTO DETECT</label>
+      <input id="c-brand" autocomplete="off" placeholder="カード番号から自動判定">
     </div>
 
     <div class="form-group">
       <label>カード番号</label>
-      <input id="c-num">
+      <input id="c-num" inputmode="numeric" autocomplete="off" placeholder="番号を入力するとブランドを自動判定">
+      <div id="card-brand-status" class="card-brand-status">◈ CARD BRAND // WAITING FOR INPUT</div>
     </div>
 
     <div class="form-group">
@@ -1568,8 +1593,123 @@ function changeSlot(){
     $('cipher-text').value = '';
     $('result-view').textContent =
       'ここに復号されたデータが表示されます...';
+
+    if(currentTab === 'card'){
+      setupCardBrandDetector();
+    }
   }
 }
+
+/* =========================================================
+   CARD BRAND AUTO DETECTOR
+   ※ カード番号はこのブラウザ内だけで判定。外部送信なし。
+   ========================================================= */
+
+function normalizeCardNumber(value){
+  return String(value || '').replace(/\D/g,'');
+}
+
+function detectCardBrand(number){
+  const n = normalizeCardNumber(number);
+  if(!n) return '';
+
+  if(/^4/.test(n)) return 'VISA';
+  if(/^(5[1-5]|2(2[2-9]|[3-6]\d|7[01]|720))/.test(n)) return 'Mastercard';
+  if(/^35(2[89]|[3-8]\d)/.test(n)) return 'JCB';
+  if(/^(34|37)/.test(n)) return 'American Express';
+  if(/^(30[0-5]|36|3[89])/.test(n)) return 'Diners Club';
+  if(/^(6011|65|64[4-9])/.test(n)) return 'Discover';
+  if(/^62/.test(n)) return 'UnionPay';
+  return '';
+}
+
+function luhnCheck(number){
+  const n = normalizeCardNumber(number);
+  if(n.length < 12) return null;
+
+  let sum = 0;
+  let doubleIt = false;
+
+  for(let i=n.length-1;i>=0;i--){
+    let d = Number(n[i]);
+    if(doubleIt){
+      d *= 2;
+      if(d > 9) d -= 9;
+    }
+    sum += d;
+    doubleIt = !doubleIt;
+  }
+
+  return sum % 10 === 0;
+}
+
+function formatCardNumber(value){
+  const n = normalizeCardNumber(value).slice(0,19);
+  return n.replace(/(\d{4})(?=\d)/g,'$1 ').trim();
+}
+
+function updateCardBrandDetection(){
+  const input = $('c-num');
+  const brand = $('c-brand');
+  const status = $('card-brand-status');
+
+  if(!input || !brand || !status) return;
+
+  const digits = normalizeCardNumber(input.value);
+  const detected = detectCardBrand(digits);
+
+  if(detected){
+    const previous = brand.dataset.lastDetected || '';
+
+    if(!brand.value || brand.value === previous){
+      brand.value = detected;
+    }
+
+    brand.dataset.lastDetected = detected;
+
+    const valid = luhnCheck(digits);
+    const validation = valid === null
+      ? 'FORMAT CHECK // INCOMPLETE'
+      : valid
+        ? 'NUMBER CHECK // PASS'
+        : 'NUMBER CHECK // CHECK DIGIT';
+
+    status.textContent =
+      `◈ CARD BRAND // ${detected} // ${validation}`;
+    status.className =
+      'card-brand-status detected' +
+      (valid === false ? ' warning' : '');
+  }else if(digits){
+    status.textContent = '◈ CARD BRAND // UNKNOWN PREFIX';
+    status.className = 'card-brand-status warning';
+  }else{
+    status.textContent = '◈ CARD BRAND // WAITING FOR INPUT';
+    status.className = 'card-brand-status';
+    brand.dataset.lastDetected = '';
+  }
+}
+
+function setupCardBrandDetector(){
+  const input = $('c-num');
+  if(!input) return;
+
+  input.addEventListener('input',() => {
+    const cursorEnd = input.selectionStart || input.value.length;
+    const before = normalizeCardNumber(input.value.slice(0,cursorEnd));
+
+    input.value = formatCardNumber(input.value);
+
+    const pos = formatCardNumber(before).length;
+    try{
+      input.setSelectionRange(pos,pos);
+    }catch(e){}
+
+    updateCardBrandDetection();
+  });
+
+  updateCardBrandDetection();
+}
+
 
 /* ---------- キー ---------- */
 function key(){
@@ -1892,6 +2032,8 @@ async function decryptData(){
             ][i]
           ] || '';
       });
+
+      updateCardBrandDetection();
 
     }else{
 
