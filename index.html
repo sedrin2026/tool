@@ -161,28 +161,24 @@ input,textarea{
   padding:8px 10px;border-radius:6px;font-size:11px;outline:none
 }
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(34,211,238,.35)}
-.action-btn{
-  width:100%;padding:11px;border:0;border-radius:7px;margin-top:4px;font-weight:bold;cursor:pointer;
-  font-size:10px;letter-spacing:1px;background:linear-gradient(135deg,var(--cyan),#0284c7);
-  box-shadow:0 0 14px rgba(34,211,238,.25);transition:.18s;touch-action:manipulation
-}
-.action-btn:active{transform:scale(.98)}
-.action-btn:disabled{opacity:.45;cursor:not-allowed}
-.metal{background:linear-gradient(135deg,#334155,#1e293b);color:#fff;border:1px solid rgba(148,163,184,.25)}
 
-/* --- 近未来風デザイン調整：暗号化・復号化ボタン --- */
+/* --- 近未来風デザイン調整：暗号化・復号化ボタン（サイズ・余白最適化） --- */
 #app-screen .action-btn {
   position: relative;
   border: 1px solid rgba(34, 211, 238, 0.5);
   background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(2, 132, 199, 0.4));
   color: var(--cyan);
   text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   box-shadow: 0 0 15px rgba(34, 211, 238, 0.2), inset 0 0 10px rgba(34, 211, 238, 0.1);
   letter-spacing: 1.5px;
   font-size: 11px;
-  padding: 13px 16px;
+  /* ボタン内側に十分な余白を確保 */
+  padding: 16px 24px;
+  margin: 12px 0;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  width: 100%;
 }
 
 #app-screen .action-btn:hover {
