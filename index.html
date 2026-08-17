@@ -2058,7 +2058,7 @@ function collect(){
     d.cvv =
       $('c-cvv').value;
 
-  }else{
+  }else if(currentTab === 'web'){
 
     d.service =
       $('w-srv').value;
@@ -2080,6 +2080,14 @@ function collect(){
 
     d.note =
       $('w-note').value;
+
+  }else if(currentTab === 'memo'){
+
+    d.title =
+      $('m-title').value;
+
+    d.body =
+      $('m-body').value;
   }
 
   return d;
@@ -2165,6 +2173,9 @@ async function encryptData(){
     const k =
       await derive(p,salt);
 
+    // 現在のフォーム内容を一度だけ取得して暗号化する
+    const data = collect();
+
     const ct =
       await crypto.subtle.encrypt(
         {
@@ -2173,7 +2184,7 @@ async function encryptData(){
         },
         k,
         new TextEncoder().encode(
-          JSON.stringify(collect())
+          JSON.stringify(data)
         )
       );
 
@@ -2199,28 +2210,9 @@ async function encryptData(){
     $('slot-select').value =
       currentSlot;
 
-    // 復号した登録名をスロット表示名として保存
-    if(currentTab === 'bank'){
-      const name = (d.bankName || '').trim();
-      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
-      if(name) localStorage.setItem(metaKey,name);
-      else localStorage.removeItem(metaKey);
-    }else if(currentTab === 'card'){
-      const name = (d.debitName || '').trim();
-      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
-      if(name) localStorage.setItem(metaKey,name);
-      else localStorage.removeItem(metaKey);
-    }else if(currentTab === 'web'){
-      const name = (d.service || '').trim();
-      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
-      if(name) localStorage.setItem(metaKey,name);
-      else localStorage.removeItem(metaKey);
-    }else if(currentTab === 'memo'){
-      const name = (d.title || '').trim();
-      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
-      if(name) localStorage.setItem(metaKey,name);
-      else localStorage.removeItem(metaKey);
-    }
+    // 暗号化保存に成功した時点で、フォームの登録名を
+    // スロット選択欄の表示名として保存する。
+    saveCurrentSlotDisplayName();
 
     updateSlots();
     $('slot-select').value = currentSlot;
