@@ -9,9 +9,9 @@
 <style>
 :root{
   --bg:#01040b;
-  --panel:rgba(4,10,22,.96);
+  --panel:rgba(4,10,22,.94);
   --cyan:#22d3ee;
-  --cyan2:#06b6d4;
+  --cyan2:#0891b2;
   --purple:#a855f7;
   --purple2:#7c3aed;
   --pink:#f472b6;
@@ -25,10 +25,10 @@
   margin:0;
   padding:0;
   font-family:"Courier New",monospace;
-  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
+  width:100%;
   min-height:100%;
   background:#01040b;
 }
@@ -42,26 +42,12 @@ body{
   padding:14px;
   overflow-x:hidden;
   background-image:
-    radial-gradient(circle at 50% 35%,rgba(34,211,238,.10),transparent 45%),
+    radial-gradient(circle at 50% 35%,rgba(34,211,238,.1),transparent 45%),
     radial-gradient(circle at 15% 80%,rgba(168,85,247,.08),transparent 35%),
     linear-gradient(rgba(34,211,238,.025) 1px,transparent 1px),
     linear-gradient(90deg,rgba(34,211,238,.025) 1px,transparent 1px);
   background-size:100% 100%,100% 100%,28px 28px,28px 28px;
   position:relative;
-  overscroll-behavior-x:none;
-}
-
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:9998;
-  background:
-    linear-gradient(rgba(34,211,238,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(34,211,238,.025) 1px,transparent 1px);
-  background-size:28px 28px;
-  mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent);
 }
 
 body:after{
@@ -72,15 +58,12 @@ body:after{
   z-index:9999;
   background:repeating-linear-gradient(
     0deg,
-    rgba(0,0,0,.16) 0 1px,
+    rgba(0,0,0,.18) 0 1px,
     transparent 1px 4px
   );
-  opacity:.25;
+  opacity:.3;
 }
 
-/* =========================
-   BOOT SCREEN
-========================= */
 #boot-screen{
   position:fixed;
   inset:0;
@@ -99,9 +82,8 @@ body:after{
   letter-spacing:3px;
   text-align:center;
   color:var(--cyan);
-  text-shadow:0 0 10px var(--cyan),0 0 30px rgba(34,211,238,.8);
+  text-shadow:0 0 10px var(--cyan),0 0 30px var(--cyan);
   animation:pulse 1s infinite;
-  padding:20px;
 }
 
 @keyframes boot{
@@ -112,9 +94,6 @@ body:after{
   50%{opacity:.5}
 }
 
-/* =========================
-   MAIN FRAME
-========================= */
 .container{
   width:100%;
   max-width:460px;
@@ -130,10 +109,9 @@ body:after{
     0 0 90px rgba(34,211,238,.07),
     inset 0 0 45px #000;
   backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-  animation:float 6s ease-in-out infinite;
   transform-style:preserve-3d;
-  will-change:transform;
+  transition:transform .12s ease-out;
+  animation:float 6s ease-in-out infinite;
 }
 
 .container:before{
@@ -149,9 +127,14 @@ body:after{
   50%{transform:translateY(-2px)}
 }
 
-/* =========================
-   HEADER
-========================= */
+.screen{
+  width:100%;
+}
+
+.screen[aria-hidden="true"]{
+  display:none !important;
+}
+
 .cyber-logo-wrapper{
   display:flex;
   flex-direction:column;
@@ -183,15 +166,8 @@ body:after{
   align-items:center;
   justify-content:center;
   margin-bottom:8px;
-  background:rgba(34,211,238,.10);
-  clip-path:polygon(
-    50% 0,
-    100% 25%,
-    100% 75%,
-    50% 100%,
-    0 75%,
-    0 25%
-  );
+  background:rgba(34,211,238,.1);
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
   filter:drop-shadow(0 0 9px rgba(34,211,238,.5));
   animation:badge 3s ease-in-out infinite;
 }
@@ -227,9 +203,6 @@ h1{
   text-align:center;
 }
 
-/* =========================
-   PIN GATE
-========================= */
 .pin-dots{
   display:flex;
   justify-content:center;
@@ -248,9 +221,7 @@ h1{
 
 .pin-dot.active{
   background:var(--cyan);
-  box-shadow:
-    0 0 10px var(--cyan),
-    0 0 20px rgba(34,211,238,.5);
+  box-shadow:0 0 10px var(--cyan),0 0 20px rgba(34,211,238,.5);
 }
 
 .pin-pad{
@@ -270,7 +241,6 @@ h1{
   border-radius:7px;
   cursor:pointer;
   transition:.12s;
-  touch-action:manipulation;
 }
 
 .pin-btn:hover{
@@ -283,20 +253,6 @@ h1{
   color:#000;
   transform:scale(.96);
   box-shadow:0 0 20px var(--cyan);
-}
-
-#step-bio,
-#app-screen{
-  display:none;
-}
-
-.fade-in{
-  animation:fade .35s ease forwards;
-}
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(7px)}
-  to{opacity:1;transform:none}
 }
 
 .msg-alert{
@@ -342,9 +298,6 @@ h1{
   letter-spacing:1px;
 }
 
-/* =========================
-   BIOMETRIC
-========================= */
 .bio-box{
   text-align:center;
 }
@@ -404,11 +357,7 @@ h1{
   align-items:center;
   justify-content:center;
   background:
-    radial-gradient(
-      circle at 35% 30%,
-      rgba(168,85,247,.35),
-      rgba(2,6,23,.96) 68%
-    );
+    radial-gradient(circle at 35% 30%,rgba(168,85,247,.35),rgba(2,6,23,.96) 68%);
   border:1.5px solid var(--purple);
   box-shadow:
     0 0 26px rgba(168,85,247,.45),
@@ -449,9 +398,36 @@ h1{
   color:#cbd5e1;
 }
 
-/* =========================
-   VAULT MODULES
-========================= */
+/* ===== 生体認証ボタン ===== */
+.auth-button{
+  width:100%;
+  min-height:48px;
+  padding:10px 14px;
+  border:1px solid rgba(216,180,254,.75);
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:10px;
+  letter-spacing:1px;
+  color:#fff;
+  background:
+    linear-gradient(135deg,rgba(168,85,247,.95),rgba(124,58,237,.92));
+  box-shadow:
+    0 0 16px rgba(168,85,247,.35),
+    inset 0 0 16px rgba(255,255,255,.08);
+  transition:.18s;
+}
+
+.auth-button:hover{
+  box-shadow:
+    0 0 22px rgba(168,85,247,.55),
+    inset 0 0 16px rgba(255,255,255,.1);
+}
+
+.auth-button:active{
+  transform:scale(.985);
+}
+
 .security-modules{
   display:flex;
   gap:7px;
@@ -470,7 +446,6 @@ h1{
   text-align:center;
   transition:.22s;
   overflow:hidden;
-  touch-action:manipulation;
 }
 
 .module-card:hover,
@@ -514,9 +489,6 @@ select{
   font-weight:bold;
 }
 
-/* =========================
-   FORMS
-========================= */
 .form-group{
   display:flex;
   flex-direction:column;
@@ -550,30 +522,28 @@ select:focus{
   box-shadow:0 0 10px rgba(34,211,238,.35);
 }
 
-.welcome-placeholder{
-  text-align:center;
-  padding:19px 8px;
-  color:var(--muted);
+.action-btn{
+  width:100%;
+  min-height:48px;
+  padding:9px 14px;
+  border:0;
+  border-radius:10px;
+  margin-top:4px;
+  font-weight:bold;
+  cursor:pointer;
   font-size:10px;
-  border:1px dashed rgba(34,211,238,.2);
-  border-radius:7px;
-  margin-bottom:6px;
+  letter-spacing:1px;
+  transition:.18s;
 }
 
-/* =========================
-   FUTURISTIC OCTAGON BUTTONS
-   ========================= */
-.action-btn{
-  --btn-color:var(--cyan);
-  --btn-dark:#0369a1;
+.action-btn:active{
+  transform:scale(.985);
+}
+
+/* ===== 8角形サイバーボタン ===== */
+.cyber-action{
   position:relative;
-  width:100%;
-  height:56px;
-  min-height:56px;
-  padding:0 22px;
-  margin-top:4px;
-  border:0;
-  border-radius:0;
+  overflow:hidden;
   clip-path:polygon(
     18px 0,
     calc(100% - 18px) 0,
@@ -584,110 +554,84 @@ select:focus{
     0 calc(100% - 18px),
     0 18px
   );
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-  font-size:13px;
-  letter-spacing:.5px;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(34,211,238,.95) 0%,
-      rgba(8,145,178,.95) 48%,
-      rgba(3,105,161,.95) 100%
-    );
-  box-shadow:
-    0 0 12px rgba(34,211,238,.30),
-    0 0 28px rgba(34,211,238,.12),
-    inset 0 1px 0 rgba(255,255,255,.22),
-    inset 0 -5px 12px rgba(0,0,0,.18);
-  transition:
-    transform .16s ease,
-    filter .16s ease,
-    box-shadow .16s ease;
-  overflow:hidden;
-  touch-action:manipulation;
+  border-radius:0;
+  min-height:48px;
+  padding:9px 24px;
+  isolation:isolate;
 }
 
-/* 外周の発光ライン */
-.action-btn:before{
+.cyber-action:before{
   content:"";
   position:absolute;
   inset:1px;
+  z-index:-1;
   clip-path:inherit;
-  border:1px solid rgba(255,255,255,.72);
-  pointer-events:none;
-  opacity:.9;
-}
-
-/* サイバー走査光 */
-.action-btn:after{
-  content:"";
-  position:absolute;
-  left:-20%;
-  top:0;
-  width:18%;
-  height:100%;
   background:linear-gradient(
     90deg,
     transparent,
-    rgba(255,255,255,.45),
+    rgba(255,255,255,.13),
     transparent
   );
-  transform:skewX(-18deg);
-  animation:buttonScan 3.8s linear infinite;
-  pointer-events:none;
+  transform:translateX(-110%);
+  transition:transform .55s ease;
 }
 
-@keyframes buttonScan{
-  0%{left:-25%;opacity:0}
-  12%{opacity:.7}
-  30%{left:110%;opacity:0}
-  100%{left:110%;opacity:0}
+.cyber-action:hover:before{
+  transform:translateX(110%);
 }
 
-.action-btn:hover{
-  filter:brightness(1.12);
-  box-shadow:
-    0 0 18px rgba(34,211,238,.48),
-    0 0 40px rgba(34,211,238,.18),
-    inset 0 1px 0 rgba(255,255,255,.25),
-    inset 0 -5px 12px rgba(0,0,0,.18);
+.cyber-action:after{
+  content:"";
+  position:absolute;
+  top:50%;
+  right:8px;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  transform:translateY(-50%);
+  opacity:.7;
 }
 
-.action-btn:active{
-  transform:translateY(1px) scale(.985);
-  filter:brightness(1.2);
-}
-
-.action-btn.metal{
-  --btn-color:var(--purple);
-  --btn-dark:#6d28d9;
+.cyber-save{
+  color:#fff;
+  border:1px solid rgba(103,232,249,.95);
   background:
-    linear-gradient(
-      180deg,
-      rgba(192,132,252,.96) 0%,
-      rgba(147,51,234,.96) 48%,
-      rgba(109,40,217,.98) 100%
-    );
+    linear-gradient(135deg,#0e7490,#0284c7 48%,#075985);
   box-shadow:
-    0 0 12px rgba(168,85,247,.36),
-    0 0 28px rgba(168,85,247,.16),
-    inset 0 1px 0 rgba(255,255,255,.25),
-    inset 0 -5px 12px rgba(0,0,0,.18);
+    0 0 14px rgba(34,211,238,.34),
+    inset 0 0 18px rgba(125,211,252,.12);
+  text-shadow:0 0 6px rgba(255,255,255,.35);
 }
 
-.action-btn.metal:hover{
-  box-shadow:
-    0 0 18px rgba(168,85,247,.58),
-    0 0 42px rgba(168,85,247,.22),
-    inset 0 1px 0 rgba(255,255,255,.28),
-    inset 0 -5px 12px rgba(0,0,0,.18);
+.cyber-save:after{
+  background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan),0 0 16px var(--cyan);
 }
 
-/* =========================
-   CIPHER / RESULT
-========================= */
+.cyber-decrypt{
+  color:#fff;
+  border:1px solid rgba(216,180,254,.95);
+  background:
+    linear-gradient(135deg,#4c1d95,#7e22ce 48%,#581c87);
+  box-shadow:
+    0 0 16px rgba(168,85,247,.4),
+    inset 0 0 18px rgba(216,180,254,.1);
+  text-shadow:0 0 7px rgba(255,255,255,.4);
+}
+
+.cyber-decrypt:after{
+  background:#d8b4fe;
+  box-shadow:0 0 8px #d8b4fe,0 0 16px #a855f7;
+}
+
+.cyber-action:hover{
+  filter:brightness(1.08);
+}
+
+.cyber-action:active{
+  filter:brightness(1.18);
+}
+
 .result-box{
   background:#020617;
   border:1px solid rgba(168,85,247,.25);
@@ -702,27 +646,57 @@ select:focus{
   word-break:break-all;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.welcome-placeholder{
+  text-align:center;
+  padding:19px 8px;
+  color:var(--muted);
+  font-size:10px;
+  border:1px dashed rgba(34,211,238,.2);
+  border-radius:7px;
+  margin-bottom:6px;
+}
+
+.lock-overlay{
+  position:fixed;
+  inset:0;
+  z-index:11000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(1,4,11,.82);
+  backdrop-filter:blur(8px);
+}
+
+.lock-overlay.show{
+  display:flex;
+}
+
+.lock-panel{
+  width:min(86vw,360px);
+  padding:24px 18px;
+  text-align:center;
+  background:linear-gradient(145deg,rgba(7,16,32,.98),rgba(2,6,16,.98));
+  border:1px solid rgba(34,211,238,.5);
+  border-radius:12px;
+  box-shadow:0 0 35px rgba(34,211,238,.22);
+}
+
+.lock-panel h2{
+  color:var(--cyan);
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.lock-panel p{
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.8;
+}
+
 @media(max-width:380px){
   .container{padding:16px}
   .biometric-core-container{transform:scale(.9)}
-  .action-btn{
-    height:52px;
-    min-height:52px;
-    font-size:12px;
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,
-  *:before,
-  *:after{
-    animation-duration:.001ms!important;
-    animation-iteration-count:1!important;
-    scroll-behavior:auto!important;
-  }
+  .cyber-action{min-height:46px}
 }
 </style>
 </head>
@@ -740,10 +714,8 @@ select:focus{
 
 <div class="container" id="vault-container">
 
-  <!-- =========================
-       LEVEL 01 : PIN
-  ========================== -->
-  <section id="step-pin" class="fade-in">
+  <!-- ==================== PIN ==================== -->
+  <section id="step-pin" class="screen fade-in" aria-hidden="false">
     <div class="cyber-logo-wrapper">
       <div class="hud-status-bar">
         <div>SYS // <span>VAULT-01</span></div>
@@ -789,10 +761,8 @@ select:focus{
     </div>
   </section>
 
-  <!-- =========================
-       LEVEL 02 : BIOMETRIC
-  ========================== -->
-  <section id="step-bio" class="fade-in">
+  <!-- ==================== BIOMETRIC ==================== -->
+  <section id="step-bio" class="screen fade-in" aria-hidden="true">
     <div class="cyber-logo-wrapper">
       <div class="hud-status-bar">
         <div>CORE TEMP // <span>36.2°C</span></div>
@@ -840,25 +810,17 @@ select:focus{
       </p>
 
       <button
-        class="action-btn"
-        onclick="authBio()"
-        style="
-          background:linear-gradient(
-            180deg,
-            rgba(192,132,252,.96),
-            rgba(124,58,237,.98)
-          );
-        "
-      >
+        class="auth-button"
+        id="auth-button"
+        onclick="authBio()">
         🧬 生体認証コア起動 // AUTHENTICATE
       </button>
     </div>
   </section>
 
-  <!-- =========================
-       LEVEL 03 : DEEP VAULT
-  ========================== -->
-  <section id="app-screen" class="fade-in">
+  <!-- ==================== MAIN VAULT ==================== -->
+  <section id="app-screen" class="screen fade-in" aria-hidden="true">
+
     <div class="cyber-logo-wrapper">
       <div class="hud-status-bar">
         <div>NODE // <span>ONLINE</span></div>
@@ -911,28 +873,28 @@ select:focus{
       <input
         type="password"
         id="master-pass"
-        placeholder="秘密のマスターキーを入力"
-        autocomplete="off"
-      >
+        placeholder="秘密のマスターキーを入力">
     </div>
 
-    <!-- ★ CYBER OCTAGON : ENCRYPT -->
-    <button class="action-btn" onclick="encryptData()">
+    <!-- ★ CYBER SAVE BUTTON -->
+    <button
+      class="action-btn cyber-action cyber-save"
+      onclick="encryptData()">
       🔑　データを暗号化して保存
     </button>
 
-    <div class="form-group">
+    <div class="form-group" style="margin-top:8px">
       <label>CIPHER TEXT // SECURE STREAM</label>
       <textarea
         id="cipher-text"
         rows="2"
-        placeholder="U2FsdGVkX1..."
-        readonly
-      ></textarea>
+        placeholder="U2FsdGVkX1..."></textarea>
     </div>
 
-    <!-- ★ CYBER OCTAGON : DECRYPT / PURPLE -->
-    <button class="action-btn metal" onclick="decryptData()">
+    <!-- ★ CYBER DECRYPT BUTTON -->
+    <button
+      class="action-btn cyber-action cyber-decrypt"
+      onclick="decryptData()">
       🔐　復号化して中身を確認
     </button>
 
@@ -942,222 +904,264 @@ select:focus{
         ここに復号されたデータが表示されます...
       </div>
     </div>
-  </section>
 
+  </section>
+</div>
+
+<!-- 不正な画面遷移を防ぐためのロック表示 -->
+<div class="lock-overlay" id="lock-overlay">
+  <div class="lock-panel">
+    <h2>VAULT LOCKED</h2>
+    <p>
+      セキュリティ認証が必要です。<br>
+      PINコードから再認証してください。
+    </p>
+  </div>
 </div>
 
 <script>
 /* =========================================================
-   CYBER VAULT
-   Security state is controlled only by JavaScript.
-   All sections are explicitly hidden/shown.
-========================================================= */
+   CYBER VAULT // SECURITY CORE
+   ========================================================= */
 
-"use strict";
+'use strict';
 
-/* =========================
-   INITIAL PIN
-========================= */
+/* ---------- 初期設定 ---------- */
 if(
-  !localStorage.getItem("vault_pin") &&
-  !localStorage.getItem("vault_pin_hash")
+  !localStorage.getItem('vault_pin') &&
+  !localStorage.getItem('vault_pin_hash')
 ){
-  localStorage.setItem("vault_pin","1234");
+  localStorage.setItem('vault_pin','1234');
 }
 
-/* =========================
-   STATE
-========================= */
-let enteredPin = "";
+let enteredPin = '';
 let isChangingPin = false;
-let oldPinBuffer = "";
-
+let oldPinBuffer = '';
 let pinFailCount =
-  Number(localStorage.getItem("vault_pin_fail_count")) || 0;
-
+  Number(localStorage.getItem('vault_pin_fail_count')) || 0;
 let lockUntil =
-  Number(localStorage.getItem("vault_pin_lock_until")) || 0;
+  Number(localStorage.getItem('vault_pin_lock_until')) || 0;
 
 let lockTimer = null;
 let autoLockTimer = null;
-
 let currentTab = null;
-let currentSlot = "";
+let currentSlot = '';
 
-const AUTO_LOCK = 300000; // 5 minutes
+/*
+ * 生体認証中は visibilitychange による自動ロックを
+ * 発生させない。
+ * これがないと Android の認証ダイアログ表示時に
+ * 画面がロックされる場合がある。
+ */
+let authInProgress = false;
+let authenticatedSession = false;
 
-/* =========================
-   HELPERS
-========================= */
+const AUTO_LOCK = 3e5;
 const $ = id => document.getElementById(id);
 
-function showOnly(sectionId){
-  const sections = [
-    $("step-pin"),
-    $("step-bio"),
-    $("app-screen")
+/* ---------- 画面制御 ---------- */
+function showOnly(screenId){
+  const screens = [
+    $('step-pin'),
+    $('step-bio'),
+    $('app-screen')
   ];
 
-  sections.forEach(section=>{
-    if(section){
-      section.style.display =
-        section.id === sectionId ? "block" : "none";
-    }
+  screens.forEach(screen => {
+    const visible = screen.id === screenId;
+
+    screen.style.display = visible ? 'block' : 'none';
+    screen.setAttribute('aria-hidden', visible ? 'false' : 'true');
   });
 }
 
+/*
+ * メイン画面は必ず authenticatedSession=true の時だけ表示。
+ * HTMLをスクロールしただけでは絶対に到達できない。
+ */
+function showAppScreen(){
+  if(!authenticatedSession){
+    showOnly('step-pin');
+    return false;
+  }
+
+  showOnly('app-screen');
+  resetAuto();
+  return true;
+}
+
+function showBioScreen(){
+  authenticatedSession = false;
+  showOnly('step-bio');
+}
+
+function showPinScreen(){
+  authenticatedSession = false;
+  authInProgress = false;
+  showOnly('step-pin');
+}
+
+/* ---------- PIN表示 ---------- */
 function dots(){
   for(let i=0;i<4;i++){
-    $("dot-"+i).className =
-      "pin-dot " +
-      (i < enteredPin.length ? "active" : "");
+    $('dot-'+i).className =
+      'pin-dot ' + (i < enteredPin.length ? 'active' : '');
   }
 }
 
+/* ---------- ロックカウントダウン ---------- */
 function lockCountdown(){
   clearInterval(lockTimer);
 
-  lockTimer = setInterval(()=>{
-    const remaining =
+  lockTimer = setInterval(() => {
+    const r =
       Math.ceil((lockUntil - Date.now()) / 1000);
 
-    if(remaining > 0){
-      $("pin-msg").textContent =
-        `🔒 SECURITY LOCK // ${remaining}秒間ロックされています`;
-    }else{
-      $("pin-msg").textContent = "";
+    $('pin-msg').textContent =
+      r > 0
+        ? `🔒 SECURITY LOCK // ${r}秒間ロックされています`
+        : '';
+
+    if(r <= 0){
       clearInterval(lockTimer);
+      lockTimer = null;
     }
   },500);
 }
 
-/* =========================
-   AUTO LOCK
-========================= */
+/* ---------- 自動ロック ---------- */
 function resetAuto(){
   clearTimeout(autoLockTimer);
 
-  if($("app-screen").style.display === "block"){
+  if(authenticatedSession){
     autoLockTimer = setTimeout(lockVault,AUTO_LOCK);
   }
 }
 
-["click","keydown","touchstart"].forEach(eventName=>{
-  document.addEventListener(eventName,()=>{
-    if($("app-screen").style.display === "block"){
+['click','keydown','touchstart','pointerdown'].forEach(eventName => {
+  document.addEventListener(eventName,() => {
+    if(authenticatedSession){
       resetAuto();
     }
   },{passive:true});
 });
 
-document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState === "hidden"){
-    if(
-      $("app-screen").style.display === "block" ||
-      $("step-bio").style.display === "block"
-    ){
-      lockVault();
-    }
+/*
+ * 認証ダイアログのキャンセル・戻る操作で
+ * メイン画面へ進まないようにする。
+ */
+document.addEventListener('visibilitychange',() => {
+  if(
+    document.visibilityState === 'hidden' &&
+    !authInProgress &&
+    (authenticatedSession || $('step-bio').style.display === 'block')
+  ){
+    lockVault();
   }
 });
 
-/* =========================
-   LOCK VAULT
-========================= */
+window.addEventListener('pageshow',() => {
+  /*
+   * 戻る操作等で復元された場合、
+   * 認証済みフラグがなければPINへ戻す。
+   */
+  if(!authenticatedSession){
+    showPinScreen();
+  }
+});
+
+/* ---------- 完全ロック ---------- */
 function lockVault(){
   clearTimeout(autoLockTimer);
+  authenticatedSession = false;
+  authInProgress = false;
 
-  showOnly("step-pin");
-
-  enteredPin = "";
+  enteredPin = '';
   isChangingPin = false;
-  oldPinBuffer = "";
-
+  oldPinBuffer = '';
   currentTab = null;
-  currentSlot = "";
+  currentSlot = '';
 
   dots();
 
-  $("pin-title").textContent = "ACCESS GATE";
-  $("pin-msg").textContent = "";
+  $('master-pass').value = '';
+  $('cipher-text').value = '';
+  $('result-view').textContent =
+    'ここに復号されたデータが表示されます...';
 
-  $("master-pass").value = "";
-  $("cipher-text").value = "";
-
-  $("result-view").textContent =
-    "ここに復号されたデータが表示されます...";
-
-  $("form-area").innerHTML =
+  $('form-area').innerHTML =
     '<div class="welcome-placeholder">' +
     '上のセキュリティモジュールとスロットを選択してください' +
     '</div>';
 
   document
-    .querySelectorAll(".module-card")
-    .forEach(x=>x.classList.remove("active"));
+    .querySelectorAll('.module-card')
+    .forEach(x => x.classList.remove('active'));
 
-  updateSlots();
+  $('lock-overlay').classList.remove('show');
+
+  showPinScreen();
 
   if(Date.now() < lockUntil){
     lockCountdown();
   }
 }
 
-/* =========================
-   HASH / PIN
-========================= */
+/* ---------- SHA-256 ---------- */
 async function sha(s){
-  const buffer =
+  const b =
     await crypto.subtle.digest(
-      "SHA-256",
+      'SHA-256',
       new TextEncoder().encode(s)
     );
 
-  return [...new Uint8Array(buffer)]
-    .map(x=>x.toString(16).padStart(2,"0"))
-    .join("");
+  return [...new Uint8Array(b)]
+    .map(x => x.toString(16).padStart(2,'0'))
+    .join('');
 }
 
-async function verify(pin){
-  const hash =
-    localStorage.getItem("vault_pin_hash");
+/* ---------- PIN確認 ---------- */
+async function verify(p){
+  const h =
+    localStorage.getItem('vault_pin_hash');
 
-  const plain =
-    localStorage.getItem("vault_pin");
+  const q =
+    localStorage.getItem('vault_pin');
 
-  if(hash){
-    return await sha(pin) === hash;
+  if(h){
+    return await sha(p) === h;
   }
 
-  if(plain && pin === plain){
+  if(q && p === q){
     localStorage.setItem(
-      "vault_pin_hash",
-      await sha(pin)
+      'vault_pin_hash',
+      await sha(p)
     );
-    localStorage.removeItem("vault_pin");
+
+    localStorage.removeItem('vault_pin');
+
     return true;
   }
 
   return false;
 }
 
-async function savePin(pin){
+/* ---------- PIN保存 ---------- */
+async function savePin(p){
   localStorage.setItem(
-    "vault_pin_hash",
-    await sha(pin)
+    'vault_pin_hash',
+    await sha(p)
   );
 
-  localStorage.removeItem("vault_pin");
+  localStorage.removeItem('vault_pin');
 }
 
-/* =========================
-   PIN INPUT
-========================= */
-function pressPin(number){
+/* ---------- PIN入力 ---------- */
+function pressPin(n){
   if(Date.now() < lockUntil) return;
 
   if(enteredPin.length < 4){
-    enteredPin += number;
+    enteredPin += n;
     dots();
 
     if(enteredPin.length === 4){
@@ -1168,21 +1172,21 @@ function pressPin(number){
 
 function deletePin(){
   if(Date.now() >= lockUntil){
-    enteredPin = enteredPin.slice(0,-1);
+    enteredPin =
+      enteredPin.slice(0,-1);
+
     dots();
   }
 }
 
 function clearPin(){
   if(Date.now() >= lockUntil){
-    enteredPin = "";
+    enteredPin = '';
     dots();
   }
 }
 
-/* =========================
-   PIN COMPLETE
-========================= */
+/* ---------- PIN完了 ---------- */
 async function pinDone(){
   if(Date.now() < lockUntil) return;
 
@@ -1194,156 +1198,173 @@ async function pinDone(){
       lockUntil = 0;
 
       localStorage.setItem(
-        "vault_pin_fail_count",
-        "0"
+        'vault_pin_fail_count',
+        '0'
       );
 
       localStorage.setItem(
-        "vault_pin_lock_until",
-        "0"
+        'vault_pin_lock_until',
+        '0'
       );
 
-      $("pin-msg").textContent = "";
+      $('pin-msg').textContent = '';
 
-      enteredPin = "";
+      enteredPin = '';
       dots();
 
       /*
-        IMPORTANT:
-        PIN verification alone does NOT open the vault.
-        It only moves to Level 02 hardware authentication.
-      */
-      showOnly("step-bio");
-
-      return;
-    }
-
-    pinFailCount++;
-    enteredPin = "";
-    dots();
-
-    localStorage.setItem(
-      "vault_pin_fail_count",
-      String(pinFailCount)
-    );
-
-    if(pinFailCount >= 5){
-
-      const seconds =
-        pinFailCount >= 15 ? 300 :
-        pinFailCount >= 10 ? 60 :
-        30;
-
-      lockUntil =
-        Date.now() + seconds * 1000;
-
-      localStorage.setItem(
-        "vault_pin_lock_until",
-        String(lockUntil)
-      );
-
-      lockCountdown();
+       * PINだけではメイン画面へ行かない。
+       * 必ず生体認証画面へ。
+       */
+      showBioScreen();
 
     }else{
-      $("pin-msg").textContent =
-        "❌ ACCESS DENIED";
+
+      pinFailCount++;
+      enteredPin = '';
+      dots();
+
+      localStorage.setItem(
+        'vault_pin_fail_count',
+        pinFailCount
+      );
+
+      if(pinFailCount >= 5){
+
+        const sec =
+          pinFailCount >= 15
+            ? 300
+            : pinFailCount >= 10
+              ? 60
+              : 30;
+
+        lockUntil =
+          Date.now() + sec * 1000;
+
+        localStorage.setItem(
+          'vault_pin_lock_until',
+          lockUntil
+        );
+
+        lockCountdown();
+
+      }else{
+
+        $('pin-msg').textContent =
+          '❌ ACCESS DENIED';
+      }
     }
 
-    return;
-  }
-
-  /* =========================
-     PIN CHANGE
-  ========================= */
-  if(!oldPinBuffer){
+  }else if(!oldPinBuffer){
 
     if(await verify(enteredPin)){
 
       oldPinBuffer = enteredPin;
-      enteredPin = "";
+      enteredPin = '';
       dots();
 
-      $("pin-title").textContent = "NEW PIN";
-      $("pin-msg").textContent =
-        "✨ 新しい4桁のPINを入力してください";
+      $('pin-title').textContent =
+        'NEW PIN';
+
+      $('pin-msg').textContent =
+        '✨ 新しい4桁のPINを入力してください';
 
     }else{
 
-      $("pin-msg").textContent =
-        "❌ CURRENT PIN ERROR";
+      $('pin-msg').textContent =
+        '❌ CURRENT PIN ERROR';
 
-      enteredPin = "";
+      enteredPin = '';
       dots();
     }
 
-    return;
-  }
+  }else{
 
-  if(enteredPin.length !== 4){
-    $("pin-msg").textContent =
-      "❌ 4桁のPINを入力してください";
+    if(enteredPin.length !== 4){
 
-    enteredPin = "";
+      $('pin-msg').textContent =
+        '❌ 4桁のPINを入力してください';
+
+      enteredPin = '';
+      dots();
+
+      return;
+    }
+
+    await savePin(enteredPin);
+
+    alert(
+      '🎉 PINコードが正常に変更されました！'
+    );
+
+    isChangingPin = false;
+    oldPinBuffer = '';
+    enteredPin = '';
+
+    $('pin-title').textContent =
+      'ACCESS GATE';
+
+    $('pin-msg').textContent = '';
+
     dots();
-    return;
   }
-
-  await savePin(enteredPin);
-
-  alert("🎉 PINコードが正常に変更されました！");
-
-  isChangingPin = false;
-  oldPinBuffer = "";
-  enteredPin = "";
-
-  $("pin-title").textContent = "ACCESS GATE";
-  $("pin-msg").textContent = "";
-
-  dots();
 }
 
-/* =========================
-   CHANGE PIN
-========================= */
+/* ---------- PIN変更 ---------- */
 function enablePinChange(){
-
   if(Date.now() < lockUntil) return;
 
   isChangingPin = true;
-  enteredPin = "";
-  oldPinBuffer = "";
+  enteredPin = '';
+  oldPinBuffer = '';
 
-  $("pin-title").textContent = "CURRENT PIN";
+  $('pin-title').textContent =
+    'CURRENT PIN';
 
-  $("pin-msg").textContent =
-    "🔐 現在の4桁を入力してください";
+  $('pin-msg').textContent =
+    '🔐 現在の4桁を入力してください';
 
   dots();
 }
 
-/* =========================
-   BIOMETRIC AUTH
-   IMPORTANT:
-   Cancel / Back / Failure NEVER opens app.
-========================= */
+/* =========================================================
+   BIOMETRIC AUTHENTICATION
+   ========================================================= */
+
 async function authBio(){
 
+  if(authInProgress) return;
+
   /*
-    WebAuthn is supported only in a secure context.
-    If unavailable, do NOT silently bypass security.
-  */
-  if(
-    !window.PublicKeyCredential ||
-    !navigator.credentials ||
-    !window.isSecureContext
-  ){
-    $("step-bio").querySelector(".bio-text").textContent =
-      "この端末ではデバイス認証を利用できません。HTTPS環境をご確認ください。";
+   * PublicKeyCredential が使えない端末では
+   * メイン画面へ進ませない。
+   */
+  if(!window.PublicKeyCredential){
+    $('pin-msg').textContent =
+      '❌ この端末では生体認証を利用できません。';
     return;
   }
 
+  authInProgress = true;
+
+  const button = $('auth-button');
+  const originalText = button.textContent;
+
+  button.disabled = true;
+  button.textContent =
+    '⏳ NEURAL CORE // AUTHENTICATING...';
+
   try{
 
+    /*
+     * WebAuthn。
+     *
+     * ユーザーが「戻る」「キャンセル」を押した場合は
+     * navigator.credentials.get() が reject する。
+     *
+     * reject時は絶対に authenticatedSession を
+     * trueにしない。
+     */
     const challenge =
       crypto.getRandomValues(
         new Uint8Array(32)
@@ -1352,117 +1373,151 @@ async function authBio(){
     await navigator.credentials.get({
       publicKey:{
         challenge:challenge,
-        userVerification:"required",
-        timeout:60000
+        userVerification:'required',
+        timeout:60000,
+        rpId:location.hostname
       }
     });
 
     /*
-      Only a SUCCESSFUL credential result reaches here.
-      Cancel / Back / biometric failure throws and stays here.
-    */
-    showOnly("app-screen");
+     * ここまで到達した時だけ認証成功。
+     */
+    authenticatedSession = true;
+
+    $('step-bio').style.display = 'none';
+    $('step-bio').setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    $('app-screen').style.display = 'block';
+    $('app-screen').setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
     resetAuto();
 
   }catch(error){
 
     /*
-      NEVER transition to app on cancel.
-    */
-    $("step-bio").querySelector(".bio-text").textContent =
-      "認証がキャンセルされました。もう一度デバイス認証を実行してください。";
+     * キャンセル・戻る・認証失敗はすべてここ。
+     * メイン画面へは絶対に進まない。
+     */
+    authenticatedSession = false;
 
-    showOnly("step-bio");
+    showBioScreen();
+
+    /*
+     * キャンセルなら穏やかな表示。
+     */
+    const name =
+      error && error.name
+        ? error.name
+        : '';
+
+    if(name === 'NotAllowedError'){
+      $('pin-msg').textContent =
+        '';
+    }
+
+  }finally{
+
+    authInProgress = false;
+    button.disabled = false;
+    button.textContent = originalText;
   }
 }
 
-/* =========================
-   DATA TEMPLATES
-========================= */
+/* =========================================================
+   VAULT DATA
+   ========================================================= */
+
 const templates = {
 
-  bank:
-    '<div class="form-group">' +
-      '<label>銀行名</label>' +
-      '<input id="b-name">' +
-    '</div>' +
+  bank:`
+    <div class="form-group">
+      <label>銀行名</label>
+      <input id="b-name">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>支店名</label>' +
-      '<input id="b-branch">' +
-    '</div>' +
+    <div class="form-group">
+      <label>支店名</label>
+      <input id="b-branch">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>口座番号</label>' +
-      '<input id="b-account">' +
-    '</div>' +
+    <div class="form-group">
+      <label>口座番号</label>
+      <input id="b-account">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>口座名義（カナ）</label>' +
-      '<input id="b-holder">' +
-    '</div>' +
+    <div class="form-group">
+      <label>口座名義（カナ）</label>
+      <input id="b-holder">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>暗証番号（PIN）</label>' +
-      '<input id="b-pin" type="password">' +
-    '</div>',
+    <div class="form-group">
+      <label>暗証番号（PIN）</label>
+      <input id="b-pin" type="password">
+    </div>
+  `,
 
-  card:
-    '<div class="form-group">' +
-      '<label>カード会社 / ブランド</label>' +
-      '<input id="c-brand">' +
-    '</div>' +
+  card:`
+    <div class="form-group">
+      <label>カード会社 / ブランド</label>
+      <input id="c-brand">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>カード番号</label>' +
-      '<input id="c-num">' +
-    '</div>' +
+    <div class="form-group">
+      <label>カード番号</label>
+      <input id="c-num">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>有効期限</label>' +
-      '<input id="c-exp">' +
-    '</div>' +
+    <div class="form-group">
+      <label>有効期限</label>
+      <input id="c-exp">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>名義人（HOLDER）</label>' +
-      '<input id="c-name">' +
-    '</div>' +
+    <div class="form-group">
+      <label>名義人（HOLDER）</label>
+      <input id="c-name">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>CVV</label>' +
-      '<input id="c-cvv" type="password">' +
-    '</div>',
+    <div class="form-group">
+      <label>CVV</label>
+      <input id="c-cvv" type="password">
+    </div>
+  `,
 
-  web:
-    '<div class="form-group">' +
-      '<label>サービス / アプリ名</label>' +
-      '<input id="w-srv">' +
-    '</div>' +
+  web:`
+    <div class="form-group">
+      <label>サービス / アプリ名</label>
+      <input id="w-srv">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>ログインID / メアド</label>' +
-      '<input id="w-id">' +
-    '</div>' +
+    <div class="form-group">
+      <label>ログインID / メアド</label>
+      <input id="w-id">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>登録者名 / ユーザー名</label>' +
-      '<input id="w-user">' +
-    '</div>' +
+    <div class="form-group">
+      <label>登録者名 / ユーザー名</label>
+      <input id="w-user">
+    </div>
 
-    '<div class="form-group">' +
-      '<label>パスワード</label>' +
-      '<input id="w-pass" type="password">' +
-    '</div>'
+    <div class="form-group">
+      <label>パスワード</label>
+      <input id="w-pass" type="password">
+    </div>
+  `
 };
 
-/* =========================
-   SLOT SYSTEM
-========================= */
+/* ---------- スロット ---------- */
 function updateSlots(){
 
-  const select = $("slot-select");
+  const s = $('slot-select');
 
-  select.innerHTML =
+  s.innerHTML =
     '<option value="" disabled selected>' +
     '-- スロットを選択してください --' +
     '</option>';
@@ -1471,45 +1526,48 @@ function updateSlots(){
 
   for(let i=1;i<=10;i++){
 
-    const slot = String(i);
+    const k = '' + i;
 
-    const option =
-      document.createElement("option");
+    const o =
+      document.createElement('option');
 
     const saved =
       localStorage.getItem(
-        `vault_${currentTab}_slot_${slot}`
+        `vault_${currentTab}_slot_${k}`
       );
 
-    option.value = slot;
+    o.value = k;
 
-    option.textContent =
-      `[ ${slot.padStart(2,"0")} ] ` +
-      (saved
-        ? "SECURE"
-        : "ACTIVE (EMPTY)");
+    o.textContent =
+      `[ ${k.padStart(2,'0')} ] ` +
+      `${saved ? 'SECURE' : 'ACTIVE (EMPTY)'}`;
 
-    select.appendChild(option);
+    s.appendChild(o);
   }
 }
 
-/* =========================
-   MODULE SWITCH
-========================= */
-function switchTab(tab,element){
+/* ---------- モジュール切替 ---------- */
+function switchTab(t,e){
 
-  if(currentTab === tab){
+  if(!authenticatedSession){
+    showPinScreen();
+    return;
+  }
+
+  if(currentTab === t){
 
     currentTab = null;
-    currentSlot = "";
+    currentSlot = '';
 
     document
-      .querySelectorAll(".module-card")
-      .forEach(x=>x.classList.remove("active"));
+      .querySelectorAll('.module-card')
+      .forEach(x =>
+        x.classList.remove('active')
+      );
 
     updateSlots();
 
-    $("form-area").innerHTML =
+    $('form-area').innerHTML =
       '<div class="welcome-placeholder">' +
       '上のセキュリティモジュールとスロットを選択してください' +
       '</div>';
@@ -1517,196 +1575,195 @@ function switchTab(tab,element){
     return;
   }
 
-  currentTab = tab;
-  currentSlot = "";
+  currentTab = t;
+  currentSlot = '';
 
   document
-    .querySelectorAll(".module-card")
-    .forEach(x=>x.classList.remove("active"));
+    .querySelectorAll('.module-card')
+    .forEach(x =>
+      x.classList.remove('active')
+    );
 
-  element.classList.add("active");
+  e.classList.add('active');
 
   updateSlots();
 
-  $("form-area").innerHTML =
+  $('form-area').innerHTML =
     '<div class="welcome-placeholder">' +
     '上のセキュリティモジュールとスロットを選択してください' +
     '</div>';
 }
 
-/* =========================
-   SLOT CHANGE
-========================= */
+/* ---------- スロット変更 ---------- */
 function changeSlot(){
 
-  currentSlot = $("slot-select").value;
+  if(!authenticatedSession){
+    showPinScreen();
+    return;
+  }
+
+  currentSlot =
+    $('slot-select').value;
 
   if(currentTab && currentSlot){
 
-    $("form-area").innerHTML =
+    $('form-area').innerHTML =
       templates[currentTab];
 
-    $("form-area")
-      .querySelectorAll("input")
-      .forEach(input=>{
-        input.value = "";
-      });
+    $('form-area')
+      .querySelectorAll('input')
+      .forEach(x => x.value = '');
 
-    $("cipher-text").value = "";
-    $("result-view").textContent =
-      "ここに復号されたデータが表示されます...";
+    $('cipher-text').value = '';
+    $('result-view').textContent =
+      'ここに復号されたデータが表示されます...';
   }
 }
 
-function storageKey(){
+/* ---------- キー ---------- */
+function key(){
   return `vault_${currentTab}_slot_${currentSlot}`;
 }
 
-/* =========================
-   BASE64
-========================= */
-function b64(buffer){
+/* ---------- Base64 ---------- */
+function b64(x){
 
-  let binary = "";
+  let s = '';
 
-  for(
-    const byte
-    of new Uint8Array(buffer)
-  ){
-    binary +=
-      String.fromCharCode(byte);
+  for(const v of new Uint8Array(x)){
+    s += String.fromCharCode(v);
   }
 
-  return btoa(binary);
+  return btoa(s);
 }
 
-function unb64(value){
+function unb64(s){
 
-  const binary = atob(value);
+  const x = atob(s);
+  const a = new Uint8Array(x.length);
 
-  const bytes =
-    new Uint8Array(binary.length);
-
-  for(let i=0;i<binary.length;i++){
-    bytes[i] =
-      binary.charCodeAt(i);
+  for(let i=0;i<x.length;i++){
+    a[i] = x.charCodeAt(i);
   }
 
-  return bytes.buffer;
+  return a.buffer;
 }
 
-/* =========================
-   KEY DERIVATION
-========================= */
-async function derive(password,salt){
+/* ---------- PBKDF2 ---------- */
+async function derive(p,s){
 
-  const keyMaterial =
+  const k =
     await crypto.subtle.importKey(
-      "raw",
-      new TextEncoder().encode(password),
-      {name:"PBKDF2"},
+      'raw',
+      new TextEncoder().encode(p),
+      {name:'PBKDF2'},
       false,
-      ["deriveKey"]
+      ['deriveKey']
     );
 
   return crypto.subtle.deriveKey(
     {
-      name:"PBKDF2",
-      salt:salt,
+      name:'PBKDF2',
+      salt:s,
       iterations:310000,
-      hash:"SHA-256"
+      hash:'SHA-256'
     },
-    keyMaterial,
+    k,
     {
-      name:"AES-GCM",
+      name:'AES-GCM',
       length:256
     },
     false,
-    ["encrypt","decrypt"]
+    ['encrypt','decrypt']
   );
 }
 
-/* =========================
-   COLLECT FORM
-========================= */
+/* ---------- データ収集 ---------- */
 function collect(){
 
-  const data = {
+  const d = {
     category:currentTab,
     slot:currentSlot
   };
 
-  if(currentTab === "bank"){
+  if(currentTab === 'bank'){
 
-    data.bankName =
-      $("b-name").value;
+    d.bankName =
+      $('b-name').value;
 
-    data.branch =
-      $("b-branch").value;
+    d.branch =
+      $('b-branch').value;
 
-    data.account =
-      $("b-account").value;
+    d.account =
+      $('b-account').value;
 
-    data.holder =
-      $("b-holder").value;
+    d.holder =
+      $('b-holder').value;
 
-    data.pin =
-      $("b-pin").value;
+    d.pin =
+      $('b-pin').value;
 
-  }else if(currentTab === "card"){
+  }else if(currentTab === 'card'){
 
-    data.brand =
-      $("c-brand").value;
+    d.brand =
+      $('c-brand').value;
 
-    data.number =
-      $("c-num").value;
+    d.number =
+      $('c-num').value;
 
-    data.expire =
-      $("c-exp").value;
+    d.expire =
+      $('c-exp').value;
 
-    data.name =
-      $("c-name").value;
+    d.name =
+      $('c-name').value;
 
-    data.cvv =
-      $("c-cvv").value;
+    d.cvv =
+      $('c-cvv').value;
 
   }else{
 
-    data.service =
-      $("w-srv").value;
+    d.service =
+      $('w-srv').value;
 
-    data.id =
-      $("w-id").value;
+    d.id =
+      $('w-id').value;
 
-    data.username =
-      $("w-user").value;
+    d.username =
+      $('w-user').value;
 
-    data.pass =
-      $("w-pass").value;
+    d.pass =
+      $('w-pass').value;
   }
 
-  return data;
+  return d;
 }
 
-/* =========================
-   ENCRYPT
-========================= */
+/* ---------- 暗号化 ---------- */
 async function encryptData(){
 
-  if(!currentTab || !currentSlot){
-    alert(
-      "⚠️ モジュールとスロットを選択してください！"
-    );
+  if(!authenticatedSession){
+    showPinScreen();
     return;
   }
 
-  const password =
-    $("master-pass").value;
+  if(!currentTab || !currentSlot){
 
-  if(!password){
     alert(
-      "⚠️ マスターパスワードを入力してください！"
+      '⚠️ モジュールとスロットを選択してください！'
     );
+
+    return;
+  }
+
+  const p =
+    $('master-pass').value;
+
+  if(!p){
+
+    alert(
+      '⚠️ マスターパスワードを入力してください！'
+    );
+
     return;
   }
 
@@ -1722,212 +1779,216 @@ async function encryptData(){
         new Uint8Array(12)
       );
 
-    const key =
-      await derive(password,salt);
+    const k =
+      await derive(p,salt);
 
-    const plaintext =
-      JSON.stringify(collect());
-
-    const ciphertext =
+    const ct =
       await crypto.subtle.encrypt(
         {
-          name:"AES-GCM",
+          name:'AES-GCM',
           iv:iv
         },
-        key,
-        new TextEncoder().encode(plaintext)
+        k,
+        new TextEncoder().encode(
+          JSON.stringify(collect())
+        )
       );
 
-    const object = {
+    const o = {
       version:1,
-      algorithm:"AES-GCM",
-      kdf:"PBKDF2-SHA256",
+      algorithm:'AES-GCM',
+      kdf:'PBKDF2-SHA256',
       iterations:310000,
       salt:b64(salt),
       iv:b64(iv),
-      ciphertext:b64(ciphertext)
+      ciphertext:b64(ct)
     };
 
     localStorage.setItem(
-      storageKey(),
-      JSON.stringify(object)
+      key(),
+      JSON.stringify(o)
     );
 
     updateSlots();
-
-    $("slot-select").value =
+    $('slot-select').value =
       currentSlot;
 
-    $("cipher-text").value =
-      object.ciphertext;
+    $('cipher-text').value =
+      o.ciphertext;
 
-    $("result-view").textContent =
-      "暗号化データを安全に保存しました。";
+    $('result-view').textContent =
+      '🔒 暗号化保存完了 // SECURE';
 
     alert(
-      "🔒 データを要塞レベルで暗号化・保存しました！"
+      '🔒 データを要塞レベルで暗号化・保存しました！'
     );
 
-  }catch(error){
-
-    console.error(error);
+  }catch(e){
 
     alert(
-      "❌ 暗号化処理に失敗しました。"
+      '❌ 暗号化処理に失敗しました。'
     );
   }
 }
 
-/* =========================
-   DECRYPT
-========================= */
+/* ---------- 復号 ---------- */
 async function decryptData(){
 
-  const password =
-    $("master-pass").value;
+  if(!authenticatedSession){
+    showPinScreen();
+    return;
+  }
 
-  if(!password){
+  const p =
+    $('master-pass').value;
+
+  if(!p){
+
     alert(
-      "⚠️ マスターパスワードを入力してください！"
+      '⚠️ マスターパスワードを入力してください！'
     );
+
     return;
   }
 
   if(!currentTab || !currentSlot){
+
     alert(
-      "⚠️ モジュールとスロットを選択してください！"
+      '⚠️ モジュールとスロットを選択してください！'
     );
+
     return;
   }
 
   const raw =
-    localStorage.getItem(storageKey());
+    localStorage.getItem(key());
 
   if(!raw){
+
     alert(
-      "❌ 暗号化データが存在しません！"
+      '❌ 暗号化データが存在しません！'
     );
+
     return;
   }
 
   try{
 
-    const object =
+    const o =
       JSON.parse(raw);
 
-    const key =
+    const k =
       await derive(
-        password,
-        unb64(object.salt)
+        p,
+        unb64(o.salt)
       );
 
-    const plaintext =
+    const plain =
       await crypto.subtle.decrypt(
         {
-          name:"AES-GCM",
-          iv:unb64(object.iv)
+          name:'AES-GCM',
+          iv:unb64(o.iv)
         },
-        key,
-        unb64(object.ciphertext)
+        k,
+        unb64(o.ciphertext)
       );
 
-    const data =
+    const d =
       JSON.parse(
-        new TextDecoder().decode(plaintext)
+        new TextDecoder().decode(plain)
       );
 
-    if(currentTab === "bank"){
+    if(currentTab === 'bank'){
 
-      $("b-name").value =
-        data.bankName || "";
+      [
+        'b-name',
+        'b-branch',
+        'b-account',
+        'b-holder',
+        'b-pin'
+      ].forEach((x,i) => {
 
-      $("b-branch").value =
-        data.branch || "";
+        $(x).value =
+          d[
+            [
+              'bankName',
+              'branch',
+              'account',
+              'holder',
+              'pin'
+            ][i]
+          ] || '';
+      });
 
-      $("b-account").value =
-        data.account || "";
+    }else if(currentTab === 'card'){
 
-      $("b-holder").value =
-        data.holder || "";
+      [
+        'c-brand',
+        'c-num',
+        'c-exp',
+        'c-name',
+        'c-cvv'
+      ].forEach((x,i) => {
 
-      $("b-pin").value =
-        data.pin || "";
-
-    }else if(currentTab === "card"){
-
-      $("c-brand").value =
-        data.brand || "";
-
-      $("c-num").value =
-        data.number || "";
-
-      $("c-exp").value =
-        data.expire || "";
-
-      $("c-name").value =
-        data.name || "";
-
-      $("c-cvv").value =
-        data.cvv || "";
+        $(x).value =
+          d[
+            [
+              'brand',
+              'number',
+              'expire',
+              'name',
+              'cvv'
+            ][i]
+          ] || '';
+      });
 
     }else{
 
-      $("w-srv").value =
-        data.service || "";
+      [
+        'w-srv',
+        'w-id',
+        'w-user',
+        'w-pass'
+      ].forEach((x,i) => {
 
-      $("w-id").value =
-        data.id || "";
-
-      $("w-user").value =
-        data.username || "";
-
-      $("w-pass").value =
-        data.pass || "";
+        $(x).value =
+          d[
+            [
+              'service',
+              'id',
+              'username',
+              'pass'
+            ][i]
+          ] || '';
+      });
     }
 
-    $("cipher-text").value =
-      object.ciphertext;
+    $('cipher-text').value =
+      o.ciphertext;
 
-    $("result-view").textContent =
-      JSON.stringify(data,null,2);
+    $('result-view').textContent =
+      JSON.stringify(d,null,2);
 
-  }catch(error){
-
-    console.error(error);
+  }catch(e){
 
     alert(
-      "❌ 復号に失敗しました。パスワードをご確認ください。"
+      '❌ 復号に失敗しました。パスワードをご確認ください。'
     );
 
-    $("result-view").textContent =
-      "復号に失敗しました。機密データは非表示です。";
+    $('result-view').textContent =
+      '復号に失敗しました。機密データは非表示です。';
   }
 }
 
-/* =========================
-   INITIAL STATE
-========================= */
-
-/*
-  VERY IMPORTANT:
-  The application always starts at Level 01.
-  It cannot be reached by scrolling.
-*/
-showOnly("step-pin");
-
-if(Date.now() < lockUntil){
-  lockCountdown();
-}
-
-/* =========================
+/* =========================================================
    CYBER 3D VISUAL LAYER
-   Visual only.
-   Does NOT change security state.
-========================= */
+   ※ 見た目だけを変更。認証状態・セキュリティ状態には触れない。
+   ========================================================= */
+
 (() => {
 
   const vault =
-    document.querySelector(".container");
+    document.querySelector('.container');
 
   if(!vault) return;
 
@@ -1938,21 +1999,30 @@ if(Date.now() < lockUntil){
     cancelAnimationFrame(raf);
 
     raf =
-      requestAnimationFrame(()=>{
-        vault.style.animation = "";
-        vault.style.transform = "";
+      requestAnimationFrame(() => {
+
+        if(!authenticatedSession){
+          vault.style.transform = '';
+          return;
+        }
+
+        vault.style.transform = '';
       });
   };
 
   document.addEventListener(
-    "pointermove",
-    event=>{
+    'pointermove',
+    e => {
 
       if(
         window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
+          '(prefers-reduced-motion: reduce)'
         ).matches
       ){
+        return;
+      }
+
+      if(!authenticatedSession){
         return;
       }
 
@@ -1960,51 +2030,60 @@ if(Date.now() < lockUntil){
         vault.getBoundingClientRect();
 
       if(
-        event.clientX < rect.left - 80 ||
-        event.clientX > rect.right + 80 ||
-        event.clientY < rect.top - 80 ||
-        event.clientY > rect.bottom + 80
+        e.clientX < rect.left - 80 ||
+        e.clientX > rect.right + 80 ||
+        e.clientY < rect.top - 80 ||
+        e.clientY > rect.bottom + 80
       ){
         return;
       }
 
       const x =
-        (event.clientX - rect.left) /
+        (e.clientX - rect.left) /
         rect.width - .5;
 
       const y =
-        (event.clientY - rect.top) /
+        (e.clientY - rect.top) /
         rect.height - .5;
 
       cancelAnimationFrame(raf);
 
       raf =
-        requestAnimationFrame(()=>{
+        requestAnimationFrame(() => {
 
-          vault.style.animation = "none";
+          vault.style.animation = 'none';
 
           vault.style.transform =
-            `perspective(1200px)
-             rotateX(${(-y*3.5).toFixed(2)}deg)
-             rotateY(${(x*4).toFixed(2)}deg)
-             translateZ(3px)`;
+            `perspective(1200px) ` +
+            `rotateX(${(-y * 3.5).toFixed(2)}deg) ` +
+            `rotateY(${(x * 4).toFixed(2)}deg) ` +
+            `translateZ(3px)`;
         });
 
     },
     {passive:true}
   );
 
-  document.addEventListener(
-    "pointerleave",
-    reset
-  );
-
   window.addEventListener(
-    "blur",
+    'blur',
     reset
   );
 
 })();
+
+/* ---------- 初期状態 ---------- */
+if(Date.now() < lockUntil){
+  lockCountdown();
+}
+
+/*
+ * 起動時は必ずPIN画面。
+ * localStorageに認証済み状態を保存しないので、
+ * ページ更新でもメイン画面へ直行できない。
+ */
+authenticatedSession = false;
+authInProgress = false;
+showPinScreen();
 </script>
 
 </body>
