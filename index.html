@@ -3,235 +3,730 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#01040b">
 <title>CYBER VAULT // QUANTUM SECURE PROTOCOL</title>
+
 <style>
 :root{
-  --bg:#01040b;--panel:rgba(4,10,22,.94);--cyan:#22d3ee;--cyan2:#06b6d4;
-  --purple:#a78bfa;--pink:#f472b6;--green:#34d399;--red:#fb7185;
-  --muted:#64748b;--text:#f8fafc;
+  --bg:#01040b;
+  --panel:rgba(4,10,22,.96);
+  --cyan:#22d3ee;
+  --cyan2:#06b6d4;
+  --purple:#a855f7;
+  --purple2:#7c3aed;
+  --pink:#f472b6;
+  --green:#34d399;
+  --muted:#64748b;
+  --white:#f8fafc;
 }
-*{box-sizing:border-box;margin:0;padding:0;font-family:"Courier New",monospace}
-html,body{width:100%;min-height:100%;background:#01040b}
-html{overflow-x:hidden}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:"Courier New",monospace;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  min-height:100%;
+  background:#01040b;
+}
+
 body{
-  min-height:100vh;color:var(--text);display:flex;align-items:center;justify-content:center;
-  padding:14px;overflow-x:hidden;position:relative;
+  min-height:100vh;
+  color:var(--white);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  overflow-x:hidden;
   background-image:
     radial-gradient(circle at 50% 35%,rgba(34,211,238,.10),transparent 45%),
-    radial-gradient(circle at 15% 80%,rgba(167,139,250,.08),transparent 35%),
+    radial-gradient(circle at 15% 80%,rgba(168,85,247,.08),transparent 35%),
     linear-gradient(rgba(34,211,238,.025) 1px,transparent 1px),
     linear-gradient(90deg,rgba(34,211,238,.025) 1px,transparent 1px);
   background-size:100% 100%,100% 100%,28px 28px,28px 28px;
+  position:relative;
+  overscroll-behavior-x:none;
 }
+
 body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 4px);
-  opacity:.28;
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  background:
+    linear-gradient(rgba(34,211,238,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(34,211,238,.025) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent);
 }
+
 body:after{
-  content:"";position:fixed;inset:-20%;pointer-events:none;z-index:0;
-  background:radial-gradient(circle,rgba(34,211,238,.035),transparent 55%);
-  animation:ambient 8s ease-in-out infinite;
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.16) 0 1px,
+    transparent 1px 4px
+  );
+  opacity:.25;
 }
-@keyframes ambient{50%{transform:scale(1.06);opacity:.65}}
+
+/* =========================
+   BOOT SCREEN
+========================= */
 #boot-screen{
-  position:fixed;inset:0;background:#01030a;z-index:10000;display:flex;align-items:center;
-  justify-content:center;animation:boot .7s ease 1s forwards;pointer-events:none;
-}
-.boot-console{
-  font-size:10px;line-height:2.2;letter-spacing:3px;text-align:center;color:var(--cyan);
-  text-shadow:0 0 10px var(--cyan),0 0 30px var(--cyan);animation:pulse 1s infinite
-}
-@keyframes boot{to{opacity:0;visibility:hidden}}
-@keyframes pulse{50%{opacity:.5}}
-.container{
-  width:100%;max-width:460px;padding:20px;background:linear-gradient(145deg,rgba(7,16,32,.97),rgba(2,6,16,.95));
-  border:1px solid rgba(34,211,238,.35);border-radius:14px;position:relative;z-index:2;
-  box-shadow:0 0 30px rgba(34,211,238,.12),0 0 90px rgba(34,211,238,.07),inset 0 0 45px #000;
-  backdrop-filter:blur(22px);animation:float 6s ease-in-out infinite;transform-style:preserve-3d;
-  will-change:transform;
-}
-.container:before{
-  content:"";position:absolute;inset:5px;border:1px solid rgba(34,211,238,.07);
-  border-radius:10px;pointer-events:none;
-}
-.container:after{
-  content:"";position:absolute;left:8%;right:8%;top:0;height:1px;background:var(--cyan);
-  opacity:.25;box-shadow:0 0 12px var(--cyan);animation:scanline 4s linear infinite;
+  position:fixed;
+  inset:0;
+  background:#01030a;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:boot .7s ease 1s forwards;
   pointer-events:none;
 }
-@keyframes float{50%{transform:translateY(-2px)}}
-@keyframes scanline{0%{top:2%}100%{top:98%}}
-section[hidden]{display:none!important}
-#step-pin,#step-bio,#app-screen{width:100%}
-.fade-in{animation:fade .35s ease forwards}
-@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.cyber-logo-wrapper{
-  display:flex;flex-direction:column;align-items:center;margin-bottom:15px;padding-bottom:14px;
-  border-bottom:1px solid rgba(34,211,238,.15)
+
+.boot-console{
+  font-size:10px;
+  line-height:2.2;
+  letter-spacing:3px;
+  text-align:center;
+  color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan),0 0 30px rgba(34,211,238,.8);
+  animation:pulse 1s infinite;
+  padding:20px;
 }
-.hud-status-bar{
-  width:100%;display:flex;justify-content:space-between;font-size:8px;color:var(--muted);
-  letter-spacing:1px;margin-bottom:8px
+
+@keyframes boot{
+  to{opacity:0;visibility:hidden}
 }
-.hud-status-bar span{color:var(--cyan);text-shadow:0 0 8px var(--cyan)}
-.hexagon-badge{
-  width:54px;height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;
-  background:rgba(34,211,238,.1);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
-  filter:drop-shadow(0 0 9px rgba(34,211,238,.5));animation:badge 3s ease-in-out infinite;
+
+@keyframes pulse{
+  50%{opacity:.5}
+}
+
+/* =========================
+   MAIN FRAME
+========================= */
+.container{
+  width:100%;
+  max-width:460px;
+  padding:20px;
+  background:
+    linear-gradient(145deg,rgba(7,16,32,.97),rgba(2,6,16,.95));
+  border:1px solid rgba(34,211,238,.35);
+  border-radius:14px;
+  position:relative;
+  z-index:2;
+  box-shadow:
+    0 0 30px rgba(34,211,238,.12),
+    0 0 90px rgba(34,211,238,.07),
+    inset 0 0 45px #000;
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  animation:float 6s ease-in-out infinite;
   transform-style:preserve-3d;
+  will-change:transform;
 }
+
+.container:before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid rgba(34,211,238,.07);
+  border-radius:10px;
+  pointer-events:none;
+}
+
+@keyframes float{
+  50%{transform:translateY(-2px)}
+}
+
+/* =========================
+   HEADER
+========================= */
+.cyber-logo-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:15px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(34,211,238,.15);
+}
+
+.hud-status-bar{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  font-size:8px;
+  color:var(--muted);
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+
+.hud-status-bar span{
+  color:var(--cyan);
+  text-shadow:0 0 8px var(--cyan);
+}
+
+.hexagon-badge{
+  width:54px;
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:8px;
+  background:rgba(34,211,238,.10);
+  clip-path:polygon(
+    50% 0,
+    100% 25%,
+    100% 75%,
+    50% 100%,
+    0 75%,
+    0 25%
+  );
+  filter:drop-shadow(0 0 9px rgba(34,211,238,.5));
+  animation:badge 3s ease-in-out infinite;
+}
+
 .hexagon-inner{
-  width:43px;height:48px;display:flex;align-items:center;justify-content:center;background:#020617;
-  clip-path:inherit;font-size:19px;text-shadow:0 0 12px var(--cyan)
+  width:43px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#020617;
+  clip-path:inherit;
+  font-size:19px;
+  text-shadow:0 0 12px var(--cyan);
 }
-@keyframes badge{50%{transform:translateY(-3px) rotateY(10deg)}}
-h1{font-size:17px;letter-spacing:2px;text-align:center;text-shadow:0 0 10px rgba(34,211,238,.55)}
-.terminal-header p{font-size:8px;color:var(--muted);margin-top:4px;letter-spacing:1.5px;text-align:center}
-.pin-dots{display:flex;justify-content:center;gap:13px;margin:15px 0}
+
+@keyframes badge{
+  50%{transform:translateY(-3px) rotateY(10deg)}
+}
+
+h1{
+  font-size:17px;
+  letter-spacing:2px;
+  text-align:center;
+  text-shadow:0 0 10px rgba(34,211,238,.55);
+}
+
+.terminal-header p{
+  font-size:8px;
+  color:var(--muted);
+  margin-top:4px;
+  letter-spacing:1.5px;
+  text-align:center;
+}
+
+/* =========================
+   PIN GATE
+========================= */
+.pin-dots{
+  display:flex;
+  justify-content:center;
+  gap:13px;
+  margin:15px 0;
+}
+
 .pin-dot{
-  width:13px;height:13px;border-radius:50%;border:1px solid var(--cyan);background:#020617;
-  transition:.2s;box-shadow:inset 0 0 5px rgba(34,211,238,.12)
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  border:1px solid var(--cyan);
+  background:#020617;
+  transition:.2s;
 }
-.pin-dot.active{background:var(--cyan);box-shadow:0 0 10px var(--cyan),0 0 20px rgba(34,211,238,.5)}
-.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:250px;margin:auto}
+
+.pin-dot.active{
+  background:var(--cyan);
+  box-shadow:
+    0 0 10px var(--cyan),
+    0 0 20px rgba(34,211,238,.5);
+}
+
+.pin-pad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  max-width:250px;
+  margin:auto;
+}
+
 .pin-btn{
   background:linear-gradient(145deg,rgba(17,29,52,.9),rgba(5,11,23,.9));
-  border:1px solid rgba(34,211,238,.28);color:#fff;font-size:17px;padding:12px;border-radius:7px;
-  cursor:pointer;transition:.12s;min-height:54px;touch-action:manipulation
+  border:1px solid rgba(34,211,238,.28);
+  color:#fff;
+  font-size:17px;
+  padding:12px;
+  border-radius:7px;
+  cursor:pointer;
+  transition:.12s;
+  touch-action:manipulation;
 }
-.pin-btn:hover{border-color:var(--cyan);box-shadow:0 0 12px rgba(34,211,238,.25)}
-.pin-btn:active{background:var(--cyan);color:#000;transform:scale(.96);box-shadow:0 0 20px var(--cyan)}
-.msg-alert{color:var(--pink);font-size:9px;text-align:center;margin-top:5px;min-height:13px;text-shadow:0 0 6px var(--pink)}
-.settings-link{text-align:center;margin-top:13px}
-.settings-link a{color:var(--muted);font-size:9px;cursor:pointer}
+
+.pin-btn:hover{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(34,211,238,.25);
+}
+
+.pin-btn:active{
+  background:var(--cyan);
+  color:#000;
+  transform:scale(.96);
+  box-shadow:0 0 20px var(--cyan);
+}
+
+#step-bio,
+#app-screen{
+  display:none;
+}
+
+.fade-in{
+  animation:fade .35s ease forwards;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+}
+
+.msg-alert{
+  color:var(--pink);
+  font-size:9px;
+  text-align:center;
+  margin-top:5px;
+  min-height:13px;
+  text-shadow:0 0 6px var(--pink);
+}
+
+.settings-link{
+  text-align:center;
+  margin-top:13px;
+}
+
+.settings-link a{
+  color:var(--muted);
+  font-size:9px;
+  cursor:pointer;
+}
+
 .security-clearance{
-  display:flex;flex-direction:column;gap:4px;background:rgba(2,6,23,.7);
-  border:1px solid rgba(167,139,250,.2);padding:9px 11px;border-radius:7px;font-size:8px;
-  color:var(--muted);margin-bottom:10px
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  background:rgba(2,6,23,.7);
+  border:1px solid rgba(168,85,247,.2);
+  padding:9px 11px;
+  border-radius:7px;
+  font-size:8px;
+  color:var(--muted);
+  margin-bottom:10px;
 }
-.clearance-row{display:flex;justify-content:space-between}
-.clearance-row span{color:var(--purple);letter-spacing:1px}
-.bio-box{text-align:center}
+
+.clearance-row{
+  display:flex;
+  justify-content:space-between;
+}
+
+.clearance-row span{
+  color:var(--purple);
+  letter-spacing:1px;
+}
+
+/* =========================
+   BIOMETRIC
+========================= */
+.bio-box{
+  text-align:center;
+}
+
 .biometric-core-container{
-  position:relative;width:174px;height:174px;margin:10px auto 14px;display:flex;
-  align-items:center;justify-content:center;perspective:700px
+  position:relative;
+  width:174px;
+  height:174px;
+  margin:10px auto 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.ring-layer{position:absolute;border-radius:50%;pointer-events:none}
-.ring-1{width:172px;height:172px;border:1px dashed rgba(167,139,250,.5);animation:spin 18s linear infinite}
-.ring-2{width:143px;height:143px;border:2px solid rgba(34,211,238,.32);border-left-color:transparent;border-right-color:transparent;animation:spinR 9s linear infinite}
-.ring-3{width:112px;height:112px;border:1px dotted rgba(167,139,250,.8);animation:spin 6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes spinR{to{transform:rotate(-360deg)}}
+
+.ring-layer{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.ring-1{
+  width:172px;
+  height:172px;
+  border:1px dashed rgba(168,85,247,.5);
+  animation:spin 18s linear infinite;
+}
+
+.ring-2{
+  width:143px;
+  height:143px;
+  border:2px solid rgba(34,211,238,.32);
+  border-left-color:transparent;
+  border-right-color:transparent;
+  animation:spinR 9s linear infinite;
+}
+
+.ring-3{
+  width:112px;
+  height:112px;
+  border:1px dotted rgba(168,85,247,.8);
+  animation:spin 6s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes spinR{
+  to{transform:rotate(-360deg)}
+}
+
 .biometric-core-inner{
-  width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 35% 30%,rgba(167,139,250,.35),rgba(2,6,23,.96) 68%);
-  border:1.5px solid var(--purple);box-shadow:0 0 26px rgba(167,139,250,.45),inset 0 0 18px rgba(167,139,250,.4);
-  animation:core 2.8s ease-in-out infinite;position:relative;z-index:2
+  width:84px;
+  height:84px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(168,85,247,.35),
+      rgba(2,6,23,.96) 68%
+    );
+  border:1.5px solid var(--purple);
+  box-shadow:
+    0 0 26px rgba(168,85,247,.45),
+    inset 0 0 18px rgba(168,85,247,.4);
+  animation:core 2.8s ease-in-out infinite;
+  position:relative;
+  z-index:2;
 }
+
 .biometric-core-inner:before{
-  content:"";position:absolute;inset:9px;border-radius:50%;border:1px solid rgba(34,211,238,.35);
-  animation:spin 4s linear infinite
+  content:"";
+  position:absolute;
+  inset:9px;
+  border-radius:50%;
+  border:1px solid rgba(34,211,238,.35);
+  animation:spin 4s linear infinite;
 }
+
 @keyframes core{
-  50%{transform:scale(1.07);box-shadow:0 0 40px rgba(167,139,250,.7),inset 0 0 25px rgba(167,139,250,.5)}
+  50%{
+    transform:scale(1.07);
+    box-shadow:
+      0 0 40px rgba(168,85,247,.7),
+      inset 0 0 25px rgba(168,85,247,.5);
+  }
 }
-.vaio-core-logo{font-size:15px;font-weight:bold;z-index:3;text-shadow:0 0 10px var(--purple)}
-.bio-text{font-size:10px;margin-bottom:12px;color:#cbd5e1}
-.bio-error{color:var(--pink);font-size:9px;min-height:14px;margin:8px 0}
-.security-modules{display:flex;gap:7px;margin-bottom:12px}
+
+.vaio-core-logo{
+  font-size:15px;
+  font-weight:bold;
+  z-index:3;
+  text-shadow:0 0 10px var(--purple);
+}
+
+.bio-text{
+  font-size:10px;
+  margin-bottom:12px;
+  color:#cbd5e1;
+}
+
+/* =========================
+   VAULT MODULES
+========================= */
+.security-modules{
+  display:flex;
+  gap:7px;
+  margin-bottom:12px;
+}
+
 .module-card{
-  flex:1;background:rgba(15,23,42,.55);border:1px solid rgba(34,211,238,.2);color:var(--muted);
-  padding:9px 4px;border-radius:7px;font-size:9px;cursor:pointer;text-align:center;transition:.22s;overflow:hidden;
-  touch-action:manipulation
-}
-.module-card:hover,.module-card.active{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 15px rgba(34,211,238,.25);text-shadow:0 0 6px var(--cyan)}
-.module-card.active{background:rgba(34,211,238,.1)}
-.mod-status{font-size:7px;margin-top:3px}
-.module-card.active .mod-status{color:var(--green)}
-.item-selector{margin-bottom:10px;background:rgba(2,6,23,.8);padding:5px 8px;border-radius:7px;border:1px solid rgba(34,211,238,.2)}
-.item-selector select,select{
-  width:100%;background:#020617;color:var(--cyan);border:1px solid var(--cyan);
-  padding:6px;border-radius:4px;font-size:11px;font-weight:bold
-}
-.form-group{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
-label{font-size:8px;color:var(--cyan);letter-spacing:1px;font-weight:bold}
-input,textarea{
-  width:100%;background:#020617;border:1px solid rgba(34,211,238,.25);color:#fff;
-  padding:8px 10px;border-radius:6px;font-size:11px;outline:none
-}
-input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(34,211,238,.35)}
-
-/* --- 近未来風ボタン：高さを低くし、上下を台形（斜めカット）に変更 --- */
-#app-screen .action-btn {
-  position: relative;
-  border: 1px solid rgba(34, 211, 238, 0.5);
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(2, 132, 199, 0.4));
-  color: var(--cyan);
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.6);
-  /* 上辺と下辺の両端を斜めに切り欠いた台形風ポリゴン (左上・右上・右下・左下) */
-  clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
-  box-shadow: 0 0 15px rgba(34, 211, 238, 0.2), inset 0 0 10px rgba(34, 211, 238, 0.1);
-  letter-spacing: 1.5px;
-  font-size: 11px;
-  /* 上下の高さを抑えつつ、左右の余白を確保 */
-  padding: 10px 20px;
-  margin: 10px 0;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  display: block;
-  width: 100%;
+  flex:1;
+  background:rgba(15,23,42,.55);
+  border:1px solid rgba(34,211,238,.2);
+  color:var(--muted);
+  padding:9px 4px;
+  border-radius:7px;
+  font-size:9px;
+  cursor:pointer;
+  text-align:center;
+  transition:.22s;
+  overflow:hidden;
+  touch-action:manipulation;
 }
 
-#app-screen .action-btn:hover {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.35), rgba(2, 132, 199, 0.6));
-  border-color: var(--cyan);
-  color: #fff;
-  box-shadow: 0 0 25px rgba(34, 211, 238, 0.4), inset 0 0 15px rgba(34, 211, 238, 0.3);
-  text-shadow: 0 0 12px var(--cyan);
+.module-card:hover,
+.module-card.active{
+  color:var(--cyan);
+  border-color:var(--cyan);
+  box-shadow:0 0 15px rgba(34,211,238,.25);
+  text-shadow:0 0 6px var(--cyan);
 }
 
-#app-screen .action-btn.metal {
-  border: 1px solid rgba(167, 139, 250, 0.5);
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(30, 41, 59, 0.8));
-  color: var(--purple);
-  text-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
-  box-shadow: 0 0 15px rgba(167, 139, 250, 0.15), inset 0 0 10px rgba(167, 139, 250, 0.1);
+.module-card.active{
+  background:rgba(34,211,238,.1);
 }
 
-#app-screen .action-btn.metal:hover {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(30, 41, 59, 0.9));
-  border-color: var(--purple);
-  color: #fff;
-  box-shadow: 0 0 25px rgba(167, 139, 250, 0.35), inset 0 0 15px rgba(167, 139, 250, 0.25);
-  text-shadow: 0 0 12px var(--purple);
+.mod-status{
+  font-size:7px;
+  margin-top:3px;
 }
-/* ---------------------------------------------------- */
 
-.result-box{
-  background:#020617;border:1px solid rgba(167,139,250,.25);padding:9px;color:#e9d5ff;min-height:52px;
-  max-height:110px;overflow-y:auto;border-radius:7px;font-size:10px;white-space:pre-wrap;word-break:break-all
+.module-card.active .mod-status{
+  color:var(--green);
 }
+
+.item-selector{
+  margin-bottom:10px;
+  background:rgba(2,6,23,.8);
+  padding:5px 8px;
+  border-radius:7px;
+  border:1px solid rgba(34,211,238,.2);
+}
+
+.item-selector select,
+select{
+  width:100%;
+  background:#020617;
+  color:var(--cyan);
+  border:1px solid var(--cyan);
+  padding:6px;
+  border-radius:4px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+/* =========================
+   FORMS
+========================= */
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  margin-bottom:8px;
+}
+
+label{
+  font-size:8px;
+  color:var(--cyan);
+  letter-spacing:1px;
+  font-weight:bold;
+}
+
+input,
+textarea{
+  width:100%;
+  background:#020617;
+  border:1px solid rgba(34,211,238,.25);
+  color:#fff;
+  padding:8px 10px;
+  border-radius:6px;
+  font-size:11px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 10px rgba(34,211,238,.35);
+}
+
 .welcome-placeholder{
-  text-align:center;padding:19px 8px;color:var(--muted);font-size:10px;border:1px dashed rgba(34,211,238,.2);
-  border-radius:7px;margin-bottom:6px
+  text-align:center;
+  padding:19px 8px;
+  color:var(--muted);
+  font-size:10px;
+  border:1px dashed rgba(34,211,238,.2);
+  border-radius:7px;
+  margin-bottom:6px;
 }
-.app-lock-bar{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
-  padding:7px 9px;border:1px solid rgba(34,211,238,.18);border-radius:7px;background:rgba(2,6,23,.7);
-  font-size:8px;color:var(--muted)
+
+/* =========================
+   FUTURISTIC OCTAGON BUTTONS
+   ========================= */
+.action-btn{
+  --btn-color:var(--cyan);
+  --btn-dark:#0369a1;
+  position:relative;
+  width:100%;
+  height:56px;
+  min-height:56px;
+  padding:0 22px;
+  margin-top:4px;
+  border:0;
+  border-radius:0;
+  clip-path:polygon(
+    18px 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    0 calc(100% - 18px),
+    0 18px
+  );
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:13px;
+  letter-spacing:.5px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(34,211,238,.95) 0%,
+      rgba(8,145,178,.95) 48%,
+      rgba(3,105,161,.95) 100%
+    );
+  box-shadow:
+    0 0 12px rgba(34,211,238,.30),
+    0 0 28px rgba(34,211,238,.12),
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -5px 12px rgba(0,0,0,.18);
+  transition:
+    transform .16s ease,
+    filter .16s ease,
+    box-shadow .16s ease;
+  overflow:hidden;
+  touch-action:manipulation;
 }
-.app-lock-bar strong{color:var(--green);text-shadow:0 0 8px var(--green)}
-.small-lock{color:var(--cyan);cursor:pointer}
+
+/* 外周の発光ライン */
+.action-btn:before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  clip-path:inherit;
+  border:1px solid rgba(255,255,255,.72);
+  pointer-events:none;
+  opacity:.9;
+}
+
+/* サイバー走査光 */
+.action-btn:after{
+  content:"";
+  position:absolute;
+  left:-20%;
+  top:0;
+  width:18%;
+  height:100%;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.45),
+    transparent
+  );
+  transform:skewX(-18deg);
+  animation:buttonScan 3.8s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes buttonScan{
+  0%{left:-25%;opacity:0}
+  12%{opacity:.7}
+  30%{left:110%;opacity:0}
+  100%{left:110%;opacity:0}
+}
+
+.action-btn:hover{
+  filter:brightness(1.12);
+  box-shadow:
+    0 0 18px rgba(34,211,238,.48),
+    0 0 40px rgba(34,211,238,.18),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -5px 12px rgba(0,0,0,.18);
+}
+
+.action-btn:active{
+  transform:translateY(1px) scale(.985);
+  filter:brightness(1.2);
+}
+
+.action-btn.metal{
+  --btn-color:var(--purple);
+  --btn-dark:#6d28d9;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(192,132,252,.96) 0%,
+      rgba(147,51,234,.96) 48%,
+      rgba(109,40,217,.98) 100%
+    );
+  box-shadow:
+    0 0 12px rgba(168,85,247,.36),
+    0 0 28px rgba(168,85,247,.16),
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -5px 12px rgba(0,0,0,.18);
+}
+
+.action-btn.metal:hover{
+  box-shadow:
+    0 0 18px rgba(168,85,247,.58),
+    0 0 42px rgba(168,85,247,.22),
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -5px 12px rgba(0,0,0,.18);
+}
+
+/* =========================
+   CIPHER / RESULT
+========================= */
+.result-box{
+  background:#020617;
+  border:1px solid rgba(168,85,247,.25);
+  padding:9px;
+  color:#e9d5ff;
+  min-height:52px;
+  max-height:110px;
+  overflow-y:auto;
+  border-radius:7px;
+  font-size:10px;
+  white-space:pre-wrap;
+  word-break:break-all;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
 @media(max-width:380px){
   .container{padding:16px}
   .biometric-core-container{transform:scale(.9)}
-  .pin-pad{gap:7px}
+  .action-btn{
+    height:52px;
+    min-height:52px;
+    font-size:12px;
+  }
 }
+
 @media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+  *,
+  *:before,
+  *:after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <div id="boot-screen">
@@ -243,264 +738,402 @@ input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 
   </div>
 </div>
 
-<main class="container" id="vault-shell">
+<div class="container" id="vault-container">
 
-<section id="step-pin" class="fade-in">
-  <div class="cyber-logo-wrapper">
-    <div class="hud-status-bar">
-      <div>SYS // <span>VAULT-01</span></div>
-      <div>STATUS // <span>L01 LOCKED</span></div>
-    </div>
-    <div class="hexagon-badge"><div class="hexagon-inner">⚡</div></div>
-    <div class="terminal-header">
-      <h1 id="pin-title">ACCESS GATE</h1>
-      <p>SECURITY LEVEL 01 // QUANTUM GATE</p>
-    </div>
-  </div>
+  <!-- =========================
+       LEVEL 01 : PIN
+  ========================== -->
+  <section id="step-pin" class="fade-in">
+    <div class="cyber-logo-wrapper">
+      <div class="hud-status-bar">
+        <div>SYS // <span>VAULT-01</span></div>
+        <div>STATUS // <span>L01 LOCKED</span></div>
+      </div>
 
-  <div class="pin-dots">
-    <i class="pin-dot" id="dot-0"></i>
-    <i class="pin-dot" id="dot-1"></i>
-    <i class="pin-dot" id="dot-2"></i>
-    <i class="pin-dot" id="dot-3"></i>
-  </div>
+      <div class="hexagon-badge">
+        <div class="hexagon-inner">⚡</div>
+      </div>
 
-  <div class="pin-pad">
-    <button class="pin-btn" onclick="pressPin('1')">1</button>
-    <button class="pin-btn" onclick="pressPin('2')">2</button>
-    <button class="pin-btn" onclick="pressPin('3')">3</button>
-    <button class="pin-btn" onclick="pressPin('4')">4</button>
-    <button class="pin-btn" onclick="pressPin('5')">5</button>
-    <button class="pin-btn" onclick="pressPin('6')">6</button>
-    <button class="pin-btn" onclick="pressPin('7')">7</button>
-    <button class="pin-btn" onclick="pressPin('8')">8</button>
-    <button class="pin-btn" onclick="pressPin('9')">9</button>
-    <button class="pin-btn" onclick="clearPin()">C</button>
-    <button class="pin-btn" onclick="pressPin('0')">0</button>
-    <button class="pin-btn" onclick="deletePin()">⌫</button>
-  </div>
-
-  <div id="pin-msg" class="msg-alert"></div>
-
-  <div class="settings-link">
-    <a onclick="enablePinChange()">⚙️ PINコード変更プロトコル起動</a>
-  </div>
-</section>
-
-<section id="step-bio" hidden class="fade-in">
-  <div class="cyber-logo-wrapper">
-    <div class="hud-status-bar">
-      <div>CORE TEMP // <span>36.2°C</span></div>
-      <div>ENCRYPTION // <span>AES-256</span></div>
-    </div>
-    <div class="hexagon-badge"><div class="hexagon-inner">🧬</div></div>
-    <div class="terminal-header">
-      <h1>NEURAL IDENTITY SCAN</h1>
-      <p>SECURITY LEVEL 02 // HARDWARE WALL</p>
-    </div>
-  </div>
-
-  <div class="security-clearance">
-    <div class="clearance-row"><span>LEVEL 01 ACCESS:</span><span>VERIFIED</span></div>
-    <div class="clearance-row"><span>LEVEL 02 HARDWARE:</span><span style="color:var(--cyan)">PENDING...</span></div>
-    <div class="clearance-row"><span>LEVEL 03 VAULT CORE:</span><span>STANDBY</span></div>
-  </div>
-
-  <div class="bio-box">
-    <div class="biometric-core-container">
-      <div class="ring-layer ring-1"></div>
-      <div class="ring-layer ring-2"></div>
-      <div class="ring-layer ring-3"></div>
-      <div class="biometric-core-inner"><span class="vaio-core-logo">VAIO</span></div>
+      <div class="terminal-header">
+        <h1 id="pin-title">ACCESS GATE</h1>
+        <p>SECURITY LEVEL 01 // QUANTUM GATE</p>
+      </div>
     </div>
 
-    <p class="bio-text">デバイスの生体認証またはロック解除で実行</p>
-    <div id="bio-error" class="bio-error"></div>
+    <div class="pin-dots">
+      <i class="pin-dot" id="dot-0"></i>
+      <i class="pin-dot" id="dot-1"></i>
+      <i class="pin-dot" id="dot-2"></i>
+      <i class="pin-dot" id="dot-3"></i>
+    </div>
 
-    <button id="bio-auth-btn" class="action-btn"
-      onclick="authBio()"
-      style="background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff">
-      🔐 生体認証コア起動 // AUTHENTICATE
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pressPin('1')">1</button>
+      <button class="pin-btn" onclick="pressPin('2')">2</button>
+      <button class="pin-btn" onclick="pressPin('3')">3</button>
+      <button class="pin-btn" onclick="pressPin('4')">4</button>
+      <button class="pin-btn" onclick="pressPin('5')">5</button>
+      <button class="pin-btn" onclick="pressPin('6')">6</button>
+      <button class="pin-btn" onclick="pressPin('7')">7</button>
+      <button class="pin-btn" onclick="pressPin('8')">8</button>
+      <button class="pin-btn" onclick="pressPin('9')">9</button>
+      <button class="pin-btn" onclick="clearPin()">C</button>
+      <button class="pin-btn" onclick="pressPin('0')">0</button>
+      <button class="pin-btn" onclick="deletePin()">⌫</button>
+    </div>
+
+    <div id="pin-msg" class="msg-alert"></div>
+
+    <div class="settings-link">
+      <a onclick="enablePinChange()">⚙️ PINコード変更プロトコル起動</a>
+    </div>
+  </section>
+
+  <!-- =========================
+       LEVEL 02 : BIOMETRIC
+  ========================== -->
+  <section id="step-bio" class="fade-in">
+    <div class="cyber-logo-wrapper">
+      <div class="hud-status-bar">
+        <div>CORE TEMP // <span>36.2°C</span></div>
+        <div>ENCRYPTION // <span>AES-256</span></div>
+      </div>
+
+      <div class="hexagon-badge">
+        <div class="hexagon-inner">🧬</div>
+      </div>
+
+      <div class="terminal-header">
+        <h1>NEURAL IDENTITY SCAN</h1>
+        <p>SECURITY LEVEL 02 // HARDWARE WALL</p>
+      </div>
+    </div>
+
+    <div class="security-clearance">
+      <div class="clearance-row">
+        <span>LEVEL 01 ACCESS:</span>
+        <span>VERIFIED</span>
+      </div>
+      <div class="clearance-row">
+        <span>LEVEL 02 HARDWARE:</span>
+        <span style="color:var(--cyan)">PENDING...</span>
+      </div>
+      <div class="clearance-row">
+        <span>LEVEL 03 VAULT CORE:</span>
+        <span>STANDBY</span>
+      </div>
+    </div>
+
+    <div class="bio-box">
+      <div class="biometric-core-container">
+        <div class="ring-layer ring-1"></div>
+        <div class="ring-layer ring-2"></div>
+        <div class="ring-layer ring-3"></div>
+
+        <div class="biometric-core-inner">
+          <span class="vaio-core-logo">VAIO</span>
+        </div>
+      </div>
+
+      <p class="bio-text">
+        デバイスの生体認証またはロック解除で実行
+      </p>
+
+      <button
+        class="action-btn"
+        onclick="authBio()"
+        style="
+          background:linear-gradient(
+            180deg,
+            rgba(192,132,252,.96),
+            rgba(124,58,237,.98)
+          );
+        "
+      >
+        🧬 生体認証コア起動 // AUTHENTICATE
+      </button>
+    </div>
+  </section>
+
+  <!-- =========================
+       LEVEL 03 : DEEP VAULT
+  ========================== -->
+  <section id="app-screen" class="fade-in">
+    <div class="cyber-logo-wrapper">
+      <div class="hud-status-bar">
+        <div>NODE // <span>ONLINE</span></div>
+        <div>LATENCY // <span>04ms</span></div>
+      </div>
+
+      <div class="hexagon-badge">
+        <div class="hexagon-inner">💎</div>
+      </div>
+
+      <div class="terminal-header">
+        <h1>DEEP VAULT</h1>
+        <p>NEURAL SECURITY CORE // 10 SLOTS</p>
+      </div>
+    </div>
+
+    <div class="security-modules">
+      <div class="module-card" onclick="switchTab('bank',this)">
+        🏦 銀行口座
+        <div class="mod-status">FINANCIAL CORE</div>
+      </div>
+
+      <div class="module-card" onclick="switchTab('card',this)">
+        💳 クレカ
+        <div class="mod-status">PAYMENT CORE</div>
+      </div>
+
+      <div class="module-card" onclick="switchTab('web',this)">
+        🌐 アプリ
+        <div class="mod-status">DIGITAL CORE</div>
+      </div>
+    </div>
+
+    <div class="item-selector">
+      <select id="slot-select" onchange="changeSlot()">
+        <option value="" disabled selected>
+          -- 先にセキュリティモジュールを選択 --
+        </option>
+      </select>
+    </div>
+
+    <div id="form-area">
+      <div class="welcome-placeholder">
+        上のセキュリティモジュールとスロットを選択してください
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>ENCRYPTION CORE // MASTER KEY</label>
+      <input
+        type="password"
+        id="master-pass"
+        placeholder="秘密のマスターキーを入力"
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- ★ CYBER OCTAGON : ENCRYPT -->
+    <button class="action-btn" onclick="encryptData()">
+      🔑　データを暗号化して保存
     </button>
-  </div>
-</section>
 
-<section id="app-screen" hidden class="fade-in">
-  <div class="cyber-logo-wrapper">
-    <div class="hud-status-bar">
-      <div>NODE // <span>ONLINE</span></div>
-      <div>LATENCY // <span>04ms</span></div>
+    <div class="form-group">
+      <label>CIPHER TEXT // SECURE STREAM</label>
+      <textarea
+        id="cipher-text"
+        rows="2"
+        placeholder="U2FsdGVkX1..."
+        readonly
+      ></textarea>
     </div>
-    <div class="hexagon-badge"><div class="hexagon-inner">💎</div></div>
-    <div class="terminal-header">
-      <h1>DEEP VAULT</h1>
-      <p>NEURAL SECURITY CORE // 10 SLOTS</p>
+
+    <!-- ★ CYBER OCTAGON : DECRYPT / PURPLE -->
+    <button class="action-btn metal" onclick="decryptData()">
+      🔐　復号化して中身を確認
+    </button>
+
+    <div class="form-group" style="margin-top:8px">
+      <label>DECRYPTION VIEWER</label>
+      <div id="result-view" class="result-box">
+        ここに復号されたデータが表示されます...
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="app-lock-bar">
-    <div>VAULT STATUS // <strong>UNLOCKED</strong></div>
-    <div class="small-lock" onclick="lockVault()">⛨ LOCK NOW</div>
-  </div>
-
-  <div class="security-modules">
-    <div class="module-card" onclick="switchTab('bank',this)">
-      🏦 銀行口座<div class="mod-status">FINANCIAL CORE</div>
-    </div>
-    <div class="module-card" onclick="switchTab('card',this)">
-      💳 クレカ<div class="mod-status">PAYMENT CORE</div>
-    </div>
-    <div class="module-card" onclick="switchTab('web',this)">
-      🌐 アプリ<div class="mod-status">DIGITAL CORE</div>
-    </div>
-  </div>
-
-  <div class="item-selector">
-    <select id="slot-select" onchange="changeSlot()">
-      <option value="" disabled selected>-- 先にセキュリティモジュールを選択 --</option>
-    </select>
-  </div>
-
-  <div id="form-area">
-    <div class="welcome-placeholder">上のセキュリティモジュールとスロットを選択してください</div>
-  </div>
-
-  <div class="form-group">
-    <label>ENCRYPTION CORE // MASTER KEY</label>
-    <input type="password" id="master-pass" placeholder="秘密のマスターキーを入力" autocomplete="off">
-  </div>
-
-  <button class="action-btn" onclick="encryptData()">🔑 データを暗号化して保存</button>
-
-  <div class="form-group">
-    <label>CIPHER TEXT // SECURE STREAM</label>
-    <textarea id="cipher-text" rows="2" placeholder="U2FsdGVkX1..." autocomplete="off"></textarea>
-  </div>
-
-  <button class="action-btn metal" onclick="decryptData()">🔐 復号化して中身を見る</button>
-
-  <div class="form-group">
-    <label>DECRYPTION VIEWER</label>
-    <div id="result-view" class="result-box">ここに復号されたデータが表示されます...</div>
-  </div>
-</section>
-
-</main>
+</div>
 
 <script>
+/* =========================================================
+   CYBER VAULT
+   Security state is controlled only by JavaScript.
+   All sections are explicitly hidden/shown.
+========================================================= */
+
 "use strict";
 
-const $ = id => document.getElementById(id);
-const AUTO_LOCK = 300000;
-const PIN_MAX_FAILS = 5;
-
-let enteredPin = "";
-let isChangingPin = false;
-let oldPinBuffer = "";
-let pinFailCount = Number(localStorage.getItem("vault_pin_fail_count") || 0);
-let lockUntil = Number(localStorage.getItem("vault_pin_lock_until") || 0);
-let lockTimer = null;
-let autoLockTimer = null;
-let currentTab = null;
-let currentSlot = "";
-let vaultUnlocked = false;
-let bioBusy = false;
-
-if (!localStorage.getItem("vault_pin") && !localStorage.getItem("vault_pin_hash")) {
+/* =========================
+   INITIAL PIN
+========================= */
+if(
+  !localStorage.getItem("vault_pin") &&
+  !localStorage.getItem("vault_pin_hash")
+){
   localStorage.setItem("vault_pin","1234");
 }
 
-/* SECURITY: only one section can ever be visible */
+/* =========================
+   STATE
+========================= */
+let enteredPin = "";
+let isChangingPin = false;
+let oldPinBuffer = "";
+
+let pinFailCount =
+  Number(localStorage.getItem("vault_pin_fail_count")) || 0;
+
+let lockUntil =
+  Number(localStorage.getItem("vault_pin_lock_until")) || 0;
+
+let lockTimer = null;
+let autoLockTimer = null;
+
+let currentTab = null;
+let currentSlot = "";
+
+const AUTO_LOCK = 300000; // 5 minutes
+
+/* =========================
+   HELPERS
+========================= */
+const $ = id => document.getElementById(id);
+
 function showOnly(sectionId){
-  const ids=["step-pin","step-bio","app-screen"];
+  const sections = [
+    $("step-pin"),
+    $("step-bio"),
+    $("app-screen")
+  ];
 
-  ids.forEach(id=>{
-    const el=$(id);
-    if(!el)return;
-
-    const show=id===sectionId;
-    el.hidden=!show;
-    el.style.display=show?"block":"none";
+  sections.forEach(section=>{
+    if(section){
+      section.style.display =
+        section.id === sectionId ? "block" : "none";
+    }
   });
-
-  window.scrollTo(0,0);
 }
 
-function hardLockState(){
-  vaultUnlocked=false;
-  clearTimeout(autoLockTimer);
-
-  showOnly("step-pin");
-
-  enteredPin="";
-  isChangingPin=false;
-  oldPinBuffer="";
-  currentTab=null;
-  currentSlot="";
-
-  dots();
-
-  if($("master-pass"))$("master-pass").value="";
-  if($("cipher-text"))$("cipher-text").value="";
-  if($("result-view"))$("result-view").textContent="ここに復号されたデータが表示されます...";
-
-  const form=$("form-area");
-  if(form){
-    form.innerHTML='<div class="welcome-placeholder">上のセキュリティモジュールとスロットを選択してください</div>';
-  }
-
-  document.querySelectorAll(".module-card").forEach(x=>x.classList.remove("active"));
-
-  if(Date.now()<lockUntil)lockCountdown();
-  else if($("pin-msg"))$("pin-msg").textContent="";
-}
-
-function unlockVaultUI(){
-  /* Called ONLY after successful device authentication. */
-  vaultUnlocked=true;
-  showOnly("app-screen");
-  resetAuto();
-}
-
-showOnly("step-pin");
-
-/* PIN */
 function dots(){
   for(let i=0;i<4;i++){
-    $("dot-"+i).className="pin-dot "+(i<enteredPin.length?"active":"");
+    $("dot-"+i).className =
+      "pin-dot " +
+      (i < enteredPin.length ? "active" : "");
   }
 }
 
 function lockCountdown(){
   clearInterval(lockTimer);
 
-  lockTimer=setInterval(()=>{
-    const remaining=Math.ceil((lockUntil-Date.now())/1000);
+  lockTimer = setInterval(()=>{
+    const remaining =
+      Math.ceil((lockUntil - Date.now()) / 1000);
 
-    if(remaining>0){
-      $("pin-msg").textContent=`🔒 SECURITY LOCK // ${remaining}秒間ロックされています`;
+    if(remaining > 0){
+      $("pin-msg").textContent =
+        `🔒 SECURITY LOCK // ${remaining}秒間ロックされています`;
     }else{
+      $("pin-msg").textContent = "";
       clearInterval(lockTimer);
-      $("pin-msg").textContent="";
-      pinFailCount=0;
-      localStorage.setItem("vault_pin_fail_count","0");
     }
   },500);
 }
 
-async function sha(s){
-  const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
-  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+/* =========================
+   AUTO LOCK
+========================= */
+function resetAuto(){
+  clearTimeout(autoLockTimer);
+
+  if($("app-screen").style.display === "block"){
+    autoLockTimer = setTimeout(lockVault,AUTO_LOCK);
+  }
 }
 
-async function verify(p){
-  const h=localStorage.getItem("vault_pin_hash");
-  const q=localStorage.getItem("vault_pin");
+["click","keydown","touchstart"].forEach(eventName=>{
+  document.addEventListener(eventName,()=>{
+    if($("app-screen").style.display === "block"){
+      resetAuto();
+    }
+  },{passive:true});
+});
 
-  if(h)return await sha(p)===h;
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState === "hidden"){
+    if(
+      $("app-screen").style.display === "block" ||
+      $("step-bio").style.display === "block"
+    ){
+      lockVault();
+    }
+  }
+});
 
-  if(q&&p===q){
-    localStorage.setItem("vault_pin_hash",await sha(p));
+/* =========================
+   LOCK VAULT
+========================= */
+function lockVault(){
+  clearTimeout(autoLockTimer);
+
+  showOnly("step-pin");
+
+  enteredPin = "";
+  isChangingPin = false;
+  oldPinBuffer = "";
+
+  currentTab = null;
+  currentSlot = "";
+
+  dots();
+
+  $("pin-title").textContent = "ACCESS GATE";
+  $("pin-msg").textContent = "";
+
+  $("master-pass").value = "";
+  $("cipher-text").value = "";
+
+  $("result-view").textContent =
+    "ここに復号されたデータが表示されます...";
+
+  $("form-area").innerHTML =
+    '<div class="welcome-placeholder">' +
+    '上のセキュリティモジュールとスロットを選択してください' +
+    '</div>';
+
+  document
+    .querySelectorAll(".module-card")
+    .forEach(x=>x.classList.remove("active"));
+
+  updateSlots();
+
+  if(Date.now() < lockUntil){
+    lockCountdown();
+  }
+}
+
+/* =========================
+   HASH / PIN
+========================= */
+async function sha(s){
+  const buffer =
+    await crypto.subtle.digest(
+      "SHA-256",
+      new TextEncoder().encode(s)
+    );
+
+  return [...new Uint8Array(buffer)]
+    .map(x=>x.toString(16).padStart(2,"0"))
+    .join("");
+}
+
+async function verify(pin){
+  const hash =
+    localStorage.getItem("vault_pin_hash");
+
+  const plain =
+    localStorage.getItem("vault_pin");
+
+  if(hash){
+    return await sha(pin) === hash;
+  }
+
+  if(plain && pin === plain){
+    localStorage.setItem(
+      "vault_pin_hash",
+      await sha(pin)
+    );
     localStorage.removeItem("vault_pin");
     return true;
   }
@@ -508,95 +1141,149 @@ async function verify(p){
   return false;
 }
 
-async function savePin(p){
-  localStorage.setItem("vault_pin_hash",await sha(p));
+async function savePin(pin){
+  localStorage.setItem(
+    "vault_pin_hash",
+    await sha(pin)
+  );
+
   localStorage.removeItem("vault_pin");
 }
 
-function pressPin(n){
-  if(Date.now()<lockUntil)return;
+/* =========================
+   PIN INPUT
+========================= */
+function pressPin(number){
+  if(Date.now() < lockUntil) return;
 
-  if(enteredPin.length<4){
-    enteredPin+=n;
+  if(enteredPin.length < 4){
+    enteredPin += number;
     dots();
 
-    if(enteredPin.length===4)setTimeout(pinDone,120);
+    if(enteredPin.length === 4){
+      setTimeout(pinDone,120);
+    }
   }
 }
 
 function deletePin(){
-  if(Date.now()>=lockUntil){
-    enteredPin=enteredPin.slice(0,-1);
+  if(Date.now() >= lockUntil){
+    enteredPin = enteredPin.slice(0,-1);
     dots();
   }
 }
 
 function clearPin(){
-  if(Date.now()>=lockUntil){
-    enteredPin="";
+  if(Date.now() >= lockUntil){
+    enteredPin = "";
     dots();
   }
 }
 
+/* =========================
+   PIN COMPLETE
+========================= */
 async function pinDone(){
-  if(Date.now()<lockUntil)return;
+  if(Date.now() < lockUntil) return;
 
   if(!isChangingPin){
-    const ok=await verify(enteredPin);
 
-    if(ok){
-      pinFailCount=0;
-      lockUntil=0;
+    if(await verify(enteredPin)){
 
-      localStorage.setItem("vault_pin_fail_count","0");
-      localStorage.setItem("vault_pin_lock_until","0");
+      pinFailCount = 0;
+      lockUntil = 0;
 
-      $("pin-msg").textContent="";
-      enteredPin="";
+      localStorage.setItem(
+        "vault_pin_fail_count",
+        "0"
+      );
+
+      localStorage.setItem(
+        "vault_pin_lock_until",
+        "0"
+      );
+
+      $("pin-msg").textContent = "";
+
+      enteredPin = "";
       dots();
 
-      /* PIN success -> LEVEL 02 only */
+      /*
+        IMPORTANT:
+        PIN verification alone does NOT open the vault.
+        It only moves to Level 02 hardware authentication.
+      */
       showOnly("step-bio");
-      $("bio-error").textContent="";
+
       return;
     }
 
     pinFailCount++;
-    enteredPin="";
+    enteredPin = "";
     dots();
 
-    localStorage.setItem("vault_pin_fail_count",String(pinFailCount));
+    localStorage.setItem(
+      "vault_pin_fail_count",
+      String(pinFailCount)
+    );
 
-    if(pinFailCount>=PIN_MAX_FAILS){
-      const sec=pinFailCount>=15?300:pinFailCount>=10?60:30;
-      lockUntil=Date.now()+sec*1000;
-      localStorage.setItem("vault_pin_lock_until",String(lockUntil));
+    if(pinFailCount >= 5){
+
+      const seconds =
+        pinFailCount >= 15 ? 300 :
+        pinFailCount >= 10 ? 60 :
+        30;
+
+      lockUntil =
+        Date.now() + seconds * 1000;
+
+      localStorage.setItem(
+        "vault_pin_lock_until",
+        String(lockUntil)
+      );
+
       lockCountdown();
+
     }else{
-      $("pin-msg").textContent="❌ ACCESS DENIED";
+      $("pin-msg").textContent =
+        "❌ ACCESS DENIED";
     }
 
     return;
   }
 
+  /* =========================
+     PIN CHANGE
+  ========================= */
   if(!oldPinBuffer){
+
     if(await verify(enteredPin)){
-      oldPinBuffer=enteredPin;
-      enteredPin="";
+
+      oldPinBuffer = enteredPin;
+      enteredPin = "";
       dots();
-      $("pin-title").textContent="NEW PIN";
-      $("pin-msg").textContent="✨ 新しい4桁のPINを入力してください";
+
+      $("pin-title").textContent = "NEW PIN";
+      $("pin-msg").textContent =
+        "✨ 新しい4桁のPINを入力してください";
+
     }else{
-      $("pin-msg").textContent="❌ CURRENT PIN ERROR";
-      enteredPin="";
+
+      $("pin-msg").textContent =
+        "❌ CURRENT PIN ERROR";
+
+      enteredPin = "";
       dots();
     }
+
     return;
   }
 
-  if(enteredPin.length!==4){
-    $("pin-msg").textContent="❌ 4桁のPINを入力してください";
-    enteredPin="";
+  if(enteredPin.length !== 4){
+    $("pin-msg").textContent =
+      "❌ 4桁のPINを入力してください";
+
+    enteredPin = "";
     dots();
     return;
   }
@@ -605,488 +1292,720 @@ async function pinDone(){
 
   alert("🎉 PINコードが正常に変更されました！");
 
-  isChangingPin=false;
-  oldPinBuffer="";
-  enteredPin="";
-  $("pin-title").textContent="ACCESS GATE";
-  $("pin-msg").textContent="";
+  isChangingPin = false;
+  oldPinBuffer = "";
+  enteredPin = "";
+
+  $("pin-title").textContent = "ACCESS GATE";
+  $("pin-msg").textContent = "";
+
   dots();
 }
 
+/* =========================
+   CHANGE PIN
+========================= */
 function enablePinChange(){
-  if(Date.now()<lockUntil)return;
 
-  isChangingPin=true;
-  enteredPin="";
-  oldPinBuffer="";
+  if(Date.now() < lockUntil) return;
 
-  $("pin-title").textContent="CURRENT PIN";
-  $("pin-msg").textContent="🔐 現在の4桁を入力してください";
+  isChangingPin = true;
+  enteredPin = "";
+  oldPinBuffer = "";
+
+  $("pin-title").textContent = "CURRENT PIN";
+
+  $("pin-msg").textContent =
+    "🔐 現在の4桁を入力してください";
+
   dots();
 }
 
-/* DEVICE AUTHENTICATION */
+/* =========================
+   BIOMETRIC AUTH
+   IMPORTANT:
+   Cancel / Back / Failure NEVER opens app.
+========================= */
 async function authBio(){
-  if(vaultUnlocked||bioBusy)return;
 
-  bioBusy=true;
-
-  const btn=$("bio-auth-btn");
-  const err=$("bio-error");
-
-  if(btn)btn.disabled=true;
-  if(err)err.textContent="";
+  /*
+    WebAuthn is supported only in a secure context.
+    If unavailable, do NOT silently bypass security.
+  */
+  if(
+    !window.PublicKeyCredential ||
+    !navigator.credentials ||
+    !window.isSecureContext
+  ){
+    $("step-bio").querySelector(".bio-text").textContent =
+      "この端末ではデバイス認証を利用できません。HTTPS環境をご確認ください。";
+    return;
+  }
 
   try{
-    if(!window.PublicKeyCredential||!navigator.credentials){
-      throw new Error("WebAuthn_NOT_SUPPORTED");
-    }
 
-    if(PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable){
-      const available=
-        await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    const challenge =
+      crypto.getRandomValues(
+        new Uint8Array(32)
+      );
 
-      if(!available){
-        throw new Error("PLATFORM_AUTHENTICATOR_UNAVAILABLE");
-      }
-    }
-
-    const challenge=crypto.getRandomValues(new Uint8Array(32));
-
-    const credential=await navigator.credentials.get({
+    await navigator.credentials.get({
       publicKey:{
-        challenge,
-        timeout:60000,
+        challenge:challenge,
         userVerification:"required",
-        rpId:location.hostname
+        timeout:60000
       }
     });
 
-    if(!credential)throw new Error("NO_CREDENTIAL");
+    /*
+      Only a SUCCESSFUL credential result reaches here.
+      Cancel / Back / biometric failure throws and stays here.
+    */
+    showOnly("app-screen");
+    resetAuto();
 
-    unlockVaultUI();
+  }catch(error){
 
-  }catch(e){
-    vaultUnlocked=false;
-
-    if(err){
-      if(e&&e.name==="NotAllowedError"){
-        err.textContent="⛔ 認証がキャンセルされました // VAULT LOCKED";
-      }else if(e&&e.message==="PLATFORM_AUTHENTICATOR_UNAVAILABLE"){
-        err.textContent="⚠️ この端末でデバイス認証を利用できません";
-      }else if(e&&e.message==="WebAuthn_NOT_SUPPORTED"){
-        err.textContent="⚠️ このブラウザはデバイス認証に対応していません";
-      }else{
-        err.textContent="❌ DEVICE AUTH FAILED // VAULT LOCKED";
-      }
-    }
+    /*
+      NEVER transition to app on cancel.
+    */
+    $("step-bio").querySelector(".bio-text").textContent =
+      "認証がキャンセルされました。もう一度デバイス認証を実行してください。";
 
     showOnly("step-bio");
-  }finally{
-    bioBusy=false;
-    if(btn)btn.disabled=false;
   }
 }
 
-/* AUTO LOCK */
-function resetAuto(){
-  clearTimeout(autoLockTimer);
+/* =========================
+   DATA TEMPLATES
+========================= */
+const templates = {
 
-  if(vaultUnlocked&&!$("app-screen").hidden){
-    autoLockTimer=setTimeout(lockVault,AUTO_LOCK);
-  }
-}
+  bank:
+    '<div class="form-group">' +
+      '<label>銀行名</label>' +
+      '<input id="b-name">' +
+    '</div>' +
 
-function lockVault(){
-  hardLockState();
-}
+    '<div class="form-group">' +
+      '<label>支店名</label>' +
+      '<input id="b-branch">' +
+    '</div>' +
 
-["click","keydown","touchstart"].forEach(type=>{
-  document.addEventListener(type,()=>{
-    if(vaultUnlocked)resetAuto();
-  },{passive:true});
-});
+    '<div class="form-group">' +
+      '<label>口座番号</label>' +
+      '<input id="b-account">' +
+    '</div>' +
 
-document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"){
-    if(vaultUnlocked||!$("step-bio").hidden){
-      hardLockState();
-    }
-  }
-});
+    '<div class="form-group">' +
+      '<label>口座名義（カナ）</label>' +
+      '<input id="b-holder">' +
+    '</div>' +
 
-window.addEventListener("pagehide",()=>{
-  if(vaultUnlocked)hardLockState();
-});
+    '<div class="form-group">' +
+      '<label>暗証番号（PIN）</label>' +
+      '<input id="b-pin" type="password">' +
+    '</div>',
 
-document.addEventListener("scroll",()=>{
-  if(!vaultUnlocked)window.scrollTo(0,0);
-},{passive:true});
+  card:
+    '<div class="form-group">' +
+      '<label>カード会社 / ブランド</label>' +
+      '<input id="c-brand">' +
+    '</div>' +
 
-/* VAULT DATA */
-const templates={
-  bank:`
-    <div class="form-group"><label>銀行名</label><input id="b-name" autocomplete="off"></div>
-    <div class="form-group"><label>支店名</label><input id="b-branch" autocomplete="off"></div>
-    <div class="form-group"><label>口座番号</label><input id="b-account" autocomplete="off"></div>
-    <div class="form-group"><label>口座名義 (カナ)</label><input id="b-holder" autocomplete="off"></div>
-    <div class="form-group"><label>暗証番号 (PIN)</label><input id="b-pin" type="password" autocomplete="off"></div>
-  `,
-  card:`
-    <div class="form-group"><label>カード会社 / ブランド</label><input id="c-brand" autocomplete="off"></div>
-    <div class="form-group"><label>カード番号</label><input id="c-num" autocomplete="off"></div>
-    <div class="form-group"><label>有効期限</label><input id="c-exp" autocomplete="off"></div>
-    <div class="form-group"><label>名義人 (HOLDER)</label><input id="c-name" autocomplete="off"></div>
-    <div class="form-group"><label>CVV</label><input id="c-cvv" type="password" autocomplete="off"></div>
-  `,
-  web:`
-    <div class="form-group"><label>サービス / アプリ名</label><input id="w-srv" autocomplete="off"></div>
-    <div class="form-group"><label>ログインID / メアド</label><input id="w-id" autocomplete="off"></div>
-    <div class="form-group"><label>登録者名 / ユーザー名</label><input id="w-user" autocomplete="off"></div>
-    <div class="form-group"><label>パスワード</label><input id="w-pass" type="password" autocomplete="off"></div>
-  `
+    '<div class="form-group">' +
+      '<label>カード番号</label>' +
+      '<input id="c-num">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>有効期限</label>' +
+      '<input id="c-exp">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>名義人（HOLDER）</label>' +
+      '<input id="c-name">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>CVV</label>' +
+      '<input id="c-cvv" type="password">' +
+    '</div>',
+
+  web:
+    '<div class="form-group">' +
+      '<label>サービス / アプリ名</label>' +
+      '<input id="w-srv">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>ログインID / メアド</label>' +
+      '<input id="w-id">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>登録者名 / ユーザー名</label>' +
+      '<input id="w-user">' +
+    '</div>' +
+
+    '<div class="form-group">' +
+      '<label>パスワード</label>' +
+      '<input id="w-pass" type="password">' +
+    '</div>'
 };
 
+/* =========================
+   SLOT SYSTEM
+========================= */
 function updateSlots(){
-  const s=$("slot-select");
 
-  s.innerHTML='<option value="" disabled selected>-- スロットを選択してください --</option>';
+  const select = $("slot-select");
 
-  if(!currentTab)return;
+  select.innerHTML =
+    '<option value="" disabled selected>' +
+    '-- スロットを選択してください --' +
+    '</option>';
+
+  if(!currentTab) return;
 
   for(let i=1;i<=10;i++){
-    const k=String(i);
-    const o=document.createElement("option");
-    const saved=localStorage.getItem(`vault_${currentTab}_slot_${k}`);
 
-    o.value=k;
-    o.textContent=`[ ${k.padStart(2,"0")} ] ${saved?"SECURE":"ACTIVE (EMPTY)"}`;
+    const slot = String(i);
 
-    s.appendChild(o);
+    const option =
+      document.createElement("option");
+
+    const saved =
+      localStorage.getItem(
+        `vault_${currentTab}_slot_${slot}`
+      );
+
+    option.value = slot;
+
+    option.textContent =
+      `[ ${slot.padStart(2,"0")} ] ` +
+      (saved
+        ? "SECURE"
+        : "ACTIVE (EMPTY)");
+
+    select.appendChild(option);
   }
 }
 
-function switchTab(t,e){
-  if(!vaultUnlocked)return;
+/* =========================
+   MODULE SWITCH
+========================= */
+function switchTab(tab,element){
 
-  if(currentTab===t){
-    currentTab=null;
-    currentSlot="";
+  if(currentTab === tab){
 
-    document.querySelectorAll(".module-card")
+    currentTab = null;
+    currentSlot = "";
+
+    document
+      .querySelectorAll(".module-card")
       .forEach(x=>x.classList.remove("active"));
 
     updateSlots();
 
-    $("form-area").innerHTML=
-      '<div class="welcome-placeholder">上のセキュリティモジュールとスロットを選択してください</div>';
+    $("form-area").innerHTML =
+      '<div class="welcome-placeholder">' +
+      '上のセキュリティモジュールとスロットを選択してください' +
+      '</div>';
 
     return;
   }
 
-  currentTab=t;
-  currentSlot="";
+  currentTab = tab;
+  currentSlot = "";
 
-  document.querySelectorAll(".module-card")
+  document
+    .querySelectorAll(".module-card")
     .forEach(x=>x.classList.remove("active"));
 
-  e.classList.add("active");
+  element.classList.add("active");
 
   updateSlots();
 
-  $("form-area").innerHTML=
-    '<div class="welcome-placeholder">上のセキュリティモジュールとスロットを選択してください</div>';
+  $("form-area").innerHTML =
+    '<div class="welcome-placeholder">' +
+    '上のセキュリティモジュールとスロットを選択してください' +
+    '</div>';
 }
 
+/* =========================
+   SLOT CHANGE
+========================= */
 function changeSlot(){
-  if(!vaultUnlocked)return;
 
-  currentSlot=$("slot-select").value;
+  currentSlot = $("slot-select").value;
 
-  if(currentTab&&currentSlot){
-    $("form-area").innerHTML=templates[currentTab];
+  if(currentTab && currentSlot){
 
-    $("form-area").querySelectorAll("input")
-      .forEach(x=>x.value="");
+    $("form-area").innerHTML =
+      templates[currentTab];
 
-    $("cipher-text").value="";
-    $("result-view").textContent="ここに復号されたデータが表示されます...";
+    $("form-area")
+      .querySelectorAll("input")
+      .forEach(input=>{
+        input.value = "";
+      });
+
+    $("cipher-text").value = "";
+    $("result-view").textContent =
+      "ここに復号されたデータが表示されます...";
   }
 }
 
-function key(){
+function storageKey(){
   return `vault_${currentTab}_slot_${currentSlot}`;
 }
 
-function b64(x){
-  let s="";
-  for(const v of new Uint8Array(x))s+=String.fromCharCode(v);
-  return btoa(s);
+/* =========================
+   BASE64
+========================= */
+function b64(buffer){
+
+  let binary = "";
+
+  for(
+    const byte
+    of new Uint8Array(buffer)
+  ){
+    binary +=
+      String.fromCharCode(byte);
+  }
+
+  return btoa(binary);
 }
 
-function unb64(s){
-  const x=atob(s);
-  const a=new Uint8Array(x.length);
+function unb64(value){
 
-  for(let i=0;i<x.length;i++)a[i]=x.charCodeAt(i);
+  const binary = atob(value);
 
-  return a.buffer;
+  const bytes =
+    new Uint8Array(binary.length);
+
+  for(let i=0;i<binary.length;i++){
+    bytes[i] =
+      binary.charCodeAt(i);
+  }
+
+  return bytes.buffer;
 }
 
-async function derive(p,s){
-  const k=await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(p),
-    {name:"PBKDF2"},
-    false,
-    ["deriveKey"]
-  );
+/* =========================
+   KEY DERIVATION
+========================= */
+async function derive(password,salt){
+
+  const keyMaterial =
+    await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(password),
+      {name:"PBKDF2"},
+      false,
+      ["deriveKey"]
+    );
 
   return crypto.subtle.deriveKey(
     {
       name:"PBKDF2",
-      salt:s,
+      salt:salt,
       iterations:310000,
       hash:"SHA-256"
     },
-    k,
-    {name:"AES-GCM",length:256},
+    keyMaterial,
+    {
+      name:"AES-GCM",
+      length:256
+    },
     false,
     ["encrypt","decrypt"]
   );
 }
 
+/* =========================
+   COLLECT FORM
+========================= */
 function collect(){
-  const d={category:currentTab,slot:currentSlot};
 
-  if(currentTab==="bank"){
-    d.bankName=$("b-name").value;
-    d.branch=$("b-branch").value;
-    d.account=$("b-account").value;
-    d.holder=$("b-holder").value;
-    d.pin=$("b-pin").value;
-  }else if(currentTab==="card"){
-    d.brand=$("c-brand").value;
-    d.number=$("c-num").value;
-    d.expire=$("c-exp").value;
-    d.name=$("c-name").value;
-    d.cvv=$("c-cvv").value;
+  const data = {
+    category:currentTab,
+    slot:currentSlot
+  };
+
+  if(currentTab === "bank"){
+
+    data.bankName =
+      $("b-name").value;
+
+    data.branch =
+      $("b-branch").value;
+
+    data.account =
+      $("b-account").value;
+
+    data.holder =
+      $("b-holder").value;
+
+    data.pin =
+      $("b-pin").value;
+
+  }else if(currentTab === "card"){
+
+    data.brand =
+      $("c-brand").value;
+
+    data.number =
+      $("c-num").value;
+
+    data.expire =
+      $("c-exp").value;
+
+    data.name =
+      $("c-name").value;
+
+    data.cvv =
+      $("c-cvv").value;
+
   }else{
-    d.service=$("w-srv").value;
-    d.id=$("w-id").value;
-    d.username=$("w-user").value;
-    d.pass=$("w-pass").value;
+
+    data.service =
+      $("w-srv").value;
+
+    data.id =
+      $("w-id").value;
+
+    data.username =
+      $("w-user").value;
+
+    data.pass =
+      $("w-pass").value;
   }
 
-  return d;
+  return data;
 }
 
+/* =========================
+   ENCRYPT
+========================= */
 async function encryptData(){
-  if(!vaultUnlocked)return;
 
-  if(!currentTab||!currentSlot){
-    alert("⚠️ モジュールとスロットを選択してください！");
+  if(!currentTab || !currentSlot){
+    alert(
+      "⚠️ モジュールとスロットを選択してください！"
+    );
     return;
   }
 
-  const p=$("master-pass").value;
+  const password =
+    $("master-pass").value;
 
-  if(!p){
-    alert("⚠️ マスターパスワードを入力してください！");
+  if(!password){
+    alert(
+      "⚠️ マスターパスワードを入力してください！"
+    );
     return;
   }
 
   try{
-    const salt=crypto.getRandomValues(new Uint8Array(16));
-    const iv=crypto.getRandomValues(new Uint8Array(12));
-    const k=await derive(p,salt);
 
-    const ct=await crypto.subtle.encrypt(
-      {name:"AES-GCM",iv},
-      k,
-      new TextEncoder().encode(JSON.stringify(collect()))
-    );
+    const salt =
+      crypto.getRandomValues(
+        new Uint8Array(16)
+      );
 
-    const o={
+    const iv =
+      crypto.getRandomValues(
+        new Uint8Array(12)
+      );
+
+    const key =
+      await derive(password,salt);
+
+    const plaintext =
+      JSON.stringify(collect());
+
+    const ciphertext =
+      await crypto.subtle.encrypt(
+        {
+          name:"AES-GCM",
+          iv:iv
+        },
+        key,
+        new TextEncoder().encode(plaintext)
+      );
+
+    const object = {
       version:1,
       algorithm:"AES-GCM",
       kdf:"PBKDF2-SHA256",
       iterations:310000,
       salt:b64(salt),
       iv:b64(iv),
-      ciphertext:b64(ct)
+      ciphertext:b64(ciphertext)
     };
 
-    localStorage.setItem(key(),JSON.stringify(o));
+    localStorage.setItem(
+      storageKey(),
+      JSON.stringify(object)
+    );
 
     updateSlots();
-    $("slot-select").value=currentSlot;
-    $("cipher-text").value=o.ciphertext;
 
-    alert("🔒 データを要塞レベルで暗号化・保存しました！");
-  }catch(e){
-    alert("❌ 暗号化処理に失敗しました。");
+    $("slot-select").value =
+      currentSlot;
+
+    $("cipher-text").value =
+      object.ciphertext;
+
+    $("result-view").textContent =
+      "暗号化データを安全に保存しました。";
+
+    alert(
+      "🔒 データを要塞レベルで暗号化・保存しました！"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "❌ 暗号化処理に失敗しました。"
+    );
   }
 }
 
+/* =========================
+   DECRYPT
+========================= */
 async function decryptData(){
-  if(!vaultUnlocked)return;
 
-  const p=$("master-pass").value;
+  const password =
+    $("master-pass").value;
 
-  if(!p){
-    alert("⚠️ マスターパスワードを入力してください！");
+  if(!password){
+    alert(
+      "⚠️ マスターパスワードを入力してください！"
+    );
     return;
   }
 
-  if(!currentTab||!currentSlot){
-    alert("⚠️ モジュールとスロットを選択してください！");
+  if(!currentTab || !currentSlot){
+    alert(
+      "⚠️ モジュールとスロットを選択してください！"
+    );
     return;
   }
 
-  const raw=localStorage.getItem(key());
+  const raw =
+    localStorage.getItem(storageKey());
 
   if(!raw){
-    alert("❌ 暗号化データが存在しません！");
+    alert(
+      "❌ 暗号化データが存在しません！"
+    );
     return;
   }
 
   try{
-    const o=JSON.parse(raw);
-    const k=await derive(p,unb64(o.salt));
 
-    const plain=await crypto.subtle.decrypt(
-      {name:"AES-GCM",iv:unb64(o.iv)},
-      k,
-      unb64(o.ciphertext)
-    );
+    const object =
+      JSON.parse(raw);
 
-    const d=JSON.parse(new TextDecoder().decode(plain));
+    const key =
+      await derive(
+        password,
+        unb64(object.salt)
+      );
 
-    if(currentTab==="bank"){
-      [
-        ["b-name","bankName"],
-        ["b-branch","branch"],
-        ["b-account","account"],
-        ["b-holder","holder"],
-        ["b-pin","pin"]
-      ].forEach(([id,k])=>$(id).value=d[k]||"");
-    }else if(currentTab==="card"){
-      [
-        ["c-brand","brand"],
-        ["c-num","number"],
-        ["c-exp","expire"],
-        ["c-name","name"],
-        ["c-cvv","cvv"]
-      ].forEach(([id,k])=>$(id).value=d[k]||"");
+    const plaintext =
+      await crypto.subtle.decrypt(
+        {
+          name:"AES-GCM",
+          iv:unb64(object.iv)
+        },
+        key,
+        unb64(object.ciphertext)
+      );
+
+    const data =
+      JSON.parse(
+        new TextDecoder().decode(plaintext)
+      );
+
+    if(currentTab === "bank"){
+
+      $("b-name").value =
+        data.bankName || "";
+
+      $("b-branch").value =
+        data.branch || "";
+
+      $("b-account").value =
+        data.account || "";
+
+      $("b-holder").value =
+        data.holder || "";
+
+      $("b-pin").value =
+        data.pin || "";
+
+    }else if(currentTab === "card"){
+
+      $("c-brand").value =
+        data.brand || "";
+
+      $("c-num").value =
+        data.number || "";
+
+      $("c-exp").value =
+        data.expire || "";
+
+      $("c-name").value =
+        data.name || "";
+
+      $("c-cvv").value =
+        data.cvv || "";
+
     }else{
-      [
-        ["w-srv","service"],
-        ["w-id","id"],
-        ["w-user","username"],
-        ["w-pass","pass"]
-      ].forEach(([id,k])=>$(id).value=d[k]||"");
+
+      $("w-srv").value =
+        data.service || "";
+
+      $("w-id").value =
+        data.id || "";
+
+      $("w-user").value =
+        data.username || "";
+
+      $("w-pass").value =
+        data.pass || "";
     }
 
-    $("cipher-text").value=o.ciphertext;
-    $("result-view").textContent=JSON.stringify(d,null,2);
+    $("cipher-text").value =
+      object.ciphertext;
 
-  }catch(e){
-    alert("❌ 復号に失敗しました。パスワードをご確認ください。");
-    $("result-view").textContent="復号に失敗しました。機密データは非表示です。";
+    $("result-view").textContent =
+      JSON.stringify(data,null,2);
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "❌ 復号に失敗しました。パスワードをご確認ください。"
+    );
+
+    $("result-view").textContent =
+      "復号に失敗しました。機密データは非表示です。";
   }
 }
 
-/* 3D VISUAL LAYER — visual only */
-(()=>{
-  const vault=document.querySelector(".container");
-  if(!vault)return;
+/* =========================
+   INITIAL STATE
+========================= */
 
-  let raf=0;
-  let active=false;
+/*
+  VERY IMPORTANT:
+  The application always starts at Level 01.
+  It cannot be reached by scrolling.
+*/
+showOnly("step-pin");
 
-  const reducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+if(Date.now() < lockUntil){
+  lockCountdown();
+}
 
-  function reset(){
-    cancelAnimationFrame(raf);
+/* =========================
+   CYBER 3D VISUAL LAYER
+   Visual only.
+   Does NOT change security state.
+========================= */
+(() => {
 
-    raf=requestAnimationFrame(()=>{
-      vault.style.animation="";
-      vault.style.transform="";
-    });
+  const vault =
+    document.querySelector(".container");
 
-    active=false;
-  }
+  if(!vault) return;
 
-  function tilt(clientX,clientY){
-    if(reducedMotion.matches)return;
+  let raf = 0;
 
-    const rect=vault.getBoundingClientRect();
-    const margin=80;
-
-    if(
-      clientX<rect.left-margin||
-      clientX>rect.right+margin||
-      clientY<rect.top-margin||
-      clientY>rect.bottom+margin
-    ){
-      reset();
-      return;
-    }
-
-    const x=(clientX-rect.left)/rect.width-0.5;
-    const y=(clientY-rect.top)/rect.height-0.5;
+  const reset = () => {
 
     cancelAnimationFrame(raf);
 
-    raf=requestAnimationFrame(()=>{
-      vault.style.animation="none";
-      vault.style.transform=
-        `perspective(1200px) rotateX(${(-y*3.5).toFixed(2)}deg) rotateY(${(x*4).toFixed(2)}deg) translateZ(3px)`;
-      active=true;
-    });
-  }
+    raf =
+      requestAnimationFrame(()=>{
+        vault.style.animation = "";
+        vault.style.transform = "";
+      });
+  };
 
-  document.addEventListener("pointermove",e=>{
-    if(!active&&e.pointerType==="touch")return;
-    tilt(e.clientX,e.clientY);
-  },{passive:true});
+  document.addEventListener(
+    "pointermove",
+    event=>{
 
-  window.addEventListener("blur",reset);
+      if(
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches
+      ){
+        return;
+      }
 
-  document.addEventListener("visibilitychange",()=>{
-    if(document.visibilityState!=="visible")reset();
-  });
+      const rect =
+        vault.getBoundingClientRect();
 
-  if(reducedMotion.addEventListener){
-    reducedMotion.addEventListener("change",reset);
-  }
+      if(
+        event.clientX < rect.left - 80 ||
+        event.clientX > rect.right + 80 ||
+        event.clientY < rect.top - 80 ||
+        event.clientY > rect.bottom + 80
+      ){
+        return;
+      }
 
-  window.addEventListener("deviceorientation",e=>{
-    if(reducedMotion.matches)return;
+      const x =
+        (event.clientX - rect.left) /
+        rect.width - .5;
 
-    if(typeof e.beta!=="number"||typeof e.gamma!=="number")return;
+      const y =
+        (event.clientY - rect.top) /
+        rect.height - .5;
 
-    const x=Math.max(-12,Math.min(12,e.gamma||0));
-    const y=Math.max(-12,Math.min(12,(e.beta||0)-45));
+      cancelAnimationFrame(raf);
 
-    cancelAnimationFrame(raf);
+      raf =
+        requestAnimationFrame(()=>{
 
-    raf=requestAnimationFrame(()=>{
-      vault.style.animation="none";
-      vault.style.transform=
-        `perspective(1200px) rotateX(${(-y*0.16).toFixed(2)}deg) rotateY(${(x*0.18).toFixed(2)}deg) translateZ(2px)`;
-    });
-  },{passive:true});
+          vault.style.animation = "none";
+
+          vault.style.transform =
+            `perspective(1200px)
+             rotateX(${(-y*3.5).toFixed(2)}deg)
+             rotateY(${(x*4).toFixed(2)}deg)
+             translateZ(3px)`;
+        });
+
+    },
+    {passive:true}
+  );
+
+  document.addEventListener(
+    "pointerleave",
+    reset
+  );
+
+  window.addEventListener(
+    "blur",
+    reset
+  );
+
 })();
-
-/* FINAL FAIL-CLOSED */
-window.addEventListener("load",()=>{
-  vaultUnlocked=false;
-  showOnly("step-pin");
-
-  if(Date.now()<lockUntil)lockCountdown();
-});
 </script>
+
 </body>
 </html>
