@@ -1139,7 +1139,7 @@ let currentSlot = '';
 let authInProgress = false;
 let authenticatedSession = false;
 
-const AUTO_LOCK = 3e5;
+const AUTO_LOCK = 0; // RESULTを押すまで自動ロックしない
 const $ = id => document.getElementById(id);
 
 /* ---------- 画面制御 ---------- */
@@ -1224,12 +1224,17 @@ function resetAuto(){
 });
 
 document.addEventListener('visibilitychange',() => {
-  /* メイン画面はRESULTを押すまで維持。
-     生体認証中だけは従来どおり保護する。 */
+  /* 認証済みのメイン画面はRESULTを押すまで維持する。
+     タブ切替・画面消灯・入力中でも自動ロックしない。 */
+  if(authenticatedSession){
+    resetAuto();
+    return;
+  }
+
+  /* 生体認証画面だけは従来どおり保護する。 */
   if(
     document.visibilityState === 'hidden' &&
     !authInProgress &&
-    !authenticatedSession &&
     $('step-bio').style.display === 'block'
   ){
     lockVault();
@@ -1237,9 +1242,12 @@ document.addEventListener('visibilitychange',() => {
 });
 
 window.addEventListener('pageshow',() => {
-  if(!authenticatedSession){
-    showPinScreen();
+  /* RESULTを押すまでは認証済みセッションを維持 */
+  if(authenticatedSession){
+    showAppScreen();
+    return;
   }
+  showPinScreen();
 });
 
 /* ---------- RESULT // 手動でスタート画面へ戻る ---------- */
