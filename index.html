@@ -817,6 +817,36 @@ select:focus{
   70%,100%{left:115%;opacity:0}
 }
 
+
+/* ===== アプリ // パスワード表示スイッチ ===== */
+.password-label{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+}
+.show-password{
+  display:flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  color:var(--cyan) !important;
+  font-size:8px !important;
+  letter-spacing:.5px !important;
+  cursor:pointer !important;
+  white-space:nowrap !important;
+}
+.show-password input{
+  width:13px !important;
+  height:13px !important;
+  margin:0 !important;
+  accent-color:var(--cyan) !important;
+  cursor:pointer !important;
+}
+.show-password span{
+  color:var(--cyan) !important;
+  text-shadow:0 0 6px rgba(34,211,238,.55) !important;
+}
+
 </style>
 </head>
 
@@ -1585,8 +1615,14 @@ const templates = {
     </div>
 
     <div class="form-group">
-      <label>パスワード</label>
-      <input id="w-pass" type="password">
+      <label class="password-label">
+        <span>パスワード</span>
+        <label class="show-password">
+          <input type="checkbox" onchange="toggleWebPassword(this)">
+          <span>表示する</span>
+        </label>
+      </label>
+      <input id="w-pass" type="password" autocomplete="off">
     </div>
   `
 ,
@@ -2291,6 +2327,13 @@ if(Date.now() < lockUntil){
 authenticatedSession = false;
 authInProgress = false;
 showPinScreen();
+
+function toggleWebPassword(checkbox){
+  const pass = document.getElementById('w-pass');
+  if(!pass) return;
+  pass.type = checkbox.checked ? 'text' : 'password';
+}
+
 </script>
 
 </body>
