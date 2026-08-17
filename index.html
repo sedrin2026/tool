@@ -847,6 +847,38 @@ select:focus{
   text-shadow:0 0 6px rgba(34,211,238,.55) !important;
 }
 
+
+/* ===== RESULT // 手動でスタート画面へ戻る ===== */
+.result-lock-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:20;
+  padding:4px 7px;
+  min-width:52px;
+  border:1px solid rgba(34,211,238,.65);
+  border-radius:4px;
+  background:rgba(2,12,25,.82);
+  color:var(--cyan);
+  font-family:"Courier New",monospace;
+  font-size:7px;
+  font-weight:bold;
+  letter-spacing:1px;
+  cursor:pointer;
+  text-shadow:0 0 7px var(--cyan);
+  box-shadow:0 0 8px rgba(34,211,238,.18), inset 0 0 7px rgba(34,211,238,.08);
+  transition:.15s;
+}
+.result-lock-btn:hover{
+  color:#fff;
+  border-color:var(--cyan);
+  background:rgba(34,211,238,.14);
+  box-shadow:0 0 12px rgba(34,211,238,.45), inset 0 0 8px rgba(34,211,238,.12);
+}
+.result-lock-btn:active{
+  transform:scale(.95);
+}
+
 </style>
 </head>
 
@@ -969,6 +1001,9 @@ select:focus{
 
   <!-- ==================== MAIN VAULT ==================== -->
   <section id="app-screen" class="screen fade-in" aria-hidden="true">
+    <button class="result-lock-btn" onclick="returnToStartScreen()" title="RESULT // START SCREENへ戻る">
+      RESULT
+    </button>
 
     <div class="cyber-logo-wrapper">
       <div class="hud-status-bar">
@@ -1175,11 +1210,9 @@ function lockCountdown(){
 
 /* ---------- 自動ロック ---------- */
 function resetAuto(){
+  /* メイン画面ではRESULTを押すまで自動ロックしない */
   clearTimeout(autoLockTimer);
-
-  if(authenticatedSession){
-    autoLockTimer = setTimeout(lockVault,AUTO_LOCK);
-  }
+  autoLockTimer = null;
 }
 
 ['click','keydown','touchstart','pointerdown'].forEach(eventName => {
@@ -1191,10 +1224,13 @@ function resetAuto(){
 });
 
 document.addEventListener('visibilitychange',() => {
+  /* メイン画面はRESULTを押すまで維持。
+     生体認証中だけは従来どおり保護する。 */
   if(
     document.visibilityState === 'hidden' &&
     !authInProgress &&
-    (authenticatedSession || $('step-bio').style.display === 'block')
+    !authenticatedSession &&
+    $('step-bio').style.display === 'block'
   ){
     lockVault();
   }
@@ -1205,6 +1241,15 @@ window.addEventListener('pageshow',() => {
     showPinScreen();
   }
 });
+
+/* ---------- RESULT // 手動でスタート画面へ戻る ---------- */
+function returnToStartScreen(){
+  if(authenticatedSession){
+    lockVault();
+  }else{
+    showPinScreen();
+  }
+}
 
 /* ---------- 完全ロック ---------- */
 function lockVault(){
