@@ -1625,6 +1625,11 @@ const templates = {
 
   card:`
     <div class="form-group">
+      <label>デビット名</label>
+      <input id="c-debit" placeholder="デビット名を入力">
+    </div>
+
+    <div class="form-group">
       <label>カード会社 / ブランド // AUTO DETECT</label>
       <input id="c-brand" autocomplete="off" placeholder="カード番号から自動判定">
     </div>
@@ -1735,16 +1740,28 @@ function updateSlots(){
         `vault_${currentTab}_slot_${k}`
       );
 
+    // 保存時に暗号化データとは別に保持している表示名。
+    // 表示名はスロット選択用で、暗号化データ本体には影響しません。
+    const slotName =
+      localStorage.getItem(
+        `vault_${currentTab}_slot_name_${k}`
+      );
+
     o.value = k;
 
-    const slotLabel =
+    const fallbackLabel =
       currentTab === 'bank' ? '銀行名' :
-      currentTab === 'card' ? 'クレカ名' :
+      currentTab === 'card' ? 'デビット名' :
       currentTab === 'web'  ? 'アプリ名' :
-      'メモ';
+      'タイトル';
+
+    const displayName =
+      slotName && slotName.trim()
+        ? slotName.trim()
+        : fallbackLabel;
 
     o.textContent =
-      `[ ${k.padStart(2,'0')} ] ${slotLabel}` +
+      `[ ${k.padStart(2,'0')} ] ${displayName}` +
       `${saved ? ' // SECURE' : ' // ACTIVE (EMPTY)'}`;
 
     s.appendChild(o);
@@ -2023,6 +2040,9 @@ function collect(){
 
   }else if(currentTab === 'card'){
 
+    d.debitName =
+      $('c-debit').value;
+
     d.brand =
       $('c-brand').value;
 
@@ -2063,6 +2083,42 @@ function collect(){
   }
 
   return d;
+}
+
+/* ---------- スロット表示名 ---------- */
+function getCurrentSlotDisplayName(){
+  if(!currentTab) return '';
+
+  if(currentTab === 'bank'){
+    return ($('b-name')?.value || '').trim();
+  }
+
+  if(currentTab === 'card'){
+    return ($('c-debit')?.value || '').trim();
+  }
+
+  if(currentTab === 'web'){
+    return ($('w-srv')?.value || '').trim();
+  }
+
+  if(currentTab === 'memo'){
+    return ($('m-title')?.value || '').trim();
+  }
+
+  return '';
+}
+
+function saveCurrentSlotDisplayName(){
+  if(!currentTab || !currentSlot) return;
+
+  const name = getCurrentSlotDisplayName();
+  const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
+
+  if(name){
+    localStorage.setItem(metaKey,name);
+  }else{
+    localStorage.removeItem(metaKey);
+  }
 }
 
 /* ---------- 暗号化 ---------- */
@@ -2136,9 +2192,38 @@ async function encryptData(){
       JSON.stringify(o)
     );
 
+    // スロット選択欄に登録名をそのまま表示するための表示名を更新
+    saveCurrentSlotDisplayName();
+
     updateSlots();
     $('slot-select').value =
       currentSlot;
+
+    // 復号した登録名をスロット表示名として保存
+    if(currentTab === 'bank'){
+      const name = (d.bankName || '').trim();
+      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
+      if(name) localStorage.setItem(metaKey,name);
+      else localStorage.removeItem(metaKey);
+    }else if(currentTab === 'card'){
+      const name = (d.debitName || '').trim();
+      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
+      if(name) localStorage.setItem(metaKey,name);
+      else localStorage.removeItem(metaKey);
+    }else if(currentTab === 'web'){
+      const name = (d.service || '').trim();
+      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
+      if(name) localStorage.setItem(metaKey,name);
+      else localStorage.removeItem(metaKey);
+    }else if(currentTab === 'memo'){
+      const name = (d.title || '').trim();
+      const metaKey = `vault_${currentTab}_slot_name_${currentSlot}`;
+      if(name) localStorage.setItem(metaKey,name);
+      else localStorage.removeItem(metaKey);
+    }
+
+    updateSlots();
+    $('slot-select').value = currentSlot;
 
     $('cipher-text').value =
       o.ciphertext;
@@ -2250,6 +2335,7 @@ async function decryptData(){
     }else if(currentTab === 'card'){
 
       [
+        'c-debit',
         'c-brand',
         'c-num',
         'c-exp',
@@ -2260,6 +2346,7 @@ async function decryptData(){
         $(x).value =
           d[
             [
+              'debitName',
               'brand',
               'number',
               'expire',
