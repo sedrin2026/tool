@@ -318,26 +318,30 @@ h1{
   pointer-events:none;
 }
 
+/* ★ 水色のネオン系リングに変更 */
 .ring-1{
   width:172px;
   height:172px;
-  border:1px dashed rgba(168,85,247,.5);
+  border:1px dashed rgba(34,211,238,.6);
+  box-shadow:0 0 10px rgba(34,211,238,.2);
   animation:spin 18s linear infinite;
 }
 
 .ring-2{
   width:143px;
   height:143px;
-  border:2px solid rgba(34,211,238,.32);
+  border:2px solid rgba(34,211,238,.8);
   border-left-color:transparent;
   border-right-color:transparent;
+  box-shadow:0 0 15px rgba(34,211,238,.3);
   animation:spinR 9s linear infinite;
 }
 
 .ring-3{
   width:112px;
   height:112px;
-  border:1px dotted rgba(168,85,247,.8);
+  border:1px dotted rgba(125,211,252,.9);
+  box-shadow:0 0 10px rgba(34,211,238,.4);
   animation:spin 6s linear infinite;
 }
 
@@ -357,11 +361,11 @@ h1{
   align-items:center;
   justify-content:center;
   background:
-    radial-gradient(circle at 35% 30%,rgba(168,85,247,.35),rgba(2,6,23,.96) 68%);
-  border:1.5px solid var(--purple);
+    radial-gradient(circle at 35% 30%,rgba(34,211,238,.35),rgba(2,6,23,.96) 68%);
+  border:1.5px solid var(--cyan);
   box-shadow:
-    0 0 26px rgba(168,85,247,.45),
-    inset 0 0 18px rgba(168,85,247,.4);
+    0 0 26px rgba(34,211,238,.45),
+    inset 0 0 18px rgba(34,211,238,.4);
   animation:core 2.8s ease-in-out infinite;
   position:relative;
   z-index:2;
@@ -372,7 +376,7 @@ h1{
   position:absolute;
   inset:9px;
   border-radius:50%;
-  border:1px solid rgba(34,211,238,.35);
+  border:1px solid rgba(125,211,252,.5);
   animation:spin 4s linear infinite;
 }
 
@@ -380,8 +384,8 @@ h1{
   50%{
     transform:scale(1.07);
     box-shadow:
-      0 0 40px rgba(168,85,247,.7),
-      inset 0 0 25px rgba(168,85,247,.5);
+      0 0 40px rgba(34,211,238,.7),
+      inset 0 0 25px rgba(34,211,238,.5);
   }
 }
 
@@ -389,7 +393,8 @@ h1{
   font-size:15px;
   font-weight:bold;
   z-index:3;
-  text-shadow:0 0 10px var(--purple);
+  color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan);
 }
 
 .bio-text{
@@ -525,8 +530,8 @@ select:focus{
 
 .action-btn{
   width:100%;
-  min-height:30px; /* ← 高さを少し低く調整しました */
-  height:30px;    /* ← 高さを少し低く調整しました */
+  min-height:30px;
+  height:30px;
   padding:4px 12px;
   border:0;
   border-radius:9px;
@@ -548,8 +553,8 @@ select:focus{
   overflow:hidden;
   clip-path:none;
   border-radius:9px;
-  min-height:30px; /* ← 高さを少し低く調整しました */
-  height:30px;    /* ← 高さを少し低く調整しました */
+  min-height:30px;
+  height:30px;
   padding:4px 18px;
   isolation:isolate;
 }
@@ -1494,7 +1499,7 @@ function updateSlots(){
   }
 }
 
-/* ---------- モジュール切替（もう一度押すと確実に未選択にリセット） ---------- */
+/* ---------- モジュール切替（もう一度押すと選択解除） ---------- */
 function switchTab(t,e){
 
   if(!authenticatedSession){
@@ -1502,7 +1507,7 @@ function switchTab(t,e){
     return;
   }
 
-  // 既に選択されているタブが再度押された場合は、選択を完全に解除して未選択状態に戻す
+  // 既に選択されているタブが再度押された場合は選択を解除
   if(currentTab === t){
     currentTab = null;
     currentSlot = '';
