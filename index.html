@@ -1141,7 +1141,7 @@ select:focus{
 
 .ekg-line{
   fill:none;
-  stroke:#22d3ee;
+  stroke:#ffffff;
   stroke-width:1.4;
   stroke-linecap:round;
   stroke-linejoin:round;
@@ -1448,6 +1448,38 @@ body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
 }
 </style>
 
+
+<style>
+/* CYBER GATE直下のサブ文字と、その下のラインを中央基準に統一 */
+.welcome-gate-logo .brand-copy{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+}
+
+.welcome-gate-logo .brand-sub{
+  width:100% !important;
+  text-align:center !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+.welcome-gate-logo .brand-sub::after{
+  left:50% !important;
+  transform:translateX(-50%) !important;
+}
+</style>
+
+
+<style>
+/* QUANTUM ACCESS直下のHUDライン：上側ラインと完全に同じ中央軸 */
+.welcome-gate-logo .gate-logo-svg .hud-rule.lower{
+  transform:none !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -1485,11 +1517,11 @@ body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
         <path class="ekg-line ekg-line-right" d="M522 91 H548 L558 91 L566 86 L574 91 H593 L602 91 L611 88 L620 91 H642 L652 91 L660 73 L667 112 L675 48 L683 91 H720"/>
         <!-- central HUD guides -->
         <path class="hud-rule" d="M225 27 H320 L331 17 H389 L400 27 H495"/>
-        <path class="hud-rule lower" d="M260 126 H334 L344 137 H376 M444 137 H476 L486 126 H560"/>
+        <path class="hud-rule lower" d="M225 128 H320 L331 138 H389 L400 128 H495"/>
         <line class="hud-tick" x1="229" y1="27" x2="220" y2="27"/>
         <line class="hud-tick" x1="491" y1="27" x2="500" y2="27"/>
-        <line class="hud-tick purple" x1="255" y1="126" x2="247" y2="126"/>
-        <line class="hud-tick purple" x1="565" y1="126" x2="573" y2="126"/>
+        <line class="hud-tick purple" x1="229" y1="128" x2="220" y2="128"/>
+        <line class="hud-tick purple" x1="491" y1="128" x2="500" y2="128"/>
         <text class="logo-kicker" x="360" y="50" text-anchor="middle">WELCOME TO</text>
         <text class="logo-title" x="360" y="88" text-anchor="middle">SYBER GATE</text>
         <text class="logo-sub" x="360" y="117" text-anchor="middle">QUANTUM ACCESS</text>
