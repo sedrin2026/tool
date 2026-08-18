@@ -1480,6 +1480,35 @@ body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
 }
 </style>
 
+
+
+<style>
+/* =========================================================
+   PIN SCREEN // BALANCED UPPER-CENTER POSITION
+   既存デザイン・UI・機能は変更せず、PIN画面全体だけ少し上へ
+   「画面中央より上」だが、上に寄りすぎない位置に調整
+   ========================================================= */
+
+body:has(#step-pin[aria-hidden="false"]) #vault-container{
+  position:relative;
+  top:-45px;
+}
+
+/* 短いスマホ */
+@media (max-height:900px){
+  body:has(#step-pin[aria-hidden="false"]) #vault-container{
+    top:-38px;
+  }
+}
+
+/* 小型スマホ */
+@media (max-width:380px){
+  body:has(#step-pin[aria-hidden="false"]) #vault-container{
+    top:-30px;
+  }
+}
+</style>
+
 </head>
 
 <body>
