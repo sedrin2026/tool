@@ -554,6 +554,11 @@ h1{
 .slot-list::-webkit-scrollbar-track{background:rgba(2,6,23,.5)}
 .slot-list::-webkit-scrollbar-thumb{background:rgba(34,211,238,.45);border-radius:4px}
 
+/* スロット選択後は一覧を自動収納 */
+.slot-list.collapsed{
+  display:none;
+}
+
 .slot-row{
   width:100%;
   min-height:48px;
@@ -1226,7 +1231,7 @@ select:focus{
     </div>
 
     <div class="item-selector">
-      <div class="slot-header">
+      <div class="slot-header" onclick="toggleSlotList()" role="button" tabindex="0" aria-label="スロット一覧を開閉">
         <div>
           <span class="slot-kicker">SECURE STORAGE // SLOT MATRIX</span>
           <span class="slot-title" id="slot-title">MODULE OFFLINE</span>
@@ -1989,6 +1994,11 @@ function escapeSlotText(value){
   }[m]));
 }
 
+function toggleSlotList(){
+  const list = $('slot-list');
+  if(list) list.classList.toggle('collapsed');
+}
+
 function selectSlot(k){
   if(!authenticatedSession){
     showPinScreen();
@@ -2001,6 +2011,10 @@ function selectSlot(k){
   s.value = k;
   changeSlot();
   updateSlots();
+
+  // 選択したら一覧を自動で閉じる
+  const list = $('slot-list');
+  if(list) list.classList.add('collapsed');
 }
 
 /* ---------- モジュール切替（もう一度押すと選択解除） ---------- */
@@ -2042,6 +2056,8 @@ function switchTab(t,e){
   e.classList.add('active');
 
   updateSlots();
+  const slotList = $('slot-list');
+  if(slotList) slotList.classList.remove('collapsed');
 
   $('form-area').innerHTML =
     '<div class="welcome-placeholder">' +
