@@ -478,11 +478,193 @@ h1{
 
 .item-selector{
   margin-bottom:10px;
-  background:rgba(2,6,23,.8);
-  padding:5px 8px;
-  border-radius:7px;
-  border:1px solid rgba(34,211,238,.2);
+  background:
+    linear-gradient(180deg,rgba(3,12,28,.96),rgba(2,6,23,.94));
+  padding:9px;
+  border-radius:8px;
+  border:1px solid rgba(34,211,238,.28);
+  box-shadow:inset 0 0 20px rgba(34,211,238,.035),0 0 18px rgba(34,211,238,.04);
+  position:relative;
+  overflow:hidden;
 }
+
+.item-selector:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0,transparent 3px,rgba(34,211,238,.018) 4px);
+}
+
+.slot-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:2px 3px 8px;
+  border-bottom:1px solid rgba(34,211,238,.14);
+}
+
+.slot-kicker{
+  display:block;
+  color:rgba(34,211,238,.58);
+  font-size:6px;
+  letter-spacing:1.4px;
+  font-weight:bold;
+}
+
+.slot-title{
+  display:block;
+  color:var(--cyan);
+  font-size:10px;
+  letter-spacing:1px;
+  font-weight:900;
+  text-shadow:0 0 7px rgba(34,211,238,.35);
+  margin-top:2px;
+}
+
+.slot-count{
+  color:var(--green);
+  font-size:7px;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+#slot-select{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+
+.slot-list{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-top:8px;
+  max-height:360px;
+  overflow-y:auto;
+  padding-right:2px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(34,211,238,.55) transparent;
+}
+
+.slot-list::-webkit-scrollbar{width:4px}
+.slot-list::-webkit-scrollbar-track{background:rgba(2,6,23,.5)}
+.slot-list::-webkit-scrollbar-thumb{background:rgba(34,211,238,.45);border-radius:4px}
+
+.slot-row{
+  width:100%;
+  min-height:48px;
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  align-items:center;
+  gap:8px;
+  text-align:left;
+  padding:6px 8px;
+  color:#94a3b8;
+  background:rgba(2,6,23,.72);
+  border:1px solid rgba(148,163,184,.12);
+  border-left:2px solid rgba(148,163,184,.18);
+  border-radius:5px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.18s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.slot-row:before{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;left:-35%;width:25%;
+  background:linear-gradient(90deg,transparent,rgba(34,211,238,.12),transparent);
+  transform:skewX(-18deg);
+  transition:.35s;
+}
+
+.slot-row:hover{
+  border-color:rgba(34,211,238,.55);
+  border-left-color:var(--cyan);
+  transform:translateX(2px);
+  box-shadow:0 0 12px rgba(34,211,238,.08);
+}
+
+.slot-row:hover:before{left:110%}
+
+.slot-row.active{
+  color:#e2e8f0;
+  border-color:rgba(34,211,238,.72);
+  border-left:3px solid var(--cyan);
+  background:linear-gradient(90deg,rgba(34,211,238,.12),rgba(2,6,23,.88));
+  box-shadow:0 0 14px rgba(34,211,238,.14),inset 0 0 14px rgba(34,211,238,.04);
+}
+
+.slot-number{
+  color:var(--cyan);
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-shadow:0 0 7px rgba(34,211,238,.35);
+}
+
+.slot-name{
+  min-width:0;
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#cbd5e1;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+.slot-sub{
+  display:block;
+  margin-top:2px;
+  color:#475569;
+  font-size:6px;
+  letter-spacing:1px;
+}
+
+.slot-status{
+  min-width:58px;
+  text-align:right;
+  font-size:6px;
+  letter-spacing:.8px;
+  font-weight:900;
+}
+
+.slot-status.secure{color:var(--green);text-shadow:0 0 6px rgba(74,222,128,.4)}
+.slot-status.empty{color:#64748b}
+
+.slot-dot{
+  display:inline-block;
+  width:5px;height:5px;
+  border-radius:50%;
+  margin-right:4px;
+  background:currentColor;
+  box-shadow:0 0 7px currentColor;
+}
+
+.slot-empty-state{
+  min-height:72px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  border:1px dashed rgba(34,211,238,.16);
+  border-radius:5px;
+  color:#475569;
+  text-align:center;
+}
+
+.slot-empty-state strong{font-size:8px;letter-spacing:1.5px;color:#64748b}
+.slot-empty-state small{font-size:7px;color:#475569}
+.slot-scanline{width:70%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35}
 
 .item-selector select,
 select{
@@ -1044,11 +1226,25 @@ select:focus{
     </div>
 
     <div class="item-selector">
-      <select id="slot-select" onchange="changeSlot()">
+      <div class="slot-header">
+        <div>
+          <span class="slot-kicker">SECURE STORAGE // SLOT MATRIX</span>
+          <span class="slot-title" id="slot-title">MODULE OFFLINE</span>
+        </div>
+        <span class="slot-count" id="slot-count">-- SLOTS</span>
+      </div>
+      <select id="slot-select" onchange="changeSlot()" aria-hidden="true" tabindex="-1">
         <option value="" disabled selected>
           -- 先にセキュリティモジュールを選択 --
         </option>
       </select>
+      <div id="slot-list" class="slot-list">
+        <div class="slot-empty-state">
+          <span class="slot-scanline"></span>
+          <strong>WAITING FOR MODULE</strong>
+          <small>上のセキュリティモジュールを選択してください</small>
+        </div>
+      </div>
     </div>
 
     <div id="form-area">
@@ -1713,59 +1909,98 @@ const templates = {
   `
 };
 
-/* ---------- スロット ---------- */
+/* ---------- スロット // CYBERPUNK VERTICAL MATRIX ---------- */
 function updateSlots(){
 
   const s = $('slot-select');
+  const list = $('slot-list');
+  const title = $('slot-title');
+  const count = $('slot-count');
 
   s.innerHTML =
     '<option value="" disabled selected>' +
     '-- スロットを選択してください --' +
     '</option>';
 
-  if(!currentTab) return;
+  if(!currentTab){
+    if(title) title.textContent = 'MODULE OFFLINE';
+    if(count) count.textContent = '-- SLOTS';
+    if(list){
+      list.innerHTML =
+        '<div class="slot-empty-state">' +
+        '<span class="slot-scanline"></span>' +
+        '<strong>WAITING FOR MODULE</strong>' +
+        '<small>上のセキュリティモジュールを選択してください</small>' +
+        '</div>';
+    }
+    return;
+  }
 
-  // アプリ（web）だけ20スロット、それ以外は従来どおり10スロット
   const slotCount = currentTab === 'web' ? 30 : 10;
+  const moduleName =
+    currentTab === 'bank' ? 'BANK // FINANCIAL CORE' :
+    currentTab === 'card' ? 'CARD // PAYMENT CORE' :
+    currentTab === 'web'  ? 'APP // DIGITAL CORE' :
+    'MEMO // NOTE CORE';
+
+  if(title) title.textContent = moduleName;
+  if(count) count.textContent = `// ${slotCount} SLOTS`;
+  if(list) list.innerHTML = '';
+
+  const fallbackLabel =
+    currentTab === 'bank' ? '銀行名' :
+    currentTab === 'card' ? 'デビット名' :
+    currentTab === 'web'  ? 'アプリ名' :
+    'タイトル';
 
   for(let i=1;i<=slotCount;i++){
 
     const k = '' + i;
+    const saved = localStorage.getItem(`vault_${currentTab}_slot_${k}`);
+    const slotName = localStorage.getItem(`vault_${currentTab}_slot_name_${k}`);
+    const displayName = slotName && slotName.trim() ? slotName.trim() : fallbackLabel;
 
-    const o =
-      document.createElement('option');
-
-    const saved =
-      localStorage.getItem(
-        `vault_${currentTab}_slot_${k}`
-      );
-
-    // 保存時に暗号化データとは別に保持している表示名。
-    // 表示名はスロット選択用で、暗号化データ本体には影響しません。
-    const slotName =
-      localStorage.getItem(
-        `vault_${currentTab}_slot_name_${k}`
-      );
-
+    const o = document.createElement('option');
     o.value = k;
-
-    const fallbackLabel =
-      currentTab === 'bank' ? '銀行名' :
-      currentTab === 'card' ? 'デビット名' :
-      currentTab === 'web'  ? 'アプリ名' :
-      'タイトル';
-
-    const displayName =
-      slotName && slotName.trim()
-        ? slotName.trim()
-        : fallbackLabel;
-
-    o.textContent =
-      `[ ${k.padStart(2,'0')} ] ${displayName}` +
-      `${saved ? ' // SECURE' : ' // ACTIVE (EMPTY)'}`;
-
+    o.textContent = `[ ${k.padStart(2,'0')} ] ${displayName}${saved ? ' // SECURE' : ' // ACTIVE (EMPTY)'}`;
     s.appendChild(o);
+
+    if(list){
+      const row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'slot-row' + (currentSlot === k ? ' active' : '');
+      row.setAttribute('aria-label', `スロット ${k} ${displayName}`);
+      row.onclick = () => selectSlot(k);
+
+      row.innerHTML =
+        `<span class="slot-number">${k.padStart(2,'0')}</span>` +
+        `<span><span class="slot-name">${escapeSlotText(displayName)}</span>` +
+        `<span class="slot-sub">${saved ? 'ENCRYPTED DATA // READY' : 'NO DATA // SLOT AVAILABLE'}</span></span>` +
+        `<span class="slot-status ${saved ? 'secure' : 'empty'}"><span class="slot-dot"></span>${saved ? 'SECURE' : 'EMPTY'}</span>`;
+
+      list.appendChild(row);
+    }
   }
+}
+
+function escapeSlotText(value){
+  return String(value || '').replace(/[&<>"']/g, m => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[m]));
+}
+
+function selectSlot(k){
+  if(!authenticatedSession){
+    showPinScreen();
+    return;
+  }
+
+  const s = $('slot-select');
+  if(!s) return;
+
+  s.value = k;
+  changeSlot();
+  updateSlots();
 }
 
 /* ---------- モジュール切替（もう一度押すと選択解除） ---------- */
