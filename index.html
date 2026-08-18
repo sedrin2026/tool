@@ -1601,6 +1601,19 @@ body:has(#step-pin[aria-hidden="false"]) #vault-container{
 
   <!-- ==================== BIOMETRIC ==================== -->
   <section id="step-bio" class="screen fade-in" aria-hidden="true">
+
+    <!-- ACCESS PROTOCOL // 横長HUDパネル -->
+    <div class="bio-protocol-panel" aria-label="ACCESS PROTOCOL">
+      <div class="bio-protocol-title">ACCESS PROTOCOL</div>
+      <div class="bio-protocol-grid">
+        <div class="bio-protocol-item"><span>IDENTITY</span><b>VERIFIED</b></div>
+        <div class="bio-protocol-item"><span>DEVICE</span><b>AUTHORIZED</b></div>
+        <div class="bio-protocol-item"><span>INTEGRITY</span><b>SECURE</b></div>
+        <div class="bio-protocol-item"><span>CONNECTION</span><b>STANDBY</b></div>
+      </div>
+    </div>
+
+    <div class="bio-bottom-zone">
     <div class="cyber-logo-wrapper">
       <div class="hud-status-bar">
         <div>CORE TEMP // <span>36.2°C</span></div>
@@ -1653,6 +1666,7 @@ body:has(#step-pin[aria-hidden="false"]) #vault-container{
         onclick="authBio()">
         🧬 生体認証コア起動 // AUTHENTICATE
       </button>
+    </div>
     </div>
   </section>
 
