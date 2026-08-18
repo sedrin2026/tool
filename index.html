@@ -1335,6 +1335,62 @@ select:focus{
 }
 
 </style>
+
+<style>
+/* =========================================================
+   MOBILE VERTICAL POSITION // TOP-ALIGNED
+   PIN / BIOMETRIC / MAIN の3画面をまとめて上寄せ
+   既存の機能・画面切替・認証処理は変更しない
+   ========================================================= */
+
+/* スマホでは画面中央寄せをやめ、上から自然に配置 */
+@media (max-height:1000px){
+  body{
+    align-items:flex-start;
+    padding-top:max(10px, env(safe-area-inset-top));
+  }
+
+  #vault-container{
+    margin-top:10px !important;
+  }
+
+  /* PIN画面の上部ロゴも全体位置に追従 */
+  .welcome-gate-logo{
+    top:-108px;
+  }
+}
+
+/* 短いスマホ画面はさらに少し上へ */
+@media (max-height:900px){
+  body{
+    padding-top:max(8px, env(safe-area-inset-top));
+  }
+
+  #vault-container{
+    margin-top:8px !important;
+  }
+
+  .welcome-gate-logo{
+    top:-108px;
+  }
+}
+
+/* 小型スマホ */
+@media (max-width:380px){
+  body{
+    padding-top:max(6px, env(safe-area-inset-top));
+  }
+
+  #vault-container{
+    margin-top:6px !important;
+  }
+
+  .welcome-gate-logo{
+    top:-99px;
+  }
+}
+</style>
+
 </head>
 
 <body>
