@@ -1391,6 +1391,63 @@ select:focus{
 }
 </style>
 
+
+<style>
+/* =========================================================
+   HOME / PIN SCREEN ONLY // RESTORE ORIGINAL POSITION
+   生体認証・メイン画面の上寄せは維持し、
+   ホーム画面だけ元の画面内レイアウトへ戻す
+   ========================================================= */
+
+/* PIN画面が表示中のときだけ、元の中央配置へ戻す */
+body:has(#step-pin[aria-hidden="false"]){
+  align-items:center;
+  padding-top:14px;
+}
+
+body:has(#step-pin[aria-hidden="false"]) #vault-container{
+  margin-top:88px !important;
+}
+
+body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
+  top:-126px;
+}
+
+/* 短いスマホ */
+@media (max-height:900px){
+  body:has(#step-pin[aria-hidden="false"]){
+    align-items:center;
+    padding-top:14px;
+  }
+
+  body:has(#step-pin[aria-hidden="false"]) #vault-container{
+    margin-top:72px !important;
+  }
+
+  body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
+    top:-110px;
+    height:98px;
+  }
+}
+
+/* 小型スマホ */
+@media (max-width:380px){
+  body:has(#step-pin[aria-hidden="false"]){
+    align-items:center;
+    padding-top:14px;
+  }
+
+  body:has(#step-pin[aria-hidden="false"]) #vault-container{
+    margin-top:64px !important;
+  }
+
+  body:has(#step-pin[aria-hidden="false"]) .welcome-gate-logo{
+    top:-99px;
+    height:88px;
+  }
+}
+</style>
+
 </head>
 
 <body>
